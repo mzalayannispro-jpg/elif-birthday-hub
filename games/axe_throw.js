@@ -84,18 +84,19 @@ window.initAxeThrow = function(container) {
     // Target properties
     const target = {
         x: canvas.width / 2,
-        y: 220,
+        y: canvas.height / 2,
         radius: 170, // clickable wood radius
         faceImg: null,
         angle: 0,
-        dirX: 1,
-        speedX: 2.5
+        speed: 0.03
     };
     
     let mouseX = canvas.width / 2;
+    let mouseY = canvas.height / 2;
     canvas.onmousemove = (e) => {
         let rect = canvas.getBoundingClientRect();
         mouseX = e.clientX - rect.left;
+        mouseY = e.clientY - rect.top;
     };
 
     function pickFace() {
@@ -108,7 +109,7 @@ window.initAxeThrow = function(container) {
             particles.push({
                 x, y,
                 vx: (Math.random() - 0.5) * 12,
-                vy: (Math.random() - 0.5) * 12 + (type === 'blood' ? 2 : 0), // blood falls more
+                vy: (Math.random() - 0.5) * 12 + (type === 'blood' ? 2 : 0),
                 life: 1.0,
                 color: colors[Math.floor(Math.random() * colors.length)],
                 size: Math.random() * (type === 'blood' ? 8 : 5) + 3
@@ -117,9 +118,8 @@ window.initAxeThrow = function(container) {
     }
 
     function isHitPerson(dx, dy) {
-        // dx, dy respect to target center
-        // Roughly mapping the body cross bounds
-        if (dx >= -45 && dx <= 45 && dy >= -90 && dy <= -20) return true; // head/neck
+        // dx, dy respect to target center in unrotated coordinates
+        if (dx >= -45 && dx <= 45 && dy >= -105 && dy <= -20) return true; // head/neck
         if (dx >= -50 && dx <= 50 && dy >= -20 && dy <= 120) return true; // body
         if (dx >= -140 && dx <= 140 && dy >= -30 && dy <= 30) return true; // arms
         if (dx >= -80 && dx <= 80 && dy >= 100 && dy <= 160) return true; // legs
@@ -128,14 +128,15 @@ window.initAxeThrow = function(container) {
 
     function throwAxe() {
         if (gameState !== 'playing') return;
-        // Limit max flying axes to prevent spam
-        if (axes.length > 1) return;
+        if (axes.length > 0) return; // Prevent spam
         
+        let startX = canvas.width / 2;
+        let startY = canvas.height;
         axes.push({ 
-            x: mouseX - 25, 
-            y: canvas.height - 40, 
+            startX: startX, startY: startY,
+            targetX: mouseX, targetY: mouseY,
+            progress: 0, speed: 0.08,
             w: 50, h: 50, 
-            vy: -20, // faster
             rotation: 0 
         });
     }
@@ -157,18 +158,27 @@ window.initAxeThrow = function(container) {
         pickFace();
     };
 
+    function gameOver() {
+        gameState = 'start';
+        document.getElementById('axe-start-screen').style.display = 'flex';
+        document.querySelector('#axe-start-screen h2').innerText = "GAME OVER";
+    }
+
+    function winLevel() {
+        gameState = 'start';
+        document.getElementById('axe-start-screen').style.display = 'flex';
+        document.querySelector('#axe-start-screen h2').innerText = "BRAVO ! TU AS GAGNÉ !";
+        document.querySelector('#axe-start-screen p').innerText = "Tu as survécu à la Roue !";
+    }
+
     function update() {
         if (gameState !== 'playing') return;
 
-        let t = Date.now() / 1200;
-        let cx = canvas.width / 2;
-        let cy = 220;
-        target.x = cx + Math.sin(t * 1.5) * 200 + Math.cos(t * 0.8) * 80;
-        target.y = cy + Math.sin(t * 1.1) * 100 + Math.cos(t * 2.3) * 60;
+        target.speed = 0.03 + (lodgedAxes.length * 0.003); // accelerates over time
+        target.angle += target.speed;
 
         if (bleeding > 0) {
             bleeding--;
-            // continually add blood if bleeding heavily
             if (bleeding % 5 === 0) {
                  createParticles(target.x + (Math.random()-0.5)*30, target.y - 60, 'blood');
             }
@@ -176,65 +186,61 @@ window.initAxeThrow = function(container) {
 
         for (let i = axes.length - 1; i >= 0; i--) {
             let axe = axes[i];
-            axe.y += axe.vy;
-            axe.rotation += 0.25;
+            axe.progress += axe.speed;
+            axe.rotation += 0.5;
 
-            // Axe tip collision point
-            let tipX = axe.x + axe.w/2;
-            let tipY = axe.y + axe.h/2; // center of axe sprite
+            if (axe.progress < 1) continue;
 
-            // Rotate tip coordinates back to check against unrotated board
-            // (If we use rotation, we do trig. But target.angle is 0 for now).
+            let tipX = axe.targetX;
+            let tipY = axe.targetY;
+
             let dx = tipX - target.x;
             let dy = tipY - target.y;
             let dist = Math.sqrt(dx*dx + dy*dy);
 
             if (dist < target.radius) {
-                // Hit the board!
+                // Hit board. Calculate backwards local coordinates accounting for wheel rotation!
+                let unrotX = dx * Math.cos(-target.angle) - dy * Math.sin(-target.angle);
+                let unrotY = dx * Math.sin(-target.angle) + dy * Math.cos(-target.angle);
+
                 axes.splice(i, 1);
                 
-                if (isHitPerson(dx, dy)) {
-                    // Ouch! Hit body/face
-                    bleeding = 60; // 1 second of heavy bleeding
+                if (isHitPerson(unrotX, unrotY)) {
+                    bleeding = 60;
                     createParticles(tipX, tipY, 'blood');
-                    pickFace(); // change face on hit for fun
+                    pickFace();
                     lives--;
                     livesEl.innerText = lives;
-                    if (lives <= 0) {
-                        gameState = 'start';
-                        document.getElementById('axe-start-screen').style.display = 'flex';
-                        document.querySelector('#axe-start-screen h2').innerText = "GAME OVER";
-                    }
+                    if (lives <= 0) gameOver();
                 } else {
-                    // Check if hit another axe
                     let hitAxe = false;
                     for (let la of lodgedAxes) {
-                         let adx = la.dx - dx; let ady = la.dy - dy;
-                         if (Math.sqrt(adx*adx + ady*ady) < 40) { hitAxe = true; break; }
+                         let adx = la.dx - unrotX; let ady = la.dy - unrotY;
+                         if (Math.sqrt(adx*adx + ady*ady) < 35) { hitAxe = true; break; }
                     }
                     if (hitAxe) {
-                         // Hit another axe!
                          lives--;
                          livesEl.innerText = lives;
                          createParticles(tipX, tipY, 'wood');
-                         if (lives <= 0) {
-                              gameState = 'start';
-                              document.getElementById('axe-start-screen').style.display = 'flex';
-                              document.querySelector('#axe-start-screen h2').innerText = "GAME OVER";
-                         }
+                         if (lives <= 0) gameOver();
                     } else {
-                         // Wood!
                          score += 10;
                          scoreEl.innerText = score;
                          if (typeof addGlobalScore === 'function') addGlobalScore(10);
                          createParticles(tipX, tipY, 'wood');
-                         // Lodge the axe
-                         lodgedAxes.push({ dx, dy, rotation: axe.rotation });
+                         
+                         lodgedAxes.push({ dx: unrotX, dy: unrotY, rotation: axe.rotation - target.angle });
+                         
+                         if (lodgedAxes.length >= 15) {
+                             winLevel();
+                         }
                     }
                 }
-            } else if (axe.y < -100) {
-                // Missed the whole thing
+            } else {
                 axes.splice(i, 1);
+                lives--; // Penalty on miss
+                livesEl.innerText = lives;
+                if (lives <= 0) gameOver();
             }
         }
 
@@ -305,11 +311,21 @@ window.initAxeThrow = function(container) {
 
         ctx.restore(); // end target translation
 
-        // Flying axes
+        // Flying axes (with proper trajectory)
         for(let axe of axes) {
             ctx.save();
-            ctx.translate(axe.x + axe.w/2, axe.y + axe.h/2);
+            let curX = axe.startX + (axe.targetX - axe.startX) * axe.progress;
+            let curY = axe.startY + (axe.targetY - axe.startY) * axe.progress;
+            
+            // Add a little parabolic arc (optional, makes it look thrown)
+            let arc = Math.sin(axe.progress * Math.PI) * -50; 
+            
+            ctx.translate(curX, curY + arc);
             ctx.rotate(axe.rotation);
+            
+            let scale = 1.0 - (axe.progress * 0.2); 
+            ctx.scale(scale, scale);
+            
             if (axeImg.complete) ctx.drawImage(axeToDraw, -axe.w/2, -axe.h/2, axe.w, axe.h);
             ctx.restore();
         }
@@ -324,12 +340,23 @@ window.initAxeThrow = function(container) {
         }
         ctx.globalAlpha = 1.0;
         
-        // Aim line
-        ctx.strokeStyle = 'rgba(255,100,0,0.5)';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([10, 15]);
-        ctx.beginPath(); ctx.moveTo(mouseX, canvas.height); ctx.lineTo(mouseX, 0); ctx.stroke();
-        ctx.setLineDash([]);
+        // Aim Crosshair (Retro style)
+        if (gameState === 'playing') {
+            ctx.strokeStyle = '#D4AF37';
+            ctx.shadowColor = '#000';
+            ctx.shadowBlur = 4;
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(mouseX - 20, mouseY); ctx.lineTo(mouseX + 20, mouseY);
+            ctx.moveTo(mouseX, mouseY - 20); ctx.lineTo(mouseX, mouseY + 20);
+            ctx.stroke();
+            
+            // small center hole
+            ctx.beginPath();
+            ctx.arc(mouseX, mouseY, 3, 0, Math.PI*2);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+        }
     }
 
     function loop() {
