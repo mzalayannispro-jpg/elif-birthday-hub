@@ -45,17 +45,17 @@ window.initTetris = function(container) {
     for(let r = 0; r < ROW; r++){ board[r] = []; for(let c = 0; c < COL; c++){ board[r][c] = { color: VACANT, img: null }; } }
 
     function drawSquare(x, y, cell) {
-        if(cell.color !== VACANT && cell.img && cell.img.complete && cell.img.naturalWidth > 0) {
+        if (cell.color === VACANT) {
+            ctx.clearRect(x*SQ, y*SQ, SQ, SQ);
+        } else if (cell.img && cell.img.complete && cell.img.naturalWidth > 0) {
             ctx.drawImage(cell.img, x*SQ, y*SQ, SQ, SQ);
             ctx.strokeStyle = "rgba(0,0,0,0.8)";
             ctx.strokeRect(x*SQ, y*SQ, SQ, SQ);
         } else {
             ctx.fillStyle = cell.color;
             ctx.fillRect(x*SQ, y*SQ, SQ, SQ);
-            if(cell.color !== VACANT) {
-                ctx.strokeStyle = "rgba(255,255,255,0.5)";
-                ctx.strokeRect(x*SQ, y*SQ, SQ, SQ);
-            }
+            ctx.strokeStyle = "rgba(255,255,255,0.5)";
+            ctx.strokeRect(x*SQ, y*SQ, SQ, SQ);
         }
     }
 

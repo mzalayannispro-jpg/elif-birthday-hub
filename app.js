@@ -91,27 +91,9 @@ function addGlobalScore(pts) {
 function updateScoreUI() {
     const el = document.getElementById('global-score');
     const inlineEl = document.getElementById('score-inline');
-    const palierEl = document.getElementById('palier-info');
-    const fill = document.getElementById('mystery-progress-fill');
-    const hint = document.getElementById('mystery-hint');
-    const sealed = document.getElementById('mystery-sealed');
-    const unlocked = document.getElementById('mystery-unlocked');
 
     if (el) el.textContent = globalScore;
     if (inlineEl) inlineEl.textContent = globalScore;
-
-    const pct = Math.min(100, (globalScore / SCORE_THRESHOLD) * 100);
-    if (fill) fill.style.width = pct + '%';
-    if (hint) hint.textContent = `${globalScore} / ${SCORE_THRESHOLD} pts`;
-
-    if (globalScore >= SCORE_THRESHOLD) {
-        if (sealed) sealed.style.display = 'none';
-        if (unlocked) unlocked.style.display = 'block';
-        if (palierEl) palierEl.textContent = '🎉 SURPRISE DÉBLOQUÉE !';
-    } else {
-        const remaining = SCORE_THRESHOLD - globalScore;
-        if (palierEl) palierEl.textContent = `${remaining} pts pour débloquer la surprise`;
-    }
 }
 
 // ============ GAME ROUTING ============
