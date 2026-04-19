@@ -9,30 +9,31 @@ window.initSpaceInvaders = function(container) {
                 </header>
                 
                 <div id="start-screen" class="screen active">
-                    <h2>INCOMING THREAT</h2>
-                    <p>Use Left/Right arrows to move. Space to shoot.</p>
-                    <button id="start-btn">ENGAGE</button>
+                    <h2 data-i18n="si.threat">INCOMING THREAT</h2>
+                    <p data-i18n="si.controls">Use Left/Right arrows to move. Space to shoot.</p>
+                    <button id="start-btn" data-i18n="si.engage">ENGAGE</button>
                 </div>
                 
                 <div id="game-over-screen" class="screen">
                     <img id="lose-img" alt="Defeat" style="max-height:180px; border-radius:12px; margin-bottom: 20px; box-shadow: 0 0 20px rgba(255,0,0,0.5);">
-                    <h2>MISSION FAILED</h2>
-                    <p>Final Score: <span id="final-score">0</span></p>
-                    <button id="restart-btn">TRY AGAIN</button>
-                    <button style="margin-top:20px; background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:10px 20px; border-radius:6px; cursor:pointer;" onclick="if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame();">RETOUR MENU</button>
+                    <h2 data-i18n="si.failed">MISSION FAILED</h2>
+                    <p><span data-i18n="si.final">Final Score: </span><span id="final-score">0</span></p>
+                    <button id="restart-btn" data-i18n="si.try">TRY AGAIN</button>
+                    <button style="margin-top:20px; background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:10px 20px; border-radius:6px; cursor:pointer;" onclick="if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame();" data-i18n="si.menu">RETOUR MENU</button>
                 </div>
                 
                 <div id="victory-screen" class="screen">
                     <img id="win-img" alt="Victory" style="max-height:180px; border-radius:12px; margin-bottom: 20px; box-shadow: 0 0 20px rgba(0,255,0,0.5);">
-                    <h2 style="font-size:30px; text-align:center;">You Won (my heart babylovebutterfly) 🌹</h2>
-                    <p>Final Score: <span id="victory-score">0</span></p>
-                    <button id="next-level-btn">NEXT SECTOR</button>
-                    <button style="margin-top:20px; background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:10px 20px; border-radius:6px; cursor:pointer;" onclick="if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame();">RETOUR MENU</button>
+                    <h2 style="font-size:30px; text-align:center;" data-i18n="si.won">You Won (my heart babylovebutterfly) 🌹</h2>
+                    <p><span data-i18n="si.final">Final Score: </span><span id="victory-score">0</span></p>
+                    <button id="next-level-btn" data-i18n="si.next">NEXT SECTOR</button>
+                    <button style="margin-top:20px; background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:10px 20px; border-radius:6px; cursor:pointer;" onclick="if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame();" data-i18n="si.menu">RETOUR MENU</button>
                 </div>
             </div>
             <canvas id="gameCanvas"></canvas>
         </div>
         `;
+        if(window.setLanguage) window.setLanguage(window.currentLang);
     }
 
     const canvas = document.getElementById('gameCanvas');

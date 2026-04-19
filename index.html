@@ -37,10 +37,10 @@
         <!-- Titre principal -->
         <div class="overlay-center">
             <div class="overlay-ornament">✦ ✦ ✦ ✦ ✦</div>
-            <h1 class="blinking-text">İYİ Kİ DOĞDUN</h1>
-            <h2 class="blinking-text-sub">AŞKIM! 🌹</h2>
+            <h1 class="blinking-text" data-i18n="title.happy">İYİ Kİ DOĞDUN</h1>
+            <h2 class="blinking-text-sub" data-i18n="title.love">AŞKIM! 🌹</h2>
             <div class="overlay-ornament">✦ ✦ ✦ ✦ ✦</div>
-            <p class="overlay-hint">Clique n'importe où pour continuer...</p>
+            <p class="overlay-hint" data-i18n="title.click">Clique n'importe où pour continuer...</p>
         </div>
     </div>
 
@@ -51,12 +51,12 @@
         <div class="modal-content">
             <button id="close-modal" class="close-btn" aria-label="Fermer">×</button>
             <div class="modal-ornament">🌙 ✦ 🌙</div>
-            <h2>Joyeux Anniversaire ! 🎂</h2>
-            <p>
+            <h2 data-i18n="modal.title">Joyeux Anniversaire ! 🎂</h2>
+            <p data-i18n="modal.body">
                 [Ici ton texte d'amour et de célébration, que tu pourras modifier à ta guise. Un petit mot doux pour introduire la suite...]
             </p>
             <div class="modal-ornament">🌹 ✦ 🌹</div>
-            <button id="to-dashboard-btn" class="modal-cta-btn">Découvrir ta surprise ✦</button>
+            <button id="to-dashboard-btn" class="modal-cta-btn" data-i18n="modal.btn">Découvrir ta surprise ✦</button>
         </div>
     </div>
 
@@ -69,12 +69,18 @@
         <header class="dashboard-header">
             <div class="dash-header-ornament">✦</div>
             <div class="dash-header-center">
-                <p class="dash-subtitle">✦ HOŞGELDİNİZ ✦</p>
-                <h1 class="dash-title">ELIF'İN <span>MULTIVERSE</span></h1>
+                <p class="dash-subtitle" data-i18n="dash.welcome">✦ HOŞGELDİNİZ ✦</p>
+                <h1 class="dash-title"><span data-i18n="dash.title">ELIF'İN</span> <span>MULTIVERSE</span></h1>
             </div>
-            <div class="global-score-display">
-                <div class="score-lbl">PUAN</div>
-                <div id="global-score" class="score-val">0</div>
+            <div style="display:flex; align-items:center; gap:15px;">
+                <div style="display:flex; gap:5px;">
+                    <button onclick="setLanguage('en')" style="background:none; border:none; cursor:pointer; font-size:24px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.3)); transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">🇬🇧</button>
+                    <button onclick="setLanguage('tr')" style="background:none; border:none; cursor:pointer; font-size:24px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.3)); transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">🇹🇷</button>
+                </div>
+                <div class="global-score-display">
+                    <div class="score-lbl" data-i18n="dash.score">PUAN</div>
+                    <div id="global-score" class="score-val">0</div>
+                </div>
             </div>
         </header>
 
@@ -83,41 +89,41 @@
             <!-- SECTION JEUX -->
             <section id="jeux" class="tab-panel active">
                 <div id="game-menu">
-                    <h2 class="section-title">✦ À Toi de Jouer, Championne ! ✦</h2>
+                    <h2 class="section-title" data-i18n="dash.play">✦ À Toi de Jouer, Championne ! ✦</h2>
                     <div class="games-container">
                         <button class="game-card-btn" onclick="showGame('space-invaders')">
                             <span class="btn-icon">👾</span>
-                            <span class="btn-label">SPACE INVADERS</span>
-                            <span class="btn-sub">Défends la galaxie</span>
+                            <span class="btn-label" data-i18n="game.si">SPACE INVADERS</span>
+                            <span class="btn-sub" data-i18n="game.si.sub">Défends la galaxie</span>
                         </button>
                         <button class="game-card-btn" onclick="showGame('mahjong')">
                             <span class="btn-icon">🀄</span>
-                            <span class="btn-label">MAHJONG</span>
-                            <span class="btn-sub">Trouve les paires</span>
+                            <span class="btn-label" data-i18n="game.mj">MAHJONG</span>
+                            <span class="btn-sub" data-i18n="game.mj.sub">Trouve les paires</span>
                         </button>
                         <button class="game-card-btn" onclick="showGame('sudoku')">
                             <span class="btn-icon">🔢</span>
-                            <span class="btn-label">SUDOKU</span>
-                            <span class="btn-sub">Remplis la grille</span>
+                            <span class="btn-label" data-i18n="game.sdk">SUDOKU</span>
+                            <span class="btn-sub" data-i18n="game.sdk.sub">Remplis la grille</span>
                         </button>
                         <button class="game-card-btn" onclick="showGame('tetris')">
                             <span class="btn-icon">🧱</span>
-                            <span class="btn-label">TETRIS</span>
-                            <span class="btn-sub">Classique empilé</span>
+                            <span class="btn-label" data-i18n="game.tetris">TETRIS</span>
+                            <span class="btn-sub" data-i18n="game.tetris.sub">Classique empilé</span>
                         </button>
                         <button class="game-card-btn" onclick="showGame('axe-throw')">
                             <span class="btn-icon">🪓</span>
-                            <span class="btn-label">UZINAGAZ</span>
-                            <span class="btn-sub">Lancer de Hache</span>
+                            <span class="btn-label" data-i18n="game.axe">UZINAGAZ</span>
+                            <span class="btn-sub" data-i18n="game.axe.sub">Lancer de Hache</span>
                         </button>
                     </div>
                     <div class="score-info-box">
-                        <p>🏆 Score Global : <strong id="score-inline">0</strong> pts</p>
+                        <p><span data-i18n="dash.global_score">🏆 Score Global : </span><strong id="score-inline">0</strong> pts</p>
                     </div>
                 </div>
 
                 <div id="active-game-area" style="display:none;">
-                    <button class="back-to-menu-btn" onclick="hideGame()">← Retour aux jeux</button>
+                    <button class="back-to-menu-btn" onclick="hideGame()" data-i18n="game.back">← Retour aux jeux</button>
                     <div id="game-slot"></div>
                 </div>
             </section>
@@ -131,11 +137,12 @@
         <img id="game-over-sticker" class="game-over-sticker" src="assets/STK-20250616-WA0002.webp" alt="Game Over">
         <button id="game-over-replay-btn" class="game-over-replay-btn hidden">
             <img src="assets/STK-20251014-WA0001.webp" alt="Rejouer">
-            <div style="color:var(--gold); font-family:'Cinzel Decorative'; font-weight:bold; font-size:18px; margin-top:10px;">REJOUER</div>
+            <div style="color:var(--gold); font-family:'Cinzel Decorative'; font-weight:bold; font-size:18px; margin-top:10px;" data-i18n="game.replay">REJOUER</div>
         </button>
     </div>
 
     <!-- Scripts -->
+    <script src="assets/i18n.js"></script>
     <script src="assets/quotes.js"></script>
     <script src="assets/assets_list.js"></script>
     <script src="app.js"></script>

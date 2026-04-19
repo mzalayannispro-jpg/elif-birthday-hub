@@ -18,10 +18,10 @@ window.initSudoku = function(container) {
     container.innerHTML = `
     <div style="width:90vw; max-width:700px; background:linear-gradient(160deg, rgba(20,3,0,0.96), rgba(50,5,5,0.92)); border:3px solid #D4AF37; border-radius:16px; padding:28px; box-shadow:0 0 40px rgba(212,175,55,0.25);">
         <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h2 style="font-family:'Cinzel Decorative',cursive; color:#D4AF37; font-size:20px; letter-spacing:3px;">🔢 SUDOKU</h2>
+            <h2 style="font-family:'Cinzel Decorative',cursive; color:#D4AF37; font-size:20px; letter-spacing:3px;" data-i18n="game.sdk">🔢 SUDOKU</h2>
             <div>
-                <button onclick="initSudoku(document.getElementById('game-slot'))" style="background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:6px 14px; border-radius:5px; cursor:pointer; margin-right:6px;">Nouveau</button>
-                <button onclick="hideGame()" style="background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:6px 14px; border-radius:5px; cursor:pointer;">← Menu</button>
+                <button onclick="initSudoku(document.getElementById('game-slot'))" style="background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:6px 14px; border-radius:5px; cursor:pointer; margin-right:6px;" data-i18n="game.replay">Nouveau</button>
+                <button onclick="hideGame()" style="background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:6px 14px; border-radius:5px; cursor:pointer;" data-i18n="game.back">← Menu</button>
             </div>
         </header>
         
@@ -34,12 +34,14 @@ window.initSudoku = function(container) {
         <div id="sudoku-grid-wrap" style="display:flex; justify-content:center; margin-bottom:20px;"></div>
         
         <div style="text-align:center; display:flex; gap:12px; justify-content:center; flex-direction:column; align-items:center;">
-            <p id="sudoku-errors" style="color:#f43f5e; font-size:18px; font-weight:bold; font-family:'Outfit',sans-serif; margin:0;">Erreurs : 0 / 3</p>
+            <p id="sudoku-errors" style="color:#f43f5e; font-size:18px; font-weight:bold; font-family:'Outfit',sans-serif; margin:0;" data-i18n="sdk.errors"></p>
             <p id="check-result" style="text-align:center; font-size:16px; font-family:'Lora',serif; min-height:20px; color:#4ECDC4; transition: all 0.3s;"></p>
         </div>
     </div>
     `;
-
+    if(window.setLanguage) window.setLanguage(window.currentLang);
+    document.getElementById('sudoku-errors').textContent = window.t('sdk.errors').replace('{x}', '0');
+    
     let errorCount = 0;
 
     // Generate Sudoku
@@ -159,11 +161,11 @@ window.initSudoku = function(container) {
                         }, 1000);
                         
                         errorCount++;
-                        document.getElementById('sudoku-errors').textContent = `Erreurs : ${errorCount} / 3`;
+                        document.getElementById('sudoku-errors').textContent = window.t('sdk.errors').replace('{x}', errorCount);
                         
                         if (errorCount >= 3) {
                             const result = document.getElementById('check-result');
-                            result.innerHTML = `❌ Trop d'erreurs ! Un nouveau Sudoku est recommandé...`;
+                            result.innerHTML = window.t('sdk.toomany');
                             result.style.color = '#f43f5e';
                             // Disable everything
                             table.querySelectorAll('input').forEach(inp => inp.readOnly = true);
@@ -199,7 +201,7 @@ window.initSudoku = function(container) {
             const result = document.getElementById('check-result');
             result.innerHTML = `
                 <div style="animation: fade-in 1s forwards;">
-                    <h3 style="color:#4ade80; font-family:'Cinzel Decorative'; margin-bottom:10px;">🎉 PARFAIT ! +100 points !</h3>
+                    <h3 style="color:#4ade80; font-family:'Cinzel Decorative'; margin-bottom:10px;">${window.t('sdk.perfect')}</h3>
                     <img src="../space-invaders/OwnSticker_20240410_120642727.png.jpg" style="max-height:180px; border-radius:10px; border:3px solid #D4AF37; box-shadow:0 0 20px rgba(212,175,55,0.6);" />
                     <h2 style="color:#F5E27A; font-family:'Cinzel Decorative',cursive; margin-top:10px;">Elif is Lisan al Ghaib 🌹</h2>
                 </div>

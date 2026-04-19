@@ -124,7 +124,7 @@ window.hideGame = function() {
 
 // ============ EASTER EGG ============
 window.revealSurprise = function() {
-    alert("🛫 PRÉPARE TON SAC ! LA SURPRISE EST EN ROUTE...\n\n[La vidéo de ton cadeau apparaîtra ici]");
+    alert(window.t('surprise.msg'));
 };
 
 // ============ GLOBAL GAME OVER ============

@@ -11,15 +11,34 @@ jsContent += `window.GAME_ASSETS = {\n`;
 
 foldersToScan.forEach((folder, index) => {
     const folderPath = path.join(assetsDir, folder);
-    let files = [];
-    if (fs.existsSync(folderPath)) {
-        files = fs.readdirSync(folderPath).filter(f => /\.(png|jpe?g|webp|gif)$/i.test(f));
-    } else {
+    if (!fs.existsSync(folderPath)) {
         fs.mkdirSync(folderPath);
     }
     
-    const relativePaths = files.map(f => `"assets/${folder}/${f}"`);
-    jsContent += `  "${folder}": [\n    ${relativePaths.join(',\n    ')}\n  ]`;
+    if (folder === 'tetris') {
+        const shapes = ['I', 'J', 'L', 'O', 'S', 'T', 'Z'];
+        let tetrisObj = {};
+        
+        shapes.forEach(shape => {
+            const shapeDir = path.join(folderPath, shape);
+            if (!fs.existsSync(shapeDir)) fs.mkdirSync(shapeDir);
+            
+            const files = fs.readdirSync(shapeDir).filter(f => /\.(png|jpe?g|webp|gif)$/i.test(f));
+            tetrisObj[shape] = files.map(f => `"assets/tetris/${shape}/${f}"`);
+        });
+        
+        jsContent += `  "${folder}": {\n`;
+        let shapeEntries = [];
+        for (let shape in tetrisObj) {
+            shapeEntries.push(`    "${shape}": [\n      ${tetrisObj[shape].join(',\n      ')}\n    ]`);
+        }
+        jsContent += shapeEntries.join(',\n') + `\n  }`;
+    } else {
+        const files = fs.readdirSync(folderPath).filter(f => /\.(png|jpe?g|webp|gif)$/i.test(f));
+        const relativePaths = files.map(f => `"assets/${folder}/${f}"`);
+        jsContent += `  "${folder}": [\n    ${relativePaths.join(',\n    ')}\n  ]`;
+    }
+    
     if (index < foldersToScan.length - 1) jsContent += ',\n';
     else jsContent += '\n';
 });

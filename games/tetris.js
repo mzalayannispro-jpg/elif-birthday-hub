@@ -14,18 +14,19 @@ window.initTetris = function(container) {
                 <canvas id="tetris-canvas" width="400" height="800" style="background:rgba(0,0,0,0.8); border:2px solid #D4AF37; box-shadow:0 0 15px rgba(0,0,0,0.8); width:100%; max-width:400px; max-height:80vh;"></canvas>
                 
                 <div id="tetris-start-screen" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                    <h2 style="color:#D4AF37; font-family:'Cinzel Decorative';">PRÊT ?</h2>
-                    <p style="color:#ddd; margin-bottom:20px; font-size:14px; line-height:1.6;">⬅️ ➡️ : Bouger<br>⬆️ : Tourner<br>⬇️ : Accélérer<br>Espace : Chute libre</p>
-                    <button id="start-tetris-btn" style="background:#D4AF37; border:none; color:#1A1A3A; padding:10px 20px; font-family:'Cinzel Decorative'; font-weight:bold; cursor:pointer; border-radius:6px;">JOUER</button>
+                    <h2 style="color:#D4AF37; font-family:'Cinzel Decorative';" data-i18n="game.ready">PRÊT ?</h2>
+                    <p style="color:#ddd; margin-bottom:20px; font-size:14px; line-height:1.6;" data-i18n="tetris.controls">⬅️ ➡️ : Bouger<br>⬆️ : Tourner<br>⬇️ : Accélérer<br>Espace : Chute libre</p>
+                    <button id="start-tetris-btn" style="background:#D4AF37; border:none; color:#1A1A3A; padding:10px 20px; font-family:'Cinzel Decorative'; font-weight:bold; cursor:pointer; border-radius:6px;" data-i18n="tetris.play">JOUER</button>
                 </div>
                 
                 <div id="tetris-gameover" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(139,0,0,0.8); flex-direction:column; justify-content:center; align-items:center;">
-                    <h2 style="color:#FFF;">GAME OVER</h2>
-                    <button onclick="initTetris(document.getElementById('game-slot'))" style="background:#FFF; color:#8B0000; border:none; padding:10px 20px; font-weight:bold; cursor:pointer; border-radius:6px; margin-top:10px;">Rejouer</button>
+                    <h2 style="color:#FFF;" data-i18n="tetris.gameover">GAME OVER</h2>
+                    <button onclick="initTetris(document.getElementById('game-slot'))" style="background:#FFF; color:#8B0000; border:none; padding:10px 20px; font-weight:bold; cursor:pointer; border-radius:6px; margin-top:10px;" data-i18n="game.replay">Rejouer</button>
                 </div>
             </div>
         </div>
         `;
+        if(window.setLanguage) window.setLanguage(window.currentLang);
     }
 
     const cvs = document.getElementById('tetris-canvas');
@@ -37,47 +38,18 @@ window.initTetris = function(container) {
     const SQ = 40; // 400 / 10
     const VACANT = "transparent";
     
-    // Load images
-    function trimImage(imgEl) {
-        if (!imgEl.complete || imgEl.naturalWidth === 0) return imgEl;
-        let c = document.createElement('canvas');
-        c.width = imgEl.naturalWidth; c.height = imgEl.naturalHeight;
-        let ctxT = c.getContext('2d');
-        ctxT.drawImage(imgEl, 0, 0);
-        try {
-            let data = ctxT.getImageData(0,0,c.width, c.height).data;
-            let top=null, bottom=null, left=null, right=null;
-            for(let y=0; y<c.height; y++){
-                for(let x=0; x<c.width; x++){
-                    let alpha = data[(y*c.width + x)*4 + 3];
-                    if(alpha > 10){
-                        if(top===null) top=y;
-                        bottom=y;
-                        if(left===null || x<left) left=x;
-                        if(right===null || x>right) right=x;
-                    }
-                }
-            }
-            if(top===null) return imgEl;
-            let trimW = right - left + 1;
-            let trimH = bottom - top + 1;
-            let trimC = document.createElement('canvas');
-            trimC.width = trimW; trimC.height = trimH;
-            trimC.getContext('2d').drawImage(c, left, top, trimW, trimH, 0, 0, trimW, trimH);
-            let trimmedImg = new Image();
-            trimmedImg.src = trimC.toDataURL();
-            return trimmedImg;
-        } catch(e) { return imgEl; }
-    }
-
-    const tetrisImagesUrls = window.TETRIS_IMAGES && window.TETRIS_IMAGES.length > 0 ? window.TETRIS_IMAGES : ['assets/player.webp'];
-    const loadedImages = [];
-    tetrisImagesUrls.forEach(url => {
-        let i = new Image();
-        let trimState = { completed: false, get img() { return trimState.completed ? trimState.actualImg : i; }, actualImg: i };
-        i.onload = () => { trimState.actualImg = trimImage(i); trimState.completed = true; };
-        i.src = url;
-        loadedImages.push(trimState);
+    const SHAPE_NAMES = ['I', 'J', 'L', 'O', 'S', 'T', 'Z'];
+    const shapeImages = {};
+    
+    SHAPE_NAMES.forEach(shape => {
+        shapeImages[shape] = [];
+        if (window.GAME_ASSETS && window.GAME_ASSETS['tetris'] && window.GAME_ASSETS['tetris'][shape]) {
+            window.GAME_ASSETS['tetris'][shape].forEach(url => {
+                let img = new Image();
+                img.src = url;
+                shapeImages[shape].push(img);
+            });
+        }
     });
 
     let board = [];
@@ -154,8 +126,13 @@ window.initTetris = function(container) {
 
     function randomPiece() {
         let r = Math.floor(Math.random() * PIECES.length);
-        let state = loadedImages[Math.floor(Math.random() * loadedImages.length)];
-        let img = state.img;
+        let shapeName = SHAPE_NAMES[r];
+        let imgArray = shapeImages[shapeName];
+        let img = null;
+        if (imgArray && imgArray.length > 0) {
+            img = imgArray[Math.floor(Math.random() * imgArray.length)];
+        }
+        
         let neonColors = ['#FF00FF', '#00FFFF', '#00FF00', '#FFFF00', '#FF3300', '#00FF99', '#9D00FF'];
         let rc = neonColors[Math.floor(Math.random() * neonColors.length)];
         return new Piece(PIECES[r], rc, img);

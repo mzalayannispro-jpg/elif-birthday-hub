@@ -1,18 +1,29 @@
 // Fichier généré automatiquement via update_stickers.bat
 
 window.GAME_ASSETS = {
-  "tetris": [
-    "assets/tetris/1f6c5518-609c-4db4-ae89-77325c921daf.webp",
-    "assets/tetris/2576ded6-55a4-4ae3-8a65-b2958364772d.webp",
-    "assets/tetris/9c08de24-fc9a-4106-8483-430a0f546023.webp",
-    "assets/tetris/alien3.webp",
-    "assets/tetris/STK-20240102-WA0000.webp",
-    "assets/tetris/STK-20241108-WA0002.webp",
-    "assets/tetris/STK-20241117-WA0004.webp",
-    "assets/tetris/STK-20241217-WA0045 - Copie.png",
-    "assets/tetris/STK-20241217-WA0048 - Copie.webp",
-    "assets/tetris/STK-20241217-WA0049 - Copie.webp"
-  ],
+  "tetris": {
+    "I": [
+      
+    ],
+    "J": [
+      
+    ],
+    "L": [
+      
+    ],
+    "O": [
+      
+    ],
+    "S": [
+      
+    ],
+    "T": [
+      
+    ],
+    "Z": [
+      
+    ]
+  },
   "mahjong": [
     "assets/mahjong/2576ded6-55a4-4ae3-8a65-b2958364772d.webp",
     "assets/mahjong/94d92225-07d4-44fa-b633-1b3daa63f094.webp",

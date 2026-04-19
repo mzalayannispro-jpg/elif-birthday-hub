@@ -13,14 +13,15 @@ window.initAxeThrow = function(container) {
             <div style="position:relative; display:inline-block;">
                 <canvas id="axe-canvas" width="800" height="600" style="background:#0F0700; border:2px solid #5C3A21; border-radius:8px; cursor:crosshair; box-shadow:inset 0 0 40px rgba(0,0,0,0.8);"></canvas>
                 <div id="axe-start-screen" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:8px;">
-                    <h2 style="color:#D4AF37; font-family:'Cinzel Decorative'; font-size:32px;">BUT : PLANTER LE BOIS !</h2>
-                    <p style="color:#ddd; margin-bottom:10px; font-size:18px;">Ne touche surtout pas la personne au centre.</p>
-                    <p style="color:#ff4d4d; margin-bottom:30px; font-weight:bold;">Clique ou ESPACE pour lancer.</p>
-                    <button id="start-axe-btn" style="background:#8B0000; border:2px solid #D4AF37; color:#fff; padding:15px 30px; font-size:20px; font-family:'Cinzel Decorative'; font-weight:bold; cursor:pointer; border-radius:6px;">JOUER</button>
+                    <h2 style="color:#D4AF37; font-family:'Cinzel Decorative'; font-size:32px;" data-i18n="axe.goal">BUT : PLANTER LE BOIS !</h2>
+                    <p style="color:#ddd; margin-bottom:10px; font-size:18px;" data-i18n="axe.warn">Ne touche surtout pas la personne au centre.</p>
+                    <p style="color:#ff4d4d; margin-bottom:30px; font-weight:bold;" data-i18n="axe.click">Clique ou ESPACE pour lancer.</p>
+                    <button id="start-axe-btn" style="background:#8B0000; border:2px solid #D4AF37; color:#fff; padding:15px 30px; font-size:20px; font-family:'Cinzel Decorative'; font-weight:bold; cursor:pointer; border-radius:6px;" data-i18n="tetris.play">JOUER</button>
                 </div>
             </div>
         </div>
         `;
+        if(window.setLanguage) window.setLanguage(window.currentLang);
     }
 
     const canvas = document.getElementById('axe-canvas');
@@ -166,15 +167,16 @@ window.initAxeThrow = function(container) {
         } else {
             gameState = 'start';
             document.getElementById('axe-start-screen').style.display = 'flex';
-            document.querySelector('#axe-start-screen h2').innerText = "GAME OVER";
+            document.querySelector('#axe-start-screen h2').innerText = window.t('tetris.gameover');
+            document.querySelector('#axe-start-screen p').innerText = "";
         }
     }
 
     function winLevel() {
         gameState = 'start';
         document.getElementById('axe-start-screen').style.display = 'flex';
-        document.querySelector('#axe-start-screen h2').innerText = "BRAVO ! TU AS GAGNÉ !";
-        document.querySelector('#axe-start-screen p').innerText = "Tu as survécu à la Roue !";
+        document.querySelector('#axe-start-screen h2').innerText = window.t('axe.win');
+        document.querySelector('#axe-start-screen p').innerText = window.t('axe.survived');
     }
 
     function update() {
