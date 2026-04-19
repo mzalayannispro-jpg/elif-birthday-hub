@@ -38,7 +38,7 @@ window.initAxeThrow = function(container) {
     
     // Images
     const axeImg = new Image(); axeImg.src = 'assets/axe.png';
-    const targetBoardImg = new Image(); targetBoardImg.src = 'assets/uzinagaz_body.png';
+    const targetBoardImg = new Image(); targetBoardImg.src = 'assets/green_tracksuit.png';
     
     // Explicitly restrict to face stickers
     let faceUrls = [
@@ -62,7 +62,15 @@ window.initAxeThrow = function(container) {
         y: 220,
         radius: 170, // clickable wood radius
         faceImg: null,
-        angle: 0
+        angle: 0,
+        dirX: 1,
+        speedX: 2.5
+    };
+    
+    let mouseX = canvas.width / 2;
+    canvas.onmousemove = (e) => {
+        let rect = canvas.getBoundingClientRect();
+        mouseX = e.clientX - rect.left;
     };
 
     function pickFace() {
@@ -99,7 +107,7 @@ window.initAxeThrow = function(container) {
         if (axes.length > 1) return;
         
         axes.push({ 
-            x: canvas.width / 2 - 25, 
+            x: mouseX - 25, 
             y: canvas.height - 40, 
             w: 50, h: 50, 
             vy: -20, // faster
@@ -127,8 +135,10 @@ window.initAxeThrow = function(container) {
     function update() {
         if (gameState !== 'playing') return;
 
-        // Slow rotate target maybe?
-        // target.angle += 0.01;
+        target.x += target.speedX * target.dirX;
+        if (target.x > canvas.width - target.radius || target.x < target.radius) {
+            target.dirX *= -1;
+        }
 
         if (bleeding > 0) {
             bleeding--;
@@ -276,8 +286,11 @@ window.initAxeThrow = function(container) {
         ctx.globalAlpha = 1.0;
         
         // Aim line
-        ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-        ctx.beginPath(); ctx.moveTo(canvas.width/2, canvas.height); ctx.lineTo(canvas.width/2, 0); ctx.stroke();
+        ctx.strokeStyle = 'rgba(255,100,0,0.5)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([10, 15]);
+        ctx.beginPath(); ctx.moveTo(mouseX, canvas.height); ctx.lineTo(mouseX, 0); ctx.stroke();
+        ctx.setLineDash([]);
     }
 
     function loop() {

@@ -66,7 +66,7 @@ window.initMahjong = function(container) {
                 height: ${TILE_H}px;
                 left: ${offsetX + PAD_X + c * (TILE_W + PAD_X)}px;
                 top: ${offsetY + PAD_Y + r * (TILE_H + PAD_Y)}px;
-                background-image: url('${tile.imgSrc}');
+                background-image: url('${encodeURI(tile.imgSrc)}');
                 background-size: cover;
                 background-position: center;
                 border: 2px solid #D4AF37;

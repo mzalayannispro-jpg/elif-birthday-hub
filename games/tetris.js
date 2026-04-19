@@ -11,7 +11,7 @@ window.initTetris = function(container) {
             </header>
             
             <div id="tetris-wrapper" style="position:relative; display:inline-block;">
-                <canvas id="tetris-canvas" width="300" height="600" style="background:rgba(0,0,0,0.8); border:2px solid #D4AF37; box-shadow:0 0 15px rgba(0,0,0,0.8);"></canvas>
+                <canvas id="tetris-canvas" width="400" height="800" style="background:rgba(0,0,0,0.8); border:2px solid #D4AF37; box-shadow:0 0 15px rgba(0,0,0,0.8); width:100%; max-width:400px; max-height:80vh;"></canvas>
                 
                 <div id="tetris-start-screen" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; flex-direction:column; justify-content:center; align-items:center;">
                     <h2 style="color:#D4AF37; font-family:'Cinzel Decorative';">PRÊT ?</h2>
@@ -34,7 +34,7 @@ window.initTetris = function(container) {
     
     const ROW = 20;
     const COL = 10;
-    const SQ = 30; // 300 / 10
+    const SQ = 40; // 400 / 10
     const VACANT = "transparent";
     
     // Load images
@@ -47,14 +47,20 @@ window.initTetris = function(container) {
     function drawSquare(x, y, cell) {
         if (cell.color === VACANT) {
             ctx.clearRect(x*SQ, y*SQ, SQ, SQ);
-        } else if (cell.img && cell.img.complete && cell.img.naturalWidth > 0) {
-            ctx.drawImage(cell.img, x*SQ, y*SQ, SQ, SQ);
+        } else if (cell.img && cell.img.complete && cell.img.naturalWidth > 0 && cell.wCells) {
+            let srcW = cell.img.naturalWidth / cell.wCells;
+            let srcH = cell.img.naturalHeight / cell.hCells;
+            let srcX = cell.imgOx * cell.img.naturalWidth;
+            let srcY = cell.imgOy * cell.img.naturalHeight;
+            ctx.drawImage(cell.img, srcX, srcY, srcW, srcH, x*SQ, y*SQ, SQ, SQ);
             ctx.strokeStyle = "rgba(0,0,0,0.8)";
+            ctx.lineWidth = 1;
             ctx.strokeRect(x*SQ, y*SQ, SQ, SQ);
-        } else {
+        } else if (cell.color !== VACANT) {
             ctx.fillStyle = cell.color;
             ctx.fillRect(x*SQ, y*SQ, SQ, SQ);
             ctx.strokeStyle = "rgba(255,255,255,0.5)";
+            ctx.lineWidth = 1;
             ctx.strokeRect(x*SQ, y*SQ, SQ, SQ);
         }
     }
@@ -115,10 +121,19 @@ window.initTetris = function(container) {
     }
 
     Piece.prototype.fill = function(color) {
+        let bounds = this.getBounds();
         for(let r = 0; r < this.activeTetromino.length; r++) {
             for(let c = 0; c < this.activeTetromino.length; c++) {
                 if(this.activeTetromino[r][c]) {
-                    drawSquare(this.x + c, this.y + r, {color: color, img: this.img});
+                    let cell = {
+                        color: color,
+                        img: this.img,
+                        imgOx: (c - bounds.minC) / bounds.wCells,
+                        imgOy: (r - bounds.minR) / bounds.hCells,
+                        wCells: bounds.wCells,
+                        hCells: bounds.hCells
+                    };
+                    drawSquare(this.x + c, this.y + r, cell);
                 }
             }
         }
@@ -173,6 +188,7 @@ window.initTetris = function(container) {
     }
 
     Piece.prototype.lock = function() {
+        let bounds = this.getBounds();
         for(let r = 0; r < this.activeTetromino.length; r++) {
             for(let c = 0; c < this.activeTetromino.length; c++) {
                 if(!this.activeTetromino[r][c]) continue;
@@ -182,7 +198,14 @@ window.initTetris = function(container) {
                     window.tetrisReqId = null;
                     return;
                 }
-                board[this.y+r][this.x+c] = {color: this.color, img: this.img};
+                board[this.y+r][this.x+c] = {
+                    color: this.color, 
+                    img: this.img,
+                    imgOx: (c - bounds.minC) / bounds.wCells,
+                    imgOy: (r - bounds.minR) / bounds.hCells,
+                    wCells: bounds.wCells,
+                    hCells: bounds.hCells
+                };
             }
         }
         

@@ -4,14 +4,21 @@ window.GAME_ASSETS = {
   "tetris": [
     "assets/tetris/06557c01-4024-47ed-97e3-056edb1b8041.webp",
     "assets/tetris/09eb6161-134e-43e3-af95-7c8004c45547.webp",
+    "assets/tetris/1f6c5518-609c-4db4-ae89-77325c921daf.webp",
+    "assets/tetris/52652cc6-3dcf-46c8-9a6e-12e51c82ade5.webp",
     "assets/tetris/82e4f251-83ee-43ac-a13f-ab8f212e5364.webp",
     "assets/tetris/8fda3b14-b6ef-41c7-bea0-779166881f0c.webp",
+    "assets/tetris/9c08de24-fc9a-4106-8483-430a0f546023.webp",
     "assets/tetris/alien2.webp",
     "assets/tetris/f0c20484-97a9-4757-90d2-c4a7088b3cfb.webp",
     "assets/tetris/ff5b4366-508f-4fe6-8d77-ace79e61ca26.webp",
     "assets/tetris/STK-20240506-WA0001.webp",
     "assets/tetris/STK-20240608-WA0032.webp",
-    "assets/tetris/STK-20241108-WA0001.webp"
+    "assets/tetris/STK-20241108-WA0001.webp",
+    "assets/tetris/STK-20241108-WA0002.webp",
+    "assets/tetris/STK-20241117-WA0004.webp",
+    "assets/tetris/STK-20241217-WA0048 - Copie.webp",
+    "assets/tetris/STK-20241217-WA0049 - Copie.webp"
   ],
   "mahjong": [
     "assets/mahjong/2576ded6-55a4-4ae3-8a65-b2958364772d.webp",
@@ -22,11 +29,12 @@ window.GAME_ASSETS = {
     "assets/mahjong/STK-20241217-WA0045 - Copie.png"
   ],
   "space-invaders": [
+    "assets/space-invaders/09eb6161-134e-43e3-af95-7c8004c45547.webp",
     "assets/space-invaders/47f38fdf-b18e-40a1-bb06-35b98630d987.webp",
-    "assets/space-invaders/STK-20241108-WA0002.webp",
-    "assets/space-invaders/STK-20241117-WA0004.webp",
-    "assets/space-invaders/STK-20241217-WA0048 - Copie.webp",
-    "assets/space-invaders/STK-20241217-WA0049 - Copie.webp"
+    "assets/space-invaders/82e4f251-83ee-43ac-a13f-ab8f212e5364.webp",
+    "assets/space-invaders/8fda3b14-b6ef-41c7-bea0-779166881f0c.webp",
+    "assets/space-invaders/alien2.webp",
+    "assets/space-invaders/f0c20484-97a9-4757-90d2-c4a7088b3cfb.webp"
   ],
   "sudoku": [
     "assets/sudoku/1f6c5518-609c-4db4-ae89-77325c921daf.webp",
