@@ -135,10 +135,11 @@ window.initAxeThrow = function(container) {
     function update() {
         if (gameState !== 'playing') return;
 
-        target.x += target.speedX * target.dirX;
-        if (target.x > canvas.width - target.radius || target.x < target.radius) {
-            target.dirX *= -1;
-        }
+        let t = Date.now() / 1200;
+        let cx = canvas.width / 2;
+        let cy = 220;
+        target.x = cx + Math.sin(t * 1.5) * 200 + Math.cos(t * 0.8) * 80;
+        target.y = cy + Math.sin(t * 1.1) * 100 + Math.cos(t * 2.3) * 60;
 
         if (bleeding > 0) {
             bleeding--;
@@ -228,10 +229,20 @@ window.initAxeThrow = function(container) {
         ctx.translate(target.x, target.y);
         ctx.rotate(target.angle);
 
-        // Draw Big Target Background
+        // Draw wood Cross
+        ctx.fillStyle = '#4A2511';
+        let crossW = 340, crossH = 40;
+        ctx.fillRect(-crossW/2, -crossH/2, crossW, crossH);
+        ctx.fillRect(-crossH/2, -crossW/2, crossH, crossW);
+        ctx.strokeStyle = '#2B1408';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(-crossW/2, -crossH/2, crossW, crossH);
+        ctx.strokeRect(-crossH/2, -crossW/2, crossH, crossW);
+
+        // Draw Big Target Background (Tracksuit)
         if (targetBoardImg.complete && targetBoardImg.naturalWidth > 0) {
-            // Drawn centered
-            ctx.drawImage(targetBoardImg, -200, -200, 400, 400);
+            // Drawn centered, slightly shifted down
+            ctx.drawImage(targetBoardImg, -140, -100, 280, 280);
         } else {
             ctx.fillStyle = '#8B4513';
             ctx.beginPath(); ctx.arc(0, 0, target.radius, 0, Math.PI*2); ctx.fill();

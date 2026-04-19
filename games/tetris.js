@@ -45,23 +45,17 @@ window.initTetris = function(container) {
     for(let r = 0; r < ROW; r++){ board[r] = []; for(let c = 0; c < COL; c++){ board[r][c] = { color: VACANT, img: null }; } }
 
     function drawSquare(x, y, cell) {
-        if (cell.color === VACANT) {
-            ctx.clearRect(x*SQ, y*SQ, SQ, SQ);
-        } else if (cell.img && cell.img.complete && cell.img.naturalWidth > 0 && cell.wCells) {
+        if (cell.color === VACANT) return;
+        
+        if (cell.img && cell.img.complete && cell.img.naturalWidth > 0 && cell.wCells) {
             let srcW = cell.img.naturalWidth / cell.wCells;
             let srcH = cell.img.naturalHeight / cell.hCells;
             let srcX = cell.imgOx * cell.img.naturalWidth;
             let srcY = cell.imgOy * cell.img.naturalHeight;
             ctx.drawImage(cell.img, srcX, srcY, srcW, srcH, x*SQ, y*SQ, SQ, SQ);
-            ctx.strokeStyle = "rgba(0,0,0,0.8)";
-            ctx.lineWidth = 1;
-            ctx.strokeRect(x*SQ, y*SQ, SQ, SQ);
-        } else if (cell.color !== VACANT) {
+        } else {
             ctx.fillStyle = cell.color;
             ctx.fillRect(x*SQ, y*SQ, SQ, SQ);
-            ctx.strokeStyle = "rgba(255,255,255,0.5)";
-            ctx.lineWidth = 1;
-            ctx.strokeRect(x*SQ, y*SQ, SQ, SQ);
         }
     }
 
@@ -69,9 +63,36 @@ window.initTetris = function(container) {
         ctx.clearRect(0,0,cvs.width,cvs.height);
         for(let r = 0; r < ROW; r++){ for(let c = 0; c < COL; c++){ drawSquare(c, r, board[r][c]); } }
         
+        // Locked pieces white strokes
+        ctx.strokeStyle = "rgba(255,255,255,1)";
+        ctx.lineWidth = 3;
+        for(let r = 0; r < ROW; r++) {
+            for(let c = 0; c < COL; c++) {
+                let cell = board[r][c];
+                if(cell.color !== VACANT && cell.pieceId) {
+                    let rx = c*SQ; let ry = r*SQ;
+                    ctx.beginPath();
+                    if(r===0 || (board[r-1] && board[r-1][c].pieceId !== cell.pieceId)) { ctx.moveTo(rx, ry); ctx.lineTo(rx+SQ, ry); }
+                    if(r===ROW-1 || (board[r+1] && board[r+1][c].pieceId !== cell.pieceId)) { ctx.moveTo(rx, ry+SQ); ctx.lineTo(rx+SQ, ry+SQ); }
+                    if(c===0 || board[r][c-1]?.pieceId !== cell.pieceId) { ctx.moveTo(rx, ry); ctx.lineTo(rx, ry+SQ); }
+                    if(c===COL-1 || board[r][c+1]?.pieceId !== cell.pieceId) { ctx.moveTo(rx+SQ, ry); ctx.lineTo(rx+SQ, ry+SQ); }
+                    ctx.stroke();
+                }
+            }
+        }
+        
         ctx.strokeStyle = "rgba(212,175,55,0.1)";
+        ctx.lineWidth = 1;
         for(let r = 0; r <= ROW; r++) { ctx.beginPath(); ctx.moveTo(0, r*SQ); ctx.lineTo(cvs.width, r*SQ); ctx.stroke(); }
         for(let c = 0; c <= COL; c++) { ctx.beginPath(); ctx.moveTo(c*SQ, 0); ctx.lineTo(c*SQ, cvs.height); ctx.stroke(); }
+    }
+    
+    function renderAll() {
+        drawBoard();
+        if(piece) {
+            piece.drawGhost();
+            piece.draw();
+        }
     }
 
     // Pieces shapes [I, J, L, O, S, T, Z]
@@ -139,37 +160,72 @@ window.initTetris = function(container) {
         }
     }
 
-    Piece.prototype.draw = function() { this.fill(this.color); }
-    Piece.prototype.unDraw = function() { this.fill(VACANT); }
+    Piece.prototype.draw = function() { 
+        this.fill(this.color); 
+        ctx.strokeStyle = "rgba(255,255,255,1)";
+        ctx.lineWidth = 3;
+        for(let r = 0; r < this.activeTetromino.length; r++) {
+            for(let c = 0; c < this.activeTetromino.length; c++) {
+                if(this.activeTetromino[r][c]) {
+                    let rx = (this.x + c)*SQ; let ry = (this.y + r)*SQ;
+                    ctx.beginPath();
+                    if(r===0 || !this.activeTetromino[r-1] || !this.activeTetromino[r-1][c]) { ctx.moveTo(rx, ry); ctx.lineTo(rx+SQ, ry); }
+                    if(r===this.activeTetromino.length-1 || !this.activeTetromino[r+1] || !this.activeTetromino[r+1][c]) { ctx.moveTo(rx, ry+SQ); ctx.lineTo(rx+SQ, ry+SQ); }
+                    if(c===0 || !this.activeTetromino[r][c-1]) { ctx.moveTo(rx, ry); ctx.lineTo(rx, ry+SQ); }
+                    if(c===this.activeTetromino.length-1 || !this.activeTetromino[r][c+1]) { ctx.moveTo(rx+SQ, ry); ctx.lineTo(rx+SQ, ry+SQ); }
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+    
+    Piece.prototype.drawGhost = function() {
+        let ghostY = this.y;
+        while(!this.collision(0, ghostY - this.y + 1, this.activeTetromino)) ghostY++;
+        ctx.globalAlpha = 0.2;
+        ctx.fillStyle = "white";
+        for(let r = 0; r < this.activeTetromino.length; r++) {
+            for(let c = 0; c < this.activeTetromino.length; c++) {
+                if(this.activeTetromino[r][c]) {
+                    ctx.fillRect((this.x + c)*SQ, (ghostY + r)*SQ, SQ, SQ);
+                }
+            }
+        }
+        ctx.globalAlpha = 1.0;
+    }
 
     Piece.prototype.moveDown = function() {
         if(!this.collision(0,1,this.activeTetromino)) {
-            this.unDraw(); this.y++; this.draw();
+            this.y++; renderAll();
         } else {
             this.lock();
             piece = randomPiece();
+            renderAll();
         }
     }
 
     Piece.prototype.moveRight = function() {
-        if(!this.collision(1,0,this.activeTetromino)){ this.unDraw(); this.x++; this.draw(); }
+        if(!this.collision(1,0,this.activeTetromino)){ this.x++; renderAll(); }
     }
     Piece.prototype.moveLeft = function() {
-        if(!this.collision(-1,0,this.activeTetromino)){ this.unDraw(); this.x--; this.draw(); }
+        if(!this.collision(-1,0,this.activeTetromino)){ this.x--; renderAll(); }
     }
 
     Piece.prototype.rotate = function() {
         let nextPattern = this.tetromino[(this.tetrominoN + 1) % this.tetromino.length];
         let kick = 0;
         if(this.collision(0,0,nextPattern)){
-            if(this.x > COL/2) kick = -1; else kick = 1;
+            // Wall Kicks
+            const tests = [1, -1, 2, -2];
+            for (let i = 0; i < tests.length; i++) {
+                if(!this.collision(tests[i],0,nextPattern)) { kick = tests[i]; break; }
+            }
         }
         if(!this.collision(kick,0,nextPattern)){
-            this.unDraw();
             this.x += kick;
             this.tetrominoN = (this.tetrominoN + 1) % this.tetromino.length;
             this.activeTetromino = this.tetromino[this.tetrominoN];
-            this.draw();
+            renderAll();
         }
     }
 
@@ -189,6 +245,7 @@ window.initTetris = function(container) {
 
     Piece.prototype.lock = function() {
         let bounds = this.getBounds();
+        let pieceId = Date.now() + Math.random();
         for(let r = 0; r < this.activeTetromino.length; r++) {
             for(let c = 0; c < this.activeTetromino.length; c++) {
                 if(!this.activeTetromino[r][c]) continue;
@@ -201,6 +258,7 @@ window.initTetris = function(container) {
                 board[this.y+r][this.x+c] = {
                     color: this.color, 
                     img: this.img,
+                    pieceId: pieceId,
                     imgOx: (c - bounds.minC) / bounds.wCells,
                     imgOy: (r - bounds.minR) / bounds.hCells,
                     wCells: bounds.wCells,
@@ -239,6 +297,7 @@ window.initTetris = function(container) {
         piece = randomPiece();
         document.getElementById('tetris-start-screen').style.display = 'none';
         dropStart = Date.now();
+        renderAll();
         loop();
     };
 
@@ -249,7 +308,7 @@ window.initTetris = function(container) {
             else if (e.code === 'ArrowUp') piece.rotate();
             else if (e.code === 'ArrowDown') { piece.moveDown(); dropStart = Date.now(); }
             else if (e.code === 'Space') { 
-                while(!piece.collision(0,1,piece.activeTetromino)) piece.moveDown();
+                while(!piece.collision(0,1,piece.activeTetromino)) piece.y++;
                 piece.moveDown(); // to lock it
                 dropStart = Date.now();
             }
