@@ -30,12 +30,14 @@ window.initSudoku = function(container) {
 
         <div id="sudoku-grid-wrap" style="display:flex; justify-content:center; margin-bottom:20px;"></div>
         
-        <div style="text-align:center; display:flex; gap:12px; justify-content:center;">
-            <button id="verify-btn" style="background:linear-gradient(135deg,#6B0000,#A50000); border:2px solid #D4AF37; color:#FDF5E6; font-family:'Cinzel Decorative',cursive; font-size:12px; font-weight:700; padding:12px 28px; border-radius:8px; cursor:pointer; letter-spacing:2px; transition:all 0.3s;">VÉRIFIER ✦</button>
+        <div style="text-align:center; display:flex; gap:12px; justify-content:center; flex-direction:column; align-items:center;">
+            <p id="sudoku-errors" style="color:#f43f5e; font-size:18px; font-weight:bold; font-family:'Outfit',sans-serif; margin:0;">Erreurs : 0 / 3</p>
+            <p id="check-result" style="text-align:center; font-size:16px; font-family:'Lora',serif; min-height:20px; color:#4ECDC4; transition: all 0.3s;"></p>
         </div>
-        <p id="check-result" style="text-align:center; margin-top:12px; font-size:14px; font-family:'Lora',serif; min-height:20px; color:#4ECDC4;"></p>
     </div>
     `;
+
+    let errorCount = 0;
 
     // Generate Sudoku
     const board = Array.from({length: 9}, () => Array(9).fill(0));
@@ -125,10 +127,50 @@ window.initSudoku = function(container) {
                 input.style.fontWeight = '900';
             } else {
                 input.addEventListener('input', (e) => {
-                    if (!/^[1-9]$/.test(e.target.value)) e.target.value = '';
-                    else e.target.style.background = '#FFFFF0';
+                    const val = parseInt(e.target.value);
+                    if (!/^[1-9]$/.test(e.target.value)) {
+                        e.target.value = '';
+                        return;
+                    }
+                    
+                    if (val === board[r][c]) {
+                        // Bonne réponse
+                        e.target.style.background = '#4ade80'; // Vert pour valider
+                        e.target.style.color = '#000';
+                        e.target.readOnly = true;
+                        setTimeout(() => {
+                            e.target.style.background = '#FFFEF5';
+                            e.target.style.color = '#333';
+                            e.target.style.fontWeight = 'bold';
+                        }, 1000);
+                        
+                        checkWin();
+                    } else {
+                        // Mauvaise réponse
+                        e.target.style.background = '#f43f5e'; // Rouge !
+                        e.target.style.color = '#fff';
+                        setTimeout(() => {
+                            e.target.value = '';
+                            e.target.style.background = '#FFFEF5';
+                            e.target.style.color = '#2A0A00';
+                        }, 1000);
+                        
+                        errorCount++;
+                        document.getElementById('sudoku-errors').textContent = `Erreurs : ${errorCount} / 3`;
+                        
+                        if (errorCount >= 3) {
+                            const result = document.getElementById('check-result');
+                            result.innerHTML = `❌ Trop d'erreurs ! Un nouveau Sudoku est recommandé...`;
+                            result.style.color = '#f43f5e';
+                            // Disable everything
+                            table.querySelectorAll('input').forEach(inp => inp.readOnly = true);
+                            setTimeout(() => {
+                                window.initSudoku(container);
+                            }, 2500);
+                        }
+                    }
                 });
-                input.addEventListener('focus', (e) => e.target.style.background = '#FFF3D0');
+                input.addEventListener('focus', (e) => { if(!e.target.readOnly) e.target.style.background = '#FFF3D0'; });
                 input.addEventListener('blur', (e) => { if (!e.target.readOnly) e.target.style.background = '#FFFEF5'; });
             }
             
@@ -140,40 +182,27 @@ window.initSudoku = function(container) {
     
     wrap.appendChild(table);
     
-    document.getElementById('verify-btn').onclick = () => {
-        const result = document.getElementById('check-result');
+    function checkWin() {
         const inputs = table.querySelectorAll('input');
-        let allCorrect = true;
-        let allFilled = true;
-        
+        let allFilledAndCorrect = true;
         inputs.forEach(inp => {
             const r = inp.dataset.r, c = inp.dataset.c;
-            const val = parseInt(inp.value);
-            if (isNaN(val)) {
-                allFilled = false;
-                if (!inp.readOnly) inp.style.background = '#FFD0D0';
-            } else if (val !== board[r][c]) {
-                allCorrect = false;
-                inp.style.background = '#FEF08A';
-            } else {
-                if (!inp.readOnly) inp.style.background = '#DCFCE7';
+            if (parseInt(inp.value) !== board[r][c]) {
+                allFilledAndCorrect = false;
             }
         });
         
-        if (!allFilled) {
-            result.textContent = '❌ Il manque des chiffres !';
-            result.style.color = '#f43f5e';
-        } else if (!allCorrect) {
-            result.textContent = '⚠️ Certaines cases sont incorrectes, cherche encore...';
-            result.style.color = '#fbbf24';
-        } else {
-            result.textContent = '🎉 PARFAIT ! +100 points !';
-            result.style.color = '#4ade80';
+        if (allFilledAndCorrect) {
+            const result = document.getElementById('check-result');
+            result.innerHTML = `
+                <div style="animation: fade-in 1s forwards;">
+                    <h3 style="color:#4ade80; font-family:'Cinzel Decorative'; margin-bottom:10px;">🎉 PARFAIT ! +100 points !</h3>
+                    <img src="../space-invaders/OwnSticker_20240410_120642727.png.jpg" style="max-height:180px; border-radius:10px; border:3px solid #D4AF37; box-shadow:0 0 20px rgba(212,175,55,0.6);" />
+                    <h2 style="color:#F5E27A; font-family:'Cinzel Decorative',cursive; margin-top:10px;">Elif is Lisan al Ghaib 🌹</h2>
+                </div>
+            `;
             if (typeof addGlobalScore === 'function') addGlobalScore(POINTS_PER_WIN);
-            setTimeout(() => {
-                result.textContent = 'Bravo babylovebutterfly ! 🌹';
-                setTimeout(() => hideGame(), 2000);
-            }, 1500);
+            setTimeout(() => hideGame(), 4500);
         }
-    };
+    }
 };

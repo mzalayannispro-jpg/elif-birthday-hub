@@ -1,6 +1,7 @@
 window.initMahjong = function(container) {
     // Build a static pool from known assets since no assets.json here
-    const stickerPool = [
+    // Utilisation de la liste des niveaux définis dans app.js
+    const stickerPool = window.NIVEAU_IMAGES || [
         'assets/player.webp', 'assets/win.webp', 'assets/lose.webp', 'assets/baklava.png'
     ];
 
@@ -14,7 +15,10 @@ window.initMahjong = function(container) {
             </div>
         </header>
         <div id="mahjong-board" style="position:relative; width:100%; height:480px; background:rgba(0,0,0,0.4); border-radius:10px; border:1px solid rgba(212,175,55,0.3); overflow:hidden;"></div>
-        <p id="mahjong-status" style="text-align:center; margin-top:12px; color:#4ECDC4; font-family:'Lora',serif; font-style:italic; font-size:14px;">Trouve les paires ! Clique sur deux tuiles identiques pour les retirer.</p>
+        <p id="mahjong-status" style="text-align:center; margin-top:12px; color:#4ECDC4; font-family:'Lora',serif; font-style:italic; font-size:14px;">
+            <strong>Règles :</strong> Trouve et clique sur deux tuiles strictement identiques pour les retirer du plateau.<br>
+            <em>Attention : tu ne peux sélectionner que les tuiles qui sont libres (non bloquées par d'autres).</em>
+        </p>
     </div>
     `;
 

@@ -28,13 +28,15 @@ html, body {
 }
 
 body {
-    font-family: 'Outfit', sans-serif;
-    background-color: var(--carpet-dark);
-    background-image: url('assets/turkish_bg.png');
+    margin: 0;
+    padding: 0;
+    background-color: #0d0106;
+    background-image: url('assets/persian_rug_collage.png');
     background-size: cover;
-    background-attachment: fixed;
     background-position: center;
-    color: var(--cream);
+    background-attachment: fixed;
+    color: var(--text-color);
+    overflow-x: hidden;
 }
 
 /* ================================================

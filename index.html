@@ -76,30 +76,9 @@
         </header>
 
         <!-- Navigation à onglets -->
-        <nav class="navbar">
-            <button class="tab-btn active" data-tab="souvenirs">📸 Souvenirs</button>
-            <div class="nav-gem">❊</div>
-            <button class="tab-btn" data-tab="jeux">🕹️ Les Jeux</button>
-            <div class="nav-gem">❊</div>
-            <button class="tab-btn" data-tab="surprises">🎁 Surprise</button>
-        </nav>
-
         <div class="tab-container">
-
-            <!-- SECTION SOUVENIRS -->
-            <section id="souvenirs" class="tab-panel active">
-                <h2 class="section-title">✦ Nos Meilleurs Moments ✦</h2>
-                <div class="polaroid-grid">
-                    <div class="polaroid-placeholder" style="aspect-ratio: 3/4;"></div>
-                    <div class="polaroid-placeholder" style="aspect-ratio: 3/4;"></div>
-                    <div class="polaroid-placeholder" style="aspect-ratio: 3/4;"></div>
-                    <div class="polaroid-placeholder" style="aspect-ratio: 3/4;"></div>
-                </div>
-            </section>
-
             <!-- SECTION JEUX -->
-            <section id="jeux" class="tab-panel">
-                <!-- Menu de sélection des jeux -->
+            <section id="jeux" class="tab-panel active">
                 <div id="game-menu">
                     <h2 class="section-title">✦ À Toi de Jouer, Championne ! ✦</h2>
                     <div class="games-container">
@@ -118,49 +97,37 @@
                             <span class="btn-label">SUDOKU</span>
                             <span class="btn-sub">Remplis la grille</span>
                         </button>
+                        <button class="game-card-btn" onclick="showGame('tetris')">
+                            <span class="btn-icon">🧱</span>
+                            <span class="btn-label">TETRIS</span>
+                            <span class="btn-sub">Classique empilé</span>
+                        </button>
+                        <button class="game-card-btn" onclick="showGame('axe-throw')">
+                            <span class="btn-icon">🪓</span>
+                            <span class="btn-label">UZINAGAZ</span>
+                            <span class="btn-sub">Lancer de Hache</span>
+                        </button>
                     </div>
                     <div class="score-info-box">
-                        <p>🏆 Score Global : <strong id="score-inline">0</strong> pts &nbsp;|&nbsp; 🎁 Palier : <span id="palier-info">4000 pts pour débloquer la surprise</span></p>
+                        <p>🏆 Score Global : <strong id="score-inline">0</strong> pts</p>
                     </div>
                 </div>
 
-                <!-- Zone d'affichage du jeu actif -->
                 <div id="active-game-area" style="display:none;">
                     <button class="back-to-menu-btn" onclick="hideGame()">← Retour aux jeux</button>
                     <div id="game-slot"></div>
                 </div>
             </section>
-
-            <!-- SECTION SURPRISES -->
-            <section id="surprises" class="tab-panel">
-                <h2 class="section-title">✦ Ta Surprise ✦</h2>
-                <div class="mystery-zone">
-                    <div id="mystery-sealed" class="mystery-sealed">
-                        <div class="mystery-lock">🔐</div>
-                        <p id="mystery-msg" class="mystery-text">
-                            Une surprise secrète t'attend ici... mais d'abord, tu dois jouer !
-                        </p>
-                        <div class="mystery-progress-bar">
-                            <div id="mystery-progress-fill" class="mystery-progress-fill" style="width:0%"></div>
-                        </div>
-                        <p id="mystery-hint" class="mystery-hint">0 / 4000 pts</p>
-                    </div>
-                    <div id="mystery-unlocked" class="mystery-unlocked" style="display:none;">
-                        <h3>🎉 SURPRISE DÉBLOQUÉE ! 🎉</h3>
-                        <button id="mystery-btn" class="mystery-cta-btn" onclick="revealSurprise()">
-                            🎁 OUVRIR MON CADEAU 🎁
-                        </button>
-                    </div>
-                </div>
-            </section>
-
         </div>
     </main>
 
     <!-- Scripts -->
+    <script src="assets/assets_list.js"></script>
     <script src="app.js"></script>
     <script src="games/space_invaders.js"></script>
     <script src="games/mahjong.js"></script>
     <script src="games/sudoku.js"></script>
+    <script src="games/tetris.js"></script>
+    <script src="games/axe_throw.js"></script>
 </body>
 </html>

@@ -45,12 +45,17 @@ window.initSpaceInvaders = function(container) {
     let lives = 5;
     let level = 1;
 
-    const playerImg = new Image();
-    playerImg.src = 'assets/player.webp';
-    const realBaklavaImg = new Image();
-    realBaklavaImg.src = 'assets/real_baklava.png';
+    const playerImg = new Image(); playerImg.src = 'assets/player.webp';
+    const realBaklavaImg = new Image(); realBaklavaImg.src = 'assets/real_baklava.png';
+    const flagImg = new Image(); flagImg.src = 'assets/turkish_flag_8bit_1776606457543.png';
+    const ataturkImg = new Image(); ataturkImg.src = 'assets/{039CA1E5-BA4D-496F-B625-D9F572C058F9}.png';
+    const bgSofiaImg = new Image(); bgSofiaImg.src = 'assets/hagia_sophia_8bit_1776606429857.png';
     const winImg = new Image(); winImg.src = 'assets/win.webp';
     const loseImg = new Image(); loseImg.src = 'assets/lose.webp';
+    
+    // Boss images
+    const bossImg1 = new Image(); bossImg1.src = 'assets/{E17D989C-5A4D-46FE-BBCB-849FF254697F}.png';
+    const bossImg2 = new Image(); bossImg2.src = 'assets/{347EE3DB-A94C-453B-B8D7-D6DD5BFDEDED}.png';
 
     const scoreEl = document.getElementById('si-score');
     const livesEl = document.getElementById('si-lives');
@@ -77,6 +82,7 @@ window.initSpaceInvaders = function(container) {
     let stars = [];
     let bonuses = [];
     let rapidFireTimer = 0;
+    let doubleGunTimer = 0;
 
     for(let i=0; i<50; i++) {
         stars.push({
@@ -125,34 +131,34 @@ window.initSpaceInvaders = function(container) {
         alienDirX = 1;
         let alienSpeedX = 1.0 + (level * 0.3);
         
-        const currentRows = 5 + Math.floor(level / 3);
-        const gridWidth = (alienCols * alienWidth) + ((alienCols - 1) * alienPadding);
-        const startX = (canvas.width - gridWidth) / 2;
-
-        // Fetch stickers for current level (cap at level 4, beyond that use all stickers)
-        // Simple fallback stickers from assets pool
+        const currentRows = Math.min(alienRows + Math.floor(level / 2), 6);
         const stickerPaths = [
             'assets/player.webp', 'assets/win.webp', 'assets/lose.webp', 'assets/baklava.png'
         ];
-        potentialImages = stickerPaths;
+        potentialImages = window.ALL_SPACE_INVADER_IMAGES || stickerPaths;
+
+        // Create Boss!
+        aliens.push({
+            isBoss: true,
+            health: 3 + level * 2,
+            maxHealth: 3 + level * 2,
+            x: canvas.width / 2 - 50,
+            y: 40,
+            width: 100, height: 100,
+            img: null
+        });
 
         for (let r = 0; r < currentRows; r++) {
             for (let c = 0; c < alienCols; c++) {
-                // 100% random sticker per alien!
-                const randomImgPath = potentialImages[Math.floor(Math.random() * potentialImages.length)];
-                const img = new Image();
-                img.src = randomImgPath;
-                
+                const imgObj = new Image();
+                imgObj.src = potentialImages[Math.floor(Math.random() * potentialImages.length)];
                 aliens.push({
-                    x: startX + c * (alienWidth + alienPadding),
-                    y: 80 + r * (alienHeight + alienPadding),
+                    health: 1,
+                    x: c * (alienWidth + alienPadding) + 50,
+                    y: r * (alienHeight + alienPadding) + 150, // shifted down for boss
                     width: alienWidth,
                     height: alienHeight,
-                    status: 1,
-                    vx: alienSpeedX,
-                    img: img,
-                    offsetY: 0,
-                    baseY: 80 + r * (alienHeight + alienPadding)
+                    img: imgObj
                 });
             }
         }
@@ -170,6 +176,7 @@ window.initSpaceInvaders = function(container) {
         particles = [];
         bonuses = [];
         rapidFireTimer = 0;
+        doubleGunTimer = 0;
         updateUI();
         initAliens();
     }
@@ -222,14 +229,15 @@ window.initSpaceInvaders = function(container) {
         const cooldown = (now < rapidFireTimer) ? 50 : 150;
         
         if (keys.Space && now - lastShot > cooldown) {
-            bullets.push({
-                x: player.x + player.width / 2 - 3,
-                y: player.y - 10,
-                width: 6, height: 20, speed: 12,
-                color: (now < rapidFireTimer) ? '#fbbf24' : '#4ade80'
-            });
+            const color = (now < rapidFireTimer) ? '#fbbf24' : '#4ade80';
+            if (now < doubleGunTimer) {
+                bullets.push({x: player.x, y: player.y - 10, width: 6, height: 20, speed: 12, color: color});
+                bullets.push({x: player.x + player.width - 6, y: player.y - 10, width: 6, height: 20, speed: 12, color: color});
+            } else {
+                bullets.push({x: player.x + player.width / 2 - 3, y: player.y - 10, width: 6, height: 20, speed: 12, color: color});
+            }
             lastShot = now;
-            createExplosion(player.x + player.width/2, player.y, (now < rapidFireTimer) ? '#fbbf24' : '#4ade80', 3);
+            createExplosion(player.x + player.width/2, player.y, color, 3);
         }
     }
 
@@ -270,9 +278,8 @@ window.initSpaceInvaders = function(container) {
         let currentFreq = Math.max(400, baseAlienShotFreq - (level * 200));
         
         if (now - lastAlienShot > currentFreq) {
-            const livingAliens = aliens.filter(a => a.status === 1);
-            if (livingAliens.length > 0) {
-                const shooter = livingAliens[Math.floor(Math.random() * livingAliens.length)];
+            const shooter = aliens[Math.floor(Math.random() * aliens.length)];
+            if (shooter) {
                 alienBullets.push({
                     x: shooter.x + shooter.width / 2 - 3,
                     y: shooter.y + shooter.height,
@@ -284,46 +291,24 @@ window.initSpaceInvaders = function(container) {
     }
 
     function moveAliens() {
-        let hitEdge = false;
-        let anyAlive = false;
         const time = Date.now() / 300;
+        let anyAlive = aliens.length > 0;
 
         for (let i = 0; i < aliens.length; i++) {
-            if (aliens[i].status === 1) {
-                anyAlive = true;
-                aliens[i].x += aliens[i].vx * alienDirX;
-                aliens[i].offsetY = Math.sin(time + i * 0.1) * 5;
-
-                if (aliens[i].x + aliens[i].width >= canvas.width - 20 || aliens[i].x <= 20) hitEdge = true;
-                
-                if (
-                    aliens[i].y + aliens[i].height + aliens[i].offsetY > player.y &&
-                    aliens[i].x < player.x + player.width &&
-                    aliens[i].x + aliens[i].width > player.x
-                ) {
-                     gameState = 'gameover';
-                     showScreen(gameOverScreen);
-                     finalScoreEl.innerText = score;
-                     return;
-                }
-                
-                if (aliens[i].y > canvas.height - 100) {
-                     gameState = 'gameover';
-                     showScreen(gameOverScreen);
-                     finalScoreEl.innerText = score;
-                     return;
-                }
+            const a = aliens[i];
+            a.x += (1.0 + (level * 0.1)) * alienDirX;
+            
+            if (a.x + a.width >= canvas.width - 20 || a.x <= 20) {
+                alienDirX *= -1;
+                for (let j = 0; j < aliens.length; j++) aliens[j].y += 20;
+                break;
             }
-        }
-
-        if (hitEdge) {
-            alienDirX *= -1;
-            for (let i = 0; i < aliens.length; i++) {
-                if (aliens[i].status === 1) {
-                    aliens[i].baseY += 40; 
-                    aliens[i].y = aliens[i].baseY;
-                    aliens[i].vx += 0.1;
-                }
+            
+            if (a.y + a.height > player.y) {
+                 gameState = 'gameover';
+                 showScreen(gameOverScreen);
+                 finalScoreEl.innerText = score;
+                 return;
             }
         }
 
@@ -331,39 +316,40 @@ window.initSpaceInvaders = function(container) {
             gameState = 'victory';
             showScreen(victoryScreen);
             victoryScoreEl.innerText = score;
-            // WIN EVENT: GRANT GLOBAL POINTS
-            if (typeof addGlobalScore === 'function') {
-                addGlobalScore(100); 
-            }
         }
     }
 
     function detectCollisions() {
         for (let i = bullets.length - 1; i >= 0; i--) {
-            for (let j = 0; j < aliens.length; j++) {
+            let collision = false;
+            for (let j = aliens.length - 1; j >= 0; j--) {
                 const a = aliens[j];
                 const b = bullets[i];
+                const drawY = a.y + Math.sin((Date.now() + a.x) * 0.003) * 10;
                 
-                if (a.status === 1 && b) {
-                    const drawY = a.y + a.offsetY;
-                    if (
-                        b.x < a.x + a.width && b.x + b.width > a.x &&
-                        b.y < drawY + a.height && b.y + b.height > drawY
-                    ) {
-                        a.status = 0;
-                        bullets.splice(i, 1);
-                        score += 10 * level;
-                        updateUI();
-                        createExplosion(a.x + a.width/2, drawY + a.height/2, '#c084fc');
+                if (b.x < a.x + a.width && b.x + b.width > a.x && b.y < drawY + a.height && b.y + b.height > drawY) {
+                    a.health--;
+                    if (a.health <= 0) {
+                        score += a.isBoss ? 500 : 10;
+                        createExplosion(a.x + a.width/2, drawY + a.height/2, a.isBoss ? '#ef4444' : '#c084fc');
                         
-                        if (Math.random() < 0.15) {
+                        if (!a.isBoss && Math.random() < 0.15) {
+                            const bType = Math.floor(Math.random() * 3);
                             bonuses.push({
+                                type: bType,
                                 x: a.x + a.width/2 - 15, y: drawY + a.height,
                                 width: 30, height: 30, speed: 3 + (level * 0.2)
                             });
                         }
-                        break;
+                        aliens.splice(j, 1);
+                    } else {
+                        createExplosion(b.x, b.y, '#fbbf24', 2);
                     }
+                    
+                    bullets.splice(i, 1);
+                    collision = true;
+                    updateUI();
+                    break;
                 }
             }
         }
@@ -386,24 +372,28 @@ window.initSpaceInvaders = function(container) {
     }
 
     function drawAliens() {
-        for (let i = 0; i < aliens.length; i++) {
-             if (aliens[i].status === 1) {
-                 const a = aliens[i];
-                 const drawY = a.y + a.offsetY;
-                 
-                 ctx.shadowBlur = 15;
-                 ctx.shadowColor = 'rgba(255,255,255,0.2)';
-                 
-                 if (a.img.complete && a.img.naturalWidth > 0) {
-                     ctx.drawImage(a.img, a.x, drawY, a.width, a.height);
+        const now = Date.now();
+        const animBossImg = Math.floor(now / 500) % 2 === 0 ? bossImg1 : bossImg2;
+        
+        for (const a of aliens) {
+            const drawY = a.y + Math.sin((now + a.x) * 0.003) * 10;
+            if (a.isBoss) {
+                 if (animBossImg.complete && animBossImg.naturalWidth > 0) {
+                     ctx.drawImage(animBossImg, a.x, drawY, a.width, a.height);
                  } else {
-                     ctx.fillStyle = '#c084fc';
-                     ctx.beginPath();
-                     ctx.roundRect(a.x, drawY, a.width, a.height, 8);
-                     ctx.fill();
+                     ctx.fillStyle = '#ef4444'; ctx.fillRect(a.x, drawY, a.width, a.height);
                  }
-                 ctx.shadowBlur = 0;
-             }
+                 // Health bar
+                 ctx.fillStyle = '#ef4444';
+                 ctx.fillRect(a.x, drawY - 10, a.width * (a.health / a.maxHealth), 5);
+            } else {
+                if (a.img && a.img.complete && a.img.naturalWidth > 0) {
+                    ctx.drawImage(a.img, a.x, drawY, a.width, a.height);
+                } else {
+                    ctx.fillStyle = '#ef4444';
+                    ctx.fillRect(a.x, drawY, a.width, a.height);
+                }
+            }
         }
     }
 
@@ -452,7 +442,10 @@ window.initSpaceInvaders = function(container) {
             b.y += b.speed;
             
             if (b.x < player.x + player.width && b.x + b.width > player.x && b.y < player.y + player.height && b.y + b.height > player.y) {
-                rapidFireTimer = Date.now() + 5000;
+                if (b.type === 0) rapidFireTimer = Date.now() + 5000;
+                else if (b.type === 1) lives++;
+                else if (b.type === 2) doubleGunTimer = Date.now() + 5000;
+                
                 bonuses.splice(i, 1);
                 score += 50;
                 updateUI();
@@ -464,10 +457,12 @@ window.initSpaceInvaders = function(container) {
 
     function drawBonuses() {
         for (const b of bonuses) {
-            if (realBaklavaImg.complete && realBaklavaImg.naturalWidth > 0) {
+            const dropImg = b.type === 0 ? realBaklavaImg : b.type === 1 ? flagImg : ataturkImg;
+            const dropColor = b.type === 0 ? 'rgba(251, 191, 36, 0.8)' : b.type === 1 ? 'rgba(239, 68, 68, 0.8)' : 'rgba(59, 130, 246, 0.8)';
+            if (dropImg.complete && dropImg.naturalWidth > 0) {
                 ctx.shadowBlur = 15;
-                ctx.shadowColor = 'rgba(251, 191, 36, 0.8)';
-                ctx.drawImage(realBaklavaImg, b.x, b.y, b.width, b.height);
+                ctx.shadowColor = dropColor;
+                ctx.drawImage(dropImg, b.x, b.y, b.width, b.height);
                 ctx.shadowBlur = 0;
             } else {
                  ctx.fillStyle = '#fbbf24';
@@ -486,8 +481,16 @@ window.initSpaceInvaders = function(container) {
         if(!document.getElementById('gameCanvas')) return;
         
         if (gameState === 'playing') {
-            ctx.fillStyle = 'rgba(5, 5, 16, 0.6)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            if (bgSofiaImg.complete && bgSofiaImg.naturalWidth > 0) {
+                ctx.globalAlpha = 0.5;
+                ctx.drawImage(bgSofiaImg, 0, 0, canvas.width, canvas.height);
+                ctx.globalAlpha = 1.0;
+                ctx.fillStyle = 'rgba(5, 5, 16, 0.5)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            } else {
+                ctx.fillStyle = 'rgba(5, 5, 16, 0.6)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
             
             updateStars(); drawStars();
             movePlayer(); shootBullet(); updateBullets();
