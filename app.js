@@ -39,7 +39,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // ============ DASHBOARD COLLAGE EFFECT ============
 document.addEventListener('DOMContentLoaded', () => {
-    // Generates a random collage of provided stickers directly on the body
     setTimeout(() => {
         if (!window.GAME_ASSETS) return;
         const allStickers = [];
@@ -47,6 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
             allStickers.push(...window.GAME_ASSETS[key]);
         }
         if (allStickers.length === 0) return;
+        
+        // Remove duplicates
+        const uniqueStickers = [...new Set(allStickers)];
         
         const collageLayer = document.createElement('div');
         collageLayer.style.position = 'fixed';
@@ -57,17 +59,18 @@ document.addEventListener('DOMContentLoaded', () => {
         collageLayer.style.overflow = 'hidden';
         document.body.appendChild(collageLayer);
         
-        // Add 20 random stickers
-        for (let i = 0; i < 20; i++) {
+        // Add 25 random stickers floating in the background
+        for (let i = 0; i < 25; i++) {
             const img = document.createElement('img');
-            img.src = allStickers[Math.floor(Math.random() * allStickers.length)];
+            img.src = uniqueStickers[Math.floor(Math.random() * uniqueStickers.length)];
             img.style.position = 'absolute';
-            img.style.left = Math.random() * 90 + '%';
-            img.style.top = Math.random() * 90 + '%';
-            img.style.width = (Math.random() * 80 + 40) + 'px';
+            img.style.left = Math.random() * 95 + '%';
+            img.style.top = Math.random() * 95 + '%';
+            img.style.width = (Math.random() * 100 + 40) + 'px'; // 40px to 140px
             img.style.transform = `rotate(${(Math.random() - 0.5) * 80}deg)`;
             img.style.opacity = '0.9';
-            img.style.filter = 'drop-shadow(2px 4px 6px rgba(0,0,0,0.5))';
+            img.style.objectFit = 'contain';
+            img.style.filter = 'drop-shadow(4px 4px 6px rgba(0,0,0,0.8))';
             collageLayer.appendChild(img);
         }
     }, 500);

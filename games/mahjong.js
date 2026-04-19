@@ -66,31 +66,29 @@ window.initMahjong = function(container) {
                 height: ${TILE_H}px;
                 left: ${offsetX + PAD_X + c * (TILE_W + PAD_X)}px;
                 top: ${offsetY + PAD_Y + r * (TILE_H + PAD_Y)}px;
-                border: 2px solid #D4AF37;
-                border-radius: 6px;
+                background: transparent;
+                border: none;
                 cursor: pointer;
-                box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
-                transition: transform 0.15s, box-shadow 0.15s, opacity 0.3s;
-                background-color: #FFF8E7;
+                transition: transform 0.15s, opacity 0.3s, filter 0.15s;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                overflow: hidden;
+                filter: drop-shadow(3px 3px 4px rgba(0,0,0,0.6));
             `;
             
             const imgEl = document.createElement('img');
             imgEl.src = tile.imgSrc;
             imgEl.style.width = '100%';
             imgEl.style.height = '100%';
-            imgEl.style.objectFit = 'cover';
+            imgEl.style.objectFit = 'contain';
             imgEl.style.pointerEvents = 'none'; // prevent dragging
             tile.el.appendChild(imgEl);
             
             tile.el.onmouseenter = () => {
-                if (tile.active) { tile.el.style.transform = 'translateY(-4px)'; tile.el.style.boxShadow = '3px 8px 15px rgba(0,0,0,0.5), 0 0 12px rgba(212,175,55,0.4)'; }
+                if (tile.active) { tile.el.style.transform = 'translateY(-6px)'; tile.el.style.filter = 'drop-shadow(5px 8px 8px rgba(0,0,0,0.8)) brightness(1.1)'; }
             };
             tile.el.onmouseleave = () => {
-                if (tile.active && !tile.selected) { tile.el.style.transform = ''; tile.el.style.boxShadow = '3px 3px 5px rgba(0,0,0,0.5)'; }
+                if (tile.active && !tile.selected) { tile.el.style.transform = ''; tile.el.style.filter = 'drop-shadow(3px 3px 4px rgba(0,0,0,0.6))'; }
             };
             tile.el.onclick = () => onTileClick(tile);
             
@@ -108,15 +106,13 @@ window.initMahjong = function(container) {
         if (!selected) {
             selected = tile;
             tile.selected = true;
-            tile.el.style.border = '3px solid #F5E27A';
-            tile.el.style.transform = 'translateY(-6px)';
-            tile.el.style.boxShadow = '0 0 15px rgba(245,226,122,0.7)';
+            tile.el.style.transform = 'translateY(-10px)';
+            tile.el.style.filter = 'drop-shadow(0 0 15px rgba(245,226,122,1)) brightness(1.2)';
         } else if (selected.id === tile.id) {
             // Deselect same tile
             selected.selected = false;
-            selected.el.style.border = '2px solid #D4AF37';
             selected.el.style.transform = '';
-            selected.el.style.boxShadow = '3px 3px 5px rgba(0,0,0,0.5)';
+            selected.el.style.filter = 'drop-shadow(3px 3px 4px rgba(0,0,0,0.6))';
             selected = null;
         } else if (selected.imgSrc === tile.imgSrc) {
             // MATCH!
@@ -132,21 +128,20 @@ window.initMahjong = function(container) {
             if (tilesLeft <= 0) {
                 setTimeout(() => {
                     statusEl.textContent = '🎉 PLATEAU COMPLÉTÉ ! +100 points !';
-                    if (typeof addGlobalScore === 'function') addGlobalScore(POINTS_PER_WIN);
+                    if (typeof addGlobalScore === 'function') addGlobalScore(window.POINTS_PER_WIN || 100);
                     setTimeout(() => hideGame(), 2000);
                 }, 400);
             }
         } else {
             // No match
             selected.selected = false;
-            selected.el.style.border = '2px solid #ff4444';
-            tile.el.style.border = '2px solid #ff4444';
+            selected.el.style.filter = 'drop-shadow(0 0 15px rgba(255,0,0,1))';
+            tile.el.style.filter = 'drop-shadow(0 0 15px rgba(255,0,0,1))';
             const s = selected;
             setTimeout(() => {
-                s.el.style.border = '2px solid #D4AF37';
                 s.el.style.transform = '';
-                s.el.style.boxShadow = '3px 3px 5px rgba(0,0,0,0.5)';
-                tile.el.style.border = '2px solid #D4AF37';
+                s.el.style.filter = 'drop-shadow(3px 3px 4px rgba(0,0,0,0.6))';
+                tile.el.style.filter = 'drop-shadow(3px 3px 4px rgba(0,0,0,0.6))';
             }, 400);
             selected = null;
         }

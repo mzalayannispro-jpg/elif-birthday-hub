@@ -38,8 +38,47 @@ window.initTetris = function(container) {
     const VACANT = "transparent";
     
     // Load images
+    function trimImage(imgEl) {
+        if (!imgEl.complete || imgEl.naturalWidth === 0) return imgEl;
+        let c = document.createElement('canvas');
+        c.width = imgEl.naturalWidth; c.height = imgEl.naturalHeight;
+        let ctxT = c.getContext('2d');
+        ctxT.drawImage(imgEl, 0, 0);
+        try {
+            let data = ctxT.getImageData(0,0,c.width, c.height).data;
+            let top=null, bottom=null, left=null, right=null;
+            for(let y=0; y<c.height; y++){
+                for(let x=0; x<c.width; x++){
+                    let alpha = data[(y*c.width + x)*4 + 3];
+                    if(alpha > 10){
+                        if(top===null) top=y;
+                        bottom=y;
+                        if(left===null || x<left) left=x;
+                        if(right===null || x>right) right=x;
+                    }
+                }
+            }
+            if(top===null) return imgEl;
+            let trimW = right - left + 1;
+            let trimH = bottom - top + 1;
+            let trimC = document.createElement('canvas');
+            trimC.width = trimW; trimC.height = trimH;
+            trimC.getContext('2d').drawImage(c, left, top, trimW, trimH, 0, 0, trimW, trimH);
+            let trimmedImg = new Image();
+            trimmedImg.src = trimC.toDataURL();
+            return trimmedImg;
+        } catch(e) { return imgEl; }
+    }
+
     const tetrisImagesUrls = window.TETRIS_IMAGES && window.TETRIS_IMAGES.length > 0 ? window.TETRIS_IMAGES : ['assets/player.webp'];
-    const loadedImages = tetrisImagesUrls.map(url => { const i = new Image(); i.src = url; return i; });
+    const loadedImages = [];
+    tetrisImagesUrls.forEach(url => {
+        let i = new Image();
+        let trimState = { completed: false, get img() { return trimState.completed ? trimState.actualImg : i; }, actualImg: i };
+        i.onload = () => { trimState.actualImg = trimImage(i); trimState.completed = true; };
+        i.src = url;
+        loadedImages.push(trimState);
+    });
 
     let board = [];
     for(let r = 0; r < ROW; r++){ board[r] = []; for(let c = 0; c < COL; c++){ board[r][c] = { color: VACANT, img: null }; } }
@@ -115,7 +154,8 @@ window.initTetris = function(container) {
 
     function randomPiece() {
         let r = Math.floor(Math.random() * PIECES.length);
-        let img = loadedImages[Math.floor(Math.random() * loadedImages.length)];
+        let state = loadedImages[Math.floor(Math.random() * loadedImages.length)];
+        let img = state.img;
         let neonColors = ['#FF00FF', '#00FFFF', '#00FF00', '#FFFF00', '#FF3300', '#00FF99', '#9D00FF'];
         let rc = neonColors[Math.floor(Math.random() * neonColors.length)];
         return new Piece(PIECES[r], rc, img);

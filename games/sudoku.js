@@ -1,5 +1,5 @@
 window.initSudoku = function(container) {
-    const punchlines = [
+    const fallbackPunchlines = [
         "Remplis bien tes cases, mon amour 💛",
         "Tu es plus forte que ce Sudoku !",
         "Chaque chiffre que tu mets = un bisou 🌹",
@@ -9,8 +9,11 @@ window.initSudoku = function(container) {
         "La femme la plus intelligente du bosphore 🌙"
     ];
 
-    const randomPunchline = punchlines[Math.floor(Math.random() * punchlines.length)];
-    const randomSticker = 'assets/player.webp'; // Show player image as decoration
+    const sourceQuotes = (window.ELIF_QUOTES && window.ELIF_QUOTES.length > 0) ? window.ELIF_QUOTES : fallbackPunchlines;
+    const randomPunchline = sourceQuotes[Math.floor(Math.random() * sourceQuotes.length)];
+    // Fallback to generic image, but will be replaced nicely.
+    const randomSticker = (window.GAME_ASSETS && window.GAME_ASSETS.sudoku && window.GAME_ASSETS.sudoku.length > 0) ? 
+        window.GAME_ASSETS.sudoku[Math.floor(Math.random() * window.GAME_ASSETS.sudoku.length)] : 'assets/player.webp';
 
     container.innerHTML = `
     <div style="width:90vw; max-width:700px; background:linear-gradient(160deg, rgba(20,3,0,0.96), rgba(50,5,5,0.92)); border:3px solid #D4AF37; border-radius:16px; padding:28px; box-shadow:0 0 40px rgba(212,175,55,0.25);">

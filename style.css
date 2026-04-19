@@ -31,9 +31,10 @@ body {
     margin: 0;
     padding: 0;
     background-color: #2F110B;
-    background-image: url('assets/persian_rug_collage.png');
-    background-size: 300px;
-    background-repeat: repeat;
+    background-image: url('assets/persian_rug_bg.png');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
     background-attachment: fixed;
     color: var(--text-color);
     overflow-x: hidden;
