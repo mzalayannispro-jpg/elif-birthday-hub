@@ -129,9 +129,8 @@ window.initSpaceInvaders = function(container) {
     function initAliens() {
         aliens = [];
         alienDirX = 1;
-        let alienSpeedX = 1.0 + (level * 0.3);
         
-        const currentRows = Math.min(alienRows + Math.floor(level / 2), 6);
+        const currentRows = Math.min(4 + Math.floor(level / 2), 6);
         const stickerPaths = [
             'assets/player.webp', 'assets/win.webp', 'assets/lose.webp', 'assets/baklava.png'
         ];
