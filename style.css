@@ -47,7 +47,7 @@ body {
 .kitsch-overlay {
     position: fixed;
     inset: 0;
-    background-image: url('assets/turkish_bg.png');
+    background-image: url('assets/rug.png');
     background-size: cover;
     background-position: center;
     z-index: 9999;
@@ -56,7 +56,6 @@ body {
     align-items: center;
     cursor: pointer;
     transition: opacity 1.2s ease, visibility 1.2s ease;
-    /* Deep dark tint over the carpet for contrast */
     box-shadow: inset 0 0 0 9999px rgba(20, 0, 0, 0.45);
 }
 
@@ -66,74 +65,32 @@ body {
     pointer-events: none;
 }
 
-/* Floating emoji decorations on overlay */
-.overlay-decoration {
+/* Animations des stickers de célébration */
+.celeb-container {
     position: absolute;
-    font-size: 36px;
-    animation: overlayFloat ease-in-out infinite;
+    width: 160px;
+    height: 160px;
+    animation: celebFloat 4s ease-in-out infinite alternate;
     pointer-events: none;
-    filter: drop-shadow(0 0 8px rgba(212,175,55,0.5));
+    z-index: 5;
 }
 
-#ovdec1 { top: 8%; left: 5%; font-size: 52px; animation-duration: 5s; animation-delay: 0s; }
-#ovdec2 { top: 6%; right: 8%; font-size: 46px; animation-duration: 7s; animation-delay: -2s; }
-#ovdec3 { top: 30%; left: 3%; font-size: 40px; animation-duration: 6s; animation-delay: -1s; }
-#ovdec4 { top: 25%; right: 4%; font-size: 44px; animation-duration: 8s; animation-delay: -3s; }
-#ovdec5 { bottom: 25%; left: 6%; font-size: 48px; animation-duration: 5.5s; animation-delay: -4s; }
-#ovdec6 { bottom: 20%; right: 5%; font-size: 42px; animation-duration: 9s; animation-delay: -1.5s; }
-#ovdec7 { bottom: 8%; left: 20%; font-size: 36px; animation-duration: 6.5s; animation-delay: -0.5s; }
-#ovdec8 { bottom: 10%; right: 22%; font-size: 36px; animation-duration: 7.5s; animation-delay: -2.5s; }
-
-@keyframes overlayFloat {
-    0%, 100% { transform: translateY(0) rotate(-5deg); }
-    50% { transform: translateY(-25px) rotate(5deg); }
-}
-
-/* Floating images (memes/photos) on overlay */
-.floating-element {
-    position: absolute;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    animation: floatImg ease-in-out infinite;
-    pointer-events: none;
+.celeb-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    animation: celebSpin 8s linear infinite;
     filter: drop-shadow(4px 4px 10px rgba(0,0,0,0.6));
-    border: 3px solid var(--gold);
-    border-radius: 8px;
 }
 
-.firework-1 {
-    width: 200px; height: 200px;
-    top: 8%; left: 12%;
-    background-image: url('assets/meme1.jpg');
-    animation-duration: 6s; animation-delay: 0s;
-    transform: rotate(-8deg);
-}
-.firework-2 {
-    width: 180px; height: 180px;
-    top: 12%; right: 12%;
-    background-image: url('assets/meme2.jpg');
-    animation-duration: 7s; animation-delay: -2s;
-    transform: rotate(6deg);
-}
-.meme-1 {
-    width: 160px; height: 160px;
-    bottom: 12%; left: 14%;
-    background-image: url('assets/meme3.jpg');
-    animation-duration: 8s; animation-delay: -1s;
-    transform: rotate(10deg);
-}
-.meme-2 {
-    width: 170px; height: 170px;
-    bottom: 10%; right: 13%;
-    background-image: url('assets/meme4.jpg');
-    animation-duration: 5.5s; animation-delay: -3s;
-    transform: rotate(-12deg);
+@keyframes celebFloat {
+    from { transform: translateY(-20px); }
+    to { transform: translateY(20px); }
 }
 
-@keyframes floatImg {
-    0%, 100% { transform: translateY(0) rotate(var(--rot, -8deg)); }
-    50% { transform: translateY(-20px) rotate(calc(var(--rot, -8deg) + 4deg)); }
+@keyframes celebSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 /* Center content on overlay */
