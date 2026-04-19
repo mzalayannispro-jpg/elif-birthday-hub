@@ -68,9 +68,9 @@ body {
 /* Animations des stickers de célébration */
 .celeb-container {
     position: absolute;
-    width: 160px;
-    height: 160px;
-    animation: celebFloat 4s ease-in-out infinite alternate;
+    width: 120px; /* 80% de 160 = 128, arrondi à 120 */
+    height: 120px;
+    animation: celebFloat 8s ease-in-out infinite;
     pointer-events: none;
     z-index: 5;
 }
@@ -79,18 +79,20 @@ body {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    animation: celebSpin 8s linear infinite;
     filter: drop-shadow(4px 4px 10px rgba(0,0,0,0.6));
+    animation: bounceScale 3s ease-in-out infinite alternate;
 }
 
 @keyframes celebFloat {
-    from { transform: translateY(-20px); }
-    to { transform: translateY(20px); }
+    0% { transform: translate(0, 0); }
+    33% { transform: translate(40px, -30px); }
+    66% { transform: translate(-30px, 40px); }
+    100% { transform: translate(0, 0); }
 }
 
-@keyframes celebSpin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+@keyframes bounceScale {
+    from { transform: scale(0.95); }
+    to { transform: scale(1.05); }
 }
 
 /* Center content on overlay */
