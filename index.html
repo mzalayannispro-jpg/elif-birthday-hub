@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌙 İyi ki doğdun Aşkım! 🌙</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Outfit:wght@300;500;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- ===================================
+         1. OVERLAY KITSCH D'ENTRÉE
+         =================================== -->
+    <div id="kitsch-overlay" class="kitsch-overlay">
+        <!-- Fond principal : le tapis turc -->
+        
+        <!-- Décorations flottantes -->
+        <div class="overlay-decoration" id="ovdec1">🧿</div>
+        <div class="overlay-decoration" id="ovdec2">🌙</div>
+        <div class="overlay-decoration" id="ovdec3">🍯</div>
+        <div class="overlay-decoration" id="ovdec4">🌹</div>
+        <div class="overlay-decoration" id="ovdec5">⭐</div>
+        <div class="overlay-decoration" id="ovdec6">🫖</div>
+        <div class="overlay-decoration" id="ovdec7">🌺</div>
+        <div class="overlay-decoration" id="ovdec8">💛</div>
+
+        <!-- Photos flottantes (tes memes) -->
+        <div class="floating-element firework-1"></div>
+        <div class="floating-element firework-2"></div>
+        <div class="floating-element meme meme-1"></div>
+        <div class="floating-element meme meme-2"></div>
+
+        <!-- Titre principal -->
+        <div class="overlay-center">
+            <div class="overlay-ornament">✦ ✦ ✦ ✦ ✦</div>
+            <h1 class="blinking-text">İYİ Kİ DOĞDUN</h1>
+            <h2 class="blinking-text-sub">AŞKIM! 🌹</h2>
+            <div class="overlay-ornament">✦ ✦ ✦ ✦ ✦</div>
+            <p class="overlay-hint">Clique n'importe où pour continuer...</p>
+        </div>
+    </div>
+
+    <!-- ===================================
+         2. MODAL MESSAGE PERSONNEL
+         =================================== -->
+    <div id="personal-modal" class="modal">
+        <div class="modal-content">
+            <button id="close-modal" class="close-btn" aria-label="Fermer">×</button>
+            <div class="modal-ornament">🌙 ✦ 🌙</div>
+            <h2>Joyeux Anniversaire ! 🎂</h2>
+            <p>
+                [Ici ton texte d'amour et de célébration, que tu pourras modifier à ta guise. Un petit mot doux pour introduire la suite...]
+            </p>
+            <div class="modal-ornament">🌹 ✦ 🌹</div>
+            <button id="to-dashboard-btn" class="modal-cta-btn">Découvrir ta surprise ✦</button>
+        </div>
+    </div>
+
+    <!-- ===================================
+         3. DASHBOARD PRINCIPAL
+         =================================== -->
+    <main id="main-content" class="main-content hidden">
+
+        <!-- Header du Dashboard -->
+        <header class="dashboard-header">
+            <div class="dash-header-ornament">✦</div>
+            <div class="dash-header-center">
+                <p class="dash-subtitle">✦ HOŞGELDİNİZ ✦</p>
+                <h1 class="dash-title">ELIF'İN <span>DÜNYASI</span></h1>
+            </div>
+            <div class="global-score-display">
+                <div class="score-lbl">PUAN</div>
+                <div id="global-score" class="score-val">0</div>
+            </div>
+        </header>
+
+        <!-- Navigation à onglets -->
+        <nav class="navbar">
+            <button class="tab-btn active" data-tab="souvenirs">📸 Souvenirs</button>
+            <div class="nav-gem">❊</div>
+            <button class="tab-btn" data-tab="jeux">🕹️ Les Jeux</button>
+            <div class="nav-gem">❊</div>
+            <button class="tab-btn" data-tab="surprises">🎁 Surprise</button>
+        </nav>
+
+        <div class="tab-container">
+
+            <!-- SECTION SOUVENIRS -->
+            <section id="souvenirs" class="tab-panel active">
+                <h2 class="section-title">✦ Nos Meilleurs Moments ✦</h2>
+                <div class="polaroid-grid">
+                    <div class="polaroid-placeholder" style="aspect-ratio: 3/4;"></div>
+                    <div class="polaroid-placeholder" style="aspect-ratio: 3/4;"></div>
+                    <div class="polaroid-placeholder" style="aspect-ratio: 3/4;"></div>
+                    <div class="polaroid-placeholder" style="aspect-ratio: 3/4;"></div>
+                </div>
+            </section>
+
+            <!-- SECTION JEUX -->
+            <section id="jeux" class="tab-panel">
+                <!-- Menu de sélection des jeux -->
+                <div id="game-menu">
+                    <h2 class="section-title">✦ À Toi de Jouer, Championne ! ✦</h2>
+                    <div class="games-container">
+                        <button class="game-card-btn" onclick="showGame('space-invaders')">
+                            <span class="btn-icon">👾</span>
+                            <span class="btn-label">SPACE INVADERS</span>
+                            <span class="btn-sub">Défends la galaxie</span>
+                        </button>
+                        <button class="game-card-btn" onclick="showGame('mahjong')">
+                            <span class="btn-icon">🀄</span>
+                            <span class="btn-label">MAHJONG</span>
+                            <span class="btn-sub">Trouve les paires</span>
+                        </button>
+                        <button class="game-card-btn" onclick="showGame('sudoku')">
+                            <span class="btn-icon">🔢</span>
+                            <span class="btn-label">SUDOKU</span>
+                            <span class="btn-sub">Remplis la grille</span>
+                        </button>
+                    </div>
+                    <div class="score-info-box">
+                        <p>🏆 Score Global : <strong id="score-inline">0</strong> pts &nbsp;|&nbsp; 🎁 Palier : <span id="palier-info">4000 pts pour débloquer la surprise</span></p>
+                    </div>
+                </div>
+
+                <!-- Zone d'affichage du jeu actif -->
+                <div id="active-game-area" style="display:none;">
+                    <button class="back-to-menu-btn" onclick="hideGame()">← Retour aux jeux</button>
+                    <div id="game-slot"></div>
+                </div>
+            </section>
+
+            <!-- SECTION SURPRISES -->
+            <section id="surprises" class="tab-panel">
+                <h2 class="section-title">✦ Ta Surprise ✦</h2>
+                <div class="mystery-zone">
+                    <div id="mystery-sealed" class="mystery-sealed">
+                        <div class="mystery-lock">🔐</div>
+                        <p id="mystery-msg" class="mystery-text">
+                            Une surprise secrète t'attend ici... mais d'abord, tu dois jouer !
+                        </p>
+                        <div class="mystery-progress-bar">
+                            <div id="mystery-progress-fill" class="mystery-progress-fill" style="width:0%"></div>
+                        </div>
+                        <p id="mystery-hint" class="mystery-hint">0 / 4000 pts</p>
+                    </div>
+                    <div id="mystery-unlocked" class="mystery-unlocked" style="display:none;">
+                        <h3>🎉 SURPRISE DÉBLOQUÉE ! 🎉</h3>
+                        <button id="mystery-btn" class="mystery-cta-btn" onclick="revealSurprise()">
+                            🎁 OUVRIR MON CADEAU 🎁
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script src="games/space_invaders.js"></script>
+    <script src="games/mahjong.js"></script>
+    <script src="games/sudoku.js"></script>
+</body>
+</html>
