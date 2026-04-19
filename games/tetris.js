@@ -61,15 +61,22 @@ window.initTetris = function(container) {
 
     function drawBoard() {
         ctx.clearRect(0,0,cvs.width,cvs.height);
+
+        // Grid drawn behind pieces
+        ctx.strokeStyle = "rgba(212,175,55,0.1)";
+        ctx.lineWidth = 1;
+        for(let r = 0; r <= ROW; r++) { ctx.beginPath(); ctx.moveTo(0, r*SQ); ctx.lineTo(cvs.width, r*SQ); ctx.stroke(); }
+        for(let c = 0; c <= COL; c++) { ctx.beginPath(); ctx.moveTo(c*SQ, 0); ctx.lineTo(c*SQ, cvs.height); ctx.stroke(); }
+        
         for(let r = 0; r < ROW; r++){ for(let c = 0; c < COL; c++){ drawSquare(c, r, board[r][c]); } }
         
-        // Locked pieces white strokes
-        ctx.strokeStyle = "rgba(255,255,255,1)";
+        // Locked pieces multicolored strokes
         ctx.lineWidth = 3;
         for(let r = 0; r < ROW; r++) {
             for(let c = 0; c < COL; c++) {
                 let cell = board[r][c];
                 if(cell.color !== VACANT && cell.pieceId) {
+                    ctx.strokeStyle = cell.color;
                     let rx = c*SQ; let ry = r*SQ;
                     ctx.beginPath();
                     if(r===0 || (board[r-1] && board[r-1][c].pieceId !== cell.pieceId)) { ctx.moveTo(rx, ry); ctx.lineTo(rx+SQ, ry); }
@@ -80,11 +87,6 @@ window.initTetris = function(container) {
                 }
             }
         }
-        
-        ctx.strokeStyle = "rgba(212,175,55,0.1)";
-        ctx.lineWidth = 1;
-        for(let r = 0; r <= ROW; r++) { ctx.beginPath(); ctx.moveTo(0, r*SQ); ctx.lineTo(cvs.width, r*SQ); ctx.stroke(); }
-        for(let c = 0; c <= COL; c++) { ctx.beginPath(); ctx.moveTo(c*SQ, 0); ctx.lineTo(c*SQ, cvs.height); ctx.stroke(); }
     }
     
     function renderAll() {
@@ -114,7 +116,9 @@ window.initTetris = function(container) {
     function randomPiece() {
         let r = Math.floor(Math.random() * PIECES.length);
         let img = loadedImages[Math.floor(Math.random() * loadedImages.length)];
-        return new Piece(PIECES[r], "solid", img);
+        let neonColors = ['#FF00FF', '#00FFFF', '#00FF00', '#FFFF00', '#FF3300', '#00FF99', '#9D00FF'];
+        let rc = neonColors[Math.floor(Math.random() * neonColors.length)];
+        return new Piece(PIECES[r], rc, img);
     }
 
     function Piece(tetromino, color, img) {
@@ -162,7 +166,7 @@ window.initTetris = function(container) {
 
     Piece.prototype.draw = function() { 
         this.fill(this.color); 
-        ctx.strokeStyle = "rgba(255,255,255,1)";
+        ctx.strokeStyle = this.color;
         ctx.lineWidth = 3;
         for(let r = 0; r < this.activeTetromino.length; r++) {
             for(let c = 0; c < this.activeTetromino.length; c++) {

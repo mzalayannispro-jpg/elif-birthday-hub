@@ -16,8 +16,8 @@ window.initMahjong = function(container) {
         </header>
         <div id="mahjong-board" style="position:relative; width:100%; height:480px; background:rgba(0,0,0,0.4); border-radius:10px; border:1px solid rgba(212,175,55,0.3); overflow:hidden;"></div>
         <p id="mahjong-status" style="text-align:center; margin-top:12px; color:#4ECDC4; font-family:'Lora',serif; font-style:italic; font-size:14px;">
-            <strong>Règles :</strong> Trouve et clique sur deux tuiles strictement identiques pour les retirer du plateau.<br>
-            <em>Attention : tu ne peux sélectionner que les tuiles qui sont libres (non bloquées par d'autres).</em>
+            <strong>Règles :</strong> Clique sur deux tuiles pour les retourner. Si ce sont les mêmes images de stickers (paires identiques), elles disparaîtront.<br>
+            <em>Attention : Tu as besoin d'une bonne mémoire car les tuiles se recouvrent rapidement. Vide le plateau complet pour gagner 100 points !</em>
         </p>
     </div>
     `;
@@ -66,16 +66,25 @@ window.initMahjong = function(container) {
                 height: ${TILE_H}px;
                 left: ${offsetX + PAD_X + c * (TILE_W + PAD_X)}px;
                 top: ${offsetY + PAD_Y + r * (TILE_H + PAD_Y)}px;
-                background-image: url('${encodeURI(tile.imgSrc)}');
-                background-size: cover;
-                background-position: center;
                 border: 2px solid #D4AF37;
                 border-radius: 6px;
                 cursor: pointer;
                 box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
                 transition: transform 0.15s, box-shadow 0.15s, opacity 0.3s;
                 background-color: #FFF8E7;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
             `;
+            
+            const imgEl = document.createElement('img');
+            imgEl.src = tile.imgSrc;
+            imgEl.style.width = '100%';
+            imgEl.style.height = '100%';
+            imgEl.style.objectFit = 'cover';
+            imgEl.style.pointerEvents = 'none'; // prevent dragging
+            tile.el.appendChild(imgEl);
             
             tile.el.onmouseenter = () => {
                 if (tile.active) { tile.el.style.transform = 'translateY(-4px)'; tile.el.style.boxShadow = '3px 8px 15px rgba(0,0,0,0.5), 0 0 12px rgba(212,175,55,0.4)'; }

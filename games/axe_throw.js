@@ -34,11 +34,36 @@ window.initAxeThrow = function(container) {
     let axes = []; // flying ones
     let lodgedAxes = []; // lodged in target
     let particles = [];
-    let bleeding = 0; // timer
-    
+    // Filter for removing white background
+    function removeWhite(imgEl, threshold=240) {
+        const off = document.createElement('canvas');
+        off.width = imgEl.naturalWidth || imgEl.width || 100;
+        off.height = imgEl.naturalHeight || imgEl.height || 100;
+        const octx = off.getContext('2d');
+        octx.drawImage(imgEl, 0, 0, off.width, off.height);
+        try {
+            const data = octx.getImageData(0,0,off.width, off.height);
+            for(let i=0; i<data.data.length; i+=4) {
+                if(data.data[i]>threshold && data.data[i+1]>threshold && data.data[i+2]>threshold) {
+                    data.data[i+3] = 0; // make transparent
+                }
+            }
+            octx.putImageData(data, 0, 0);
+            return off;
+        } catch(e) { return imgEl; } // fallback
+    }
+
+    let cleanAxe = null;
+    let cleanTarget = null;
+
     // Images
-    const axeImg = new Image(); axeImg.src = 'assets/axe.png';
-    const targetBoardImg = new Image(); targetBoardImg.src = 'assets/green_tracksuit.png';
+    const axeImg = new Image(); 
+    axeImg.onload = () => { cleanAxe = removeWhite(axeImg, 220); };
+    axeImg.src = 'assets/axe.png';
+    
+    const targetBoardImg = new Image(); 
+    targetBoardImg.onload = () => { cleanTarget = removeWhite(targetBoardImg, 245); };
+    targetBoardImg.src = 'assets/wooden_dummy.png';
     
     // Explicitly restrict to face stickers
     let faceUrls = [
@@ -239,39 +264,42 @@ window.initAxeThrow = function(container) {
         ctx.strokeRect(-crossW/2, -crossH/2, crossW, crossH);
         ctx.strokeRect(-crossH/2, -crossW/2, crossH, crossW);
 
-        // Draw Big Target Background (Tracksuit)
+        // Draw Big Target Background (Wooden Dummy)
         if (targetBoardImg.complete && targetBoardImg.naturalWidth > 0) {
-            // Drawn centered, slightly shifted down
-            ctx.drawImage(targetBoardImg, -140, -100, 280, 280);
+            let imgToDraw = cleanTarget || targetBoardImg;
+            // Drawn centered
+            ctx.drawImage(imgToDraw, -140, -140, 280, 280);
         } else {
             ctx.fillStyle = '#8B4513';
             ctx.beginPath(); ctx.arc(0, 0, target.radius, 0, Math.PI*2); ctx.fill();
         }
 
-        // Draw the Face (Sticker) on the neck area (approx dy: -80)
-        let faceW = 70;
-        let faceH = 80;
+        // Draw the Face (Sticker)
+        let faceW = 75;
+        let faceH = 85;
+        let faceOffsetY = -105; // Tête placée plus haute
         if (target.faceImg && target.faceImg.complete && target.faceImg.naturalWidth > 0) {
             ctx.save();
             ctx.beginPath();
-            ctx.arc(0, -60, 35, 0, Math.PI*2); 
+            ctx.arc(0, faceOffsetY, 35, 0, Math.PI*2); 
             ctx.clip(); // Circle clip the face
             if (bleeding > 0) {
                 // Red flash tint
                 ctx.fillStyle = 'rgba(255, 0, 0, 0.4)';
-                ctx.fillRect(-faceW/2, -60 - faceH/2, faceW, faceH);
+                ctx.fillRect(-faceW/2, faceOffsetY - faceH/2, faceW, faceH);
                 ctx.globalAlpha = 0.8;
             }
-            ctx.drawImage(target.faceImg, -faceW/2, -60 - faceH/2, faceW, faceH);
+            ctx.drawImage(target.faceImg, -faceW/2, faceOffsetY - faceH/2, faceW, faceH);
             ctx.restore();
         }
 
+        let axeToDraw = cleanAxe || axeImg;
         // Lodged axes
         for(let la of lodgedAxes) {
             ctx.save();
             ctx.translate(la.dx, la.dy);
             ctx.rotate(la.rotation);
-            if(axeImg.complete) ctx.drawImage(axeImg, -25, -25, 50, 50);
+            if(axeImg.complete) ctx.drawImage(axeToDraw, -25, -25, 50, 50);
             ctx.restore();
         }
 
@@ -282,7 +310,7 @@ window.initAxeThrow = function(container) {
             ctx.save();
             ctx.translate(axe.x + axe.w/2, axe.y + axe.h/2);
             ctx.rotate(axe.rotation);
-            if (axeImg.complete) ctx.drawImage(axeImg, -axe.w/2, -axe.h/2, axe.w, axe.h);
+            if (axeImg.complete) ctx.drawImage(axeToDraw, -axe.w/2, -axe.h/2, axe.w, axe.h);
             ctx.restore();
         }
 
