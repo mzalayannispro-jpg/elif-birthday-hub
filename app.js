@@ -126,3 +126,27 @@ window.hideGame = function() {
 window.revealSurprise = function() {
     alert("🛫 PRÉPARE TON SAC ! LA SURPRISE EST EN ROUTE...\n\n[La vidéo de ton cadeau apparaîtra ici]");
 };
+
+// ============ GLOBAL GAME OVER ============
+window.showGlobalGameOver = function(restartCallback) {
+    const overlay = document.getElementById('global-game-over');
+    const sticker = document.getElementById('game-over-sticker');
+    const replayBtn = document.getElementById('game-over-replay-btn');
+    
+    // Check if the HTML exists
+    if (!overlay) return;
+
+    replayBtn.classList.add('hidden');
+    overlay.classList.remove('hidden');
+    
+    sticker.style.transform = 'scale(0.1)';
+    setTimeout(() => { sticker.style.transform = 'scale(1)'; }, 50);
+    
+    setTimeout(() => {
+        replayBtn.classList.remove('hidden');
+        replayBtn.onclick = () => {
+            overlay.classList.add('hidden');
+            if (restartCallback) restartCallback();
+        };
+    }, 2000); // 2 secondes
+};

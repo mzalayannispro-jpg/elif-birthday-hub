@@ -263,7 +263,11 @@ window.initSpaceInvaders = function(container) {
                 
                 if (lives <= 0) {
                     gameState = 'gameover';
-                    showScreen(gameOverScreen);
+                    if (window.showGlobalGameOver) {
+                        window.showGlobalGameOver(() => document.getElementById('restart-btn').click());
+                    } else {
+                        showScreen(gameOverScreen);
+                    }
                     finalScoreEl.innerText = score;
                 }
                 continue;
@@ -305,7 +309,11 @@ window.initSpaceInvaders = function(container) {
             
             if (a.y + a.height > player.y) {
                  gameState = 'gameover';
-                 showScreen(gameOverScreen);
+                 if (window.showGlobalGameOver) {
+                     window.showGlobalGameOver(() => document.getElementById('restart-btn').click());
+                 } else {
+                     showScreen(gameOverScreen);
+                 }
                  finalScoreEl.innerText = score;
                  return;
             }

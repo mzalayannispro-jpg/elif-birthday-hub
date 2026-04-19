@@ -760,6 +760,62 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
 
 /* ================================================
+   GLOBAL GAME OVER
+   ================================================ */
+.global-game-over {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 0, 0, 0.85);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(8px);
+    transition: opacity 0.5s;
+}
+
+.global-game-over.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.game-over-sticker {
+    width: 320px;
+    height: 320px;
+    object-fit: contain;
+    animation: kitschShake 0.15s infinite;
+    filter: drop-shadow(0 0 30px rgba(200, 0, 0, 0.9));
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.game-over-replay-btn {
+    margin-top: 50px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s, filter 0.3s;
+    text-align: center;
+}
+
+.game-over-replay-btn img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.game-over-replay-btn:hover img {
+    transform: scale(1.15) rotate(5deg);
+    filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.9));
+}
+
+.game-over-replay-btn.hidden {
+    display: none;
+}
+
+/* ================================================
    RESPONSIVE
    ================================================ */
 @media (max-width: 768px) {

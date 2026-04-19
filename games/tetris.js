@@ -295,8 +295,22 @@ window.initTetris = function(container) {
                 if(!this.activeTetromino[r][c]) continue;
                 if(this.y + r < 0) {
                     gameOver = true;
-                    document.getElementById('tetris-gameover').style.display = 'flex';
                     window.tetrisReqId = null;
+                    if (window.showGlobalGameOver) {
+                        window.showGlobalGameOver(() => {
+                            // Reset the board completely
+                            for(let _r = 0; _r < ROW; _r++) {
+                                for(let _c = 0; _c < COL; _c++) {
+                                    board[_r][_c] = { color: VACANT, img: null };
+                                }
+                            }
+                            score = 0;
+                            scoreEl.innerText = score;
+                            document.getElementById('start-tetris-btn').click();
+                        });
+                    } else {
+                        document.getElementById('tetris-gameover').style.display = 'flex';
+                    }
                     return;
                 }
                 board[this.y+r][this.x+c] = {

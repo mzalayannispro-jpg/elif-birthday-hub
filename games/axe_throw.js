@@ -159,9 +159,15 @@ window.initAxeThrow = function(container) {
     };
 
     function gameOver() {
-        gameState = 'start';
-        document.getElementById('axe-start-screen').style.display = 'flex';
-        document.querySelector('#axe-start-screen h2').innerText = "GAME OVER";
+        if (window.showGlobalGameOver) {
+            window.showGlobalGameOver(() => {
+                document.getElementById('start-axe-btn').click();
+            });
+        } else {
+            gameState = 'start';
+            document.getElementById('axe-start-screen').style.display = 'flex';
+            document.querySelector('#axe-start-screen h2').innerText = "GAME OVER";
+        }
     }
 
     function winLevel() {
