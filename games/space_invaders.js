@@ -59,9 +59,9 @@ window.initSpaceInvaders = function(container) {
     let level = 1;
 
     const playerImg = new Image(); playerImg.src = 'assets/player.webp';
-    const realBaklavaImg = new Image(); realBaklavaImg.src = 'assets/real_baklava.png';
-    const flagImg = new Image(); flagImg.src = 'assets/turkish_flag_8bit_1776606457543.png';
-    const ataturkImg = new Image(); ataturkImg.src = 'assets/{039CA1E5-BA4D-496F-B625-D9F572C058F9}.png';
+    const realBaklavaImg = new Image(); realBaklavaImg.src = 'assets/tetris/bonus/rapidfire.png';
+    const flagImg = new Image(); flagImg.src = 'assets/tetris/bonus/extralife.png';
+    const ataturkImg = new Image(); ataturkImg.src = 'assets/tetris/bonus/doublegun.png';
     const bgSofiaImg = new Image(); bgSofiaImg.src = 'assets/hagia_sophia_8bit_1776606429857.png';
     const winImg = new Image(); winImg.src = 'assets/win.webp';
     const loseImg = new Image(); loseImg.src = 'assets/lose.webp';
