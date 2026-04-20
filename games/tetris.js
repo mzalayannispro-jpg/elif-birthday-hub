@@ -10,7 +10,7 @@ window.initTetris = function(container) {
                 </div>
             </header>
             
-            <div id="tetris-wrapper" style="position:relative; display:inline-block;">
+            <div id="tetris-wrapper" style="position:relative; display:inline-block; width:100%;">
                 <canvas id="tetris-canvas" width="400" height="800" style="background:rgba(0,0,0,0.8); border:2px solid #D4AF37; box-shadow:0 0 15px rgba(0,0,0,0.8); width:100%; max-width:400px; max-height:80vh;"></canvas>
                 
                 <div id="tetris-start-screen" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; flex-direction:column; justify-content:center; align-items:center;">
@@ -23,6 +23,14 @@ window.initTetris = function(container) {
                     <h2 style="color:#FFF;" data-i18n="tetris.gameover">GAME OVER</h2>
                     <button onclick="initTetris(document.getElementById('game-slot'))" style="background:#FFF; color:#8B0000; border:none; padding:10px 20px; font-weight:bold; cursor:pointer; border-radius:6px; margin-top:10px;" data-i18n="game.replay">Rejouer</button>
                 </div>
+            </div>
+
+            <!-- Touch controls for tablet/mobile -->
+            <div id="tetris-touch-btns" style="display:flex; justify-content:center; gap:10px; margin-top:12px; touch-action:manipulation;">
+                <button ontouchstart="if(piece)piece.moveLeft()" onclick="if(piece)piece.moveLeft()" style="background:rgba(212,175,55,0.15); border:1px solid #D4AF37; color:#D4AF37; width:60px; height:50px; border-radius:8px; font-size:22px; cursor:pointer; touch-action:manipulation;">⬅️</button>
+                <button ontouchstart="if(piece)piece.rotate()" onclick="if(piece)piece.rotate()" style="background:rgba(212,175,55,0.15); border:1px solid #D4AF37; color:#D4AF37; width:60px; height:50px; border-radius:8px; font-size:22px; cursor:pointer; touch-action:manipulation;">🔄</button>
+                <button ontouchstart="if(piece){while(!piece.collision(0,1,piece.activeTetromino))piece.y++;piece.moveDown();}" onclick="if(piece){while(!piece.collision(0,1,piece.activeTetromino))piece.y++;piece.moveDown();}" style="background:rgba(212,175,55,0.15); border:1px solid #D4AF37; color:#D4AF37; width:60px; height:50px; border-radius:8px; font-size:22px; cursor:pointer; touch-action:manipulation;">⬇️</button>
+                <button ontouchstart="if(piece)piece.moveRight()" onclick="if(piece)piece.moveRight()" style="background:rgba(212,175,55,0.15); border:1px solid #D4AF37; color:#D4AF37; width:60px; height:50px; border-radius:8px; font-size:22px; cursor:pointer; touch-action:manipulation;">➡️</button>
             </div>
         </div>
         `;

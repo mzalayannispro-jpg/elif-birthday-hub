@@ -1,7 +1,8 @@
 window.initSpaceInvaders = function(container) {
     if (!container.innerHTML.includes('gameCanvas')) {
         container.innerHTML = `
-        <div id="game-container" style="width:800px; height:650px;">
+        <div style="overflow-x:auto; max-width:100%; width:100%;">
+        <div id="game-container" style="width:800px; height:650px; transform-origin:top left; position:relative;">
             <div id="ui-layer">
                 <header style="padding:10px 20px; display:flex; justify-content:space-between; z-index:10; pointer-events:all;">
                     <div style="color:#D4AF37; font-weight:700;"><span data-i18n="si.lives">LIVES: </span><span id="si-lives">5</span> | SCORE: <span id="si-score">0</span></div>
@@ -32,8 +33,19 @@ window.initSpaceInvaders = function(container) {
             </div>
             <canvas id="gameCanvas"></canvas>
         </div>
+        </div>
+        <!-- Touch controls for tablet -->
+        <div id="si-touch-row" style="display:flex;justify-content:center;gap:16px;margin-top:10px;touch-action:manipulation;">
+            <button id="si-t-left"  style="background:rgba(212,175,55,0.15);border:1px solid #D4AF37;color:#D4AF37;width:70px;height:54px;border-radius:8px;font-size:24px;cursor:pointer;touch-action:manipulation;">⬅️</button>
+            <button id="si-t-fire"  style="background:rgba(212,175,55,0.3);border:2px solid #D4AF37;color:#D4AF37;width:90px;height:54px;border-radius:8px;font-size:24px;cursor:pointer;touch-action:manipulation;">🔫</button>
+            <button id="si-t-right" style="background:rgba(212,175,55,0.15);border:1px solid #D4AF37;color:#D4AF37;width:70px;height:54px;border-radius:8px;font-size:24px;cursor:pointer;touch-action:manipulation;">➡️</button>
+        </div>
         `;
         if(window.setLanguage) window.setLanguage(window.currentLang);
+        // Scale game container to fit viewport width on small screens
+        const gc = document.getElementById('game-container');
+        const available = Math.min(window.innerWidth - 32, 800);
+        if (available < 800) gc.style.transform = `scale(${available / 800})`;
     }
 
     const canvas = document.getElementById('gameCanvas');
@@ -126,6 +138,29 @@ window.initSpaceInvaders = function(container) {
 
     document.addEventListener('keydown', window.siKeydown);
     document.addEventListener('keyup', window.siKeyup);
+
+    // ── Touch button hooks for tablet ────────────────────────────────────────
+    const _tLeft  = document.getElementById('si-t-left');
+    const _tRight = document.getElementById('si-t-right');
+    const _tFire  = document.getElementById('si-t-fire');
+    if (_tLeft) {
+        _tLeft.addEventListener('touchstart',  (e) => { e.preventDefault(); keys.ArrowLeft = true;  }, { passive: false });
+        _tLeft.addEventListener('touchend',    (e) => { e.preventDefault(); keys.ArrowLeft = false; }, { passive: false });
+        _tLeft.addEventListener('mousedown',   ()  => keys.ArrowLeft = true);
+        _tLeft.addEventListener('mouseup',     ()  => keys.ArrowLeft = false);
+    }
+    if (_tRight) {
+        _tRight.addEventListener('touchstart', (e) => { e.preventDefault(); keys.ArrowRight = true;  }, { passive: false });
+        _tRight.addEventListener('touchend',   (e) => { e.preventDefault(); keys.ArrowRight = false; }, { passive: false });
+        _tRight.addEventListener('mousedown',  ()  => keys.ArrowRight = true);
+        _tRight.addEventListener('mouseup',    ()  => keys.ArrowRight = false);
+    }
+    if (_tFire) {
+        _tFire.addEventListener('touchstart',  (e) => { e.preventDefault(); keys.Space = true;  }, { passive: false });
+        _tFire.addEventListener('touchend',    (e) => { e.preventDefault(); keys.Space = false; }, { passive: false });
+        _tFire.addEventListener('mousedown',   ()  => keys.Space = true);
+        _tFire.addEventListener('mouseup',     ()  => keys.Space = false);
+    }
 
     function initAliens() {
         aliens = [];

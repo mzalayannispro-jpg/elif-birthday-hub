@@ -94,11 +94,30 @@ window.initAxeThrow = function(container) {
     
     let mouseX = canvas.width / 2;
     let mouseY = canvas.height / 2;
-    canvas.onmousemove = (e) => {
+
+    function updateAim(clientX, clientY) {
         let rect = canvas.getBoundingClientRect();
-        mouseX = e.clientX - rect.left;
-        mouseY = e.clientY - rect.top;
-    };
+        const scaleX = canvas.width  / rect.width;
+        const scaleY = canvas.height / rect.height;
+        mouseX = (clientX - rect.left) * scaleX;
+        mouseY = (clientY - rect.top)  * scaleY;
+    }
+
+    canvas.onmousemove = (e) => updateAim(e.clientX, e.clientY);
+
+    // Touch: move finger = aim, lift finger = throw
+    canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        if (e.touches.length > 0) updateAim(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: false });
+    canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (e.touches.length > 0) updateAim(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: false });
+    canvas.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        throwAxe();
+    }, { passive: false });
 
     function pickFace() {
         target.faceImg = faceImages[Math.floor(Math.random() * faceImages.length)];

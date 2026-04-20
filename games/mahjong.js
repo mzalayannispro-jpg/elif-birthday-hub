@@ -14,7 +14,7 @@ window.initMahjong = function(container) {
                 <button onclick="hideGame()" style="background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:6px 14px; border-radius:5px; cursor:pointer;" data-i18n="game.back">← Menu</button>
             </div>
         </header>
-        <div id="mahjong-board" style="position:relative; width:100%; height:480px; background:rgba(0,0,0,0.4); border-radius:10px; border:1px solid rgba(212,175,55,0.3); overflow:hidden;"></div>
+        <div id="mahjong-board" style="position:relative; width:100%; background:rgba(0,0,0,0.4); border-radius:10px; border:1px solid rgba(212,175,55,0.3); overflow:visible;"></div>
         <p id="mahjong-status" style="text-align:center; margin-top:12px; color:#4ECDC4; font-family:'Lora',serif; font-style:italic; font-size:14px;" data-i18n="mj.rules">
             <strong>Rules:</strong> Click on two tiles to flip them. If they match, they disappear.<br>
             <em>Warning: You need a good memory. Clear the board to earn 100 points!</em>
@@ -46,8 +46,12 @@ window.initMahjong = function(container) {
     
     const boardW = COLS * (TILE_W + PAD_X) + PAD_X;
     const boardH = ROWS * (TILE_H + PAD_Y) + PAD_Y;
+
+    // Set the board div to the exact needed height BEFORE computing offsets
+    boardEl.style.height = (boardH + PAD_Y * 2) + 'px';
+
     const offsetX = Math.max(0, (boardEl.offsetWidth - boardW) / 2);
-    const offsetY = Math.max(0, (boardEl.offsetHeight - boardH) / 2);
+    const offsetY = PAD_Y;
     
     for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
