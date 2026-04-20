@@ -1,7 +1,7 @@
 window.I18N = {
     en: {
         "title.happy": "HAPPY BIRTHDAY",
-        "title.love": "MY LOVE! 🌹",
+        "title.love": "MY BABYLOVE BUTTERFLY IN THE SKY MENI ASKAM 🌹",
         "title.click": "Click anywhere to continue...",
         "modal.title": "Happy Birthday! 🎂",
         "modal.body": "[Here is your love and celebration text, modify as you wish. A little sweet word to introduce the rest...]",
@@ -55,7 +55,7 @@ window.I18N = {
     },
     tr: {
         "title.happy": "İYİ Kİ DOĞDUN",
-        "title.love": "AŞKIM! 🌹",
+        "title.love": "MY BABYLOVE BUTTERFLY IN THE SKY MENİ AŞKAM 🌹",
         "title.click": "Devam etmek için ekrana tıklayın...",
         "modal.title": "Doğum Günün Kutlu Olsun! 🎂",
         "modal.body": "[Aşk ve kutlama metniniz burada, dilediğiniz gibi değiştirin. Devamını tanıtmak için küçük tatlı bir söz...]",
