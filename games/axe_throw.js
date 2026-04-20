@@ -290,14 +290,32 @@ window.initAxeThrow = function(container) {
         ctx.rotate(target.angle);
 
         // Draw wood Cross
-        ctx.fillStyle = '#4A2511';
+        ctx.fillStyle = '#5C2E0A';
         let crossW = 340, crossH = 40;
         ctx.fillRect(-crossW/2, -crossH/2, crossW, crossH);
         ctx.fillRect(-crossH/2, -crossW/2, crossH, crossW);
-        ctx.strokeStyle = '#2B1408';
-        ctx.lineWidth = 4;
+
+        // Outer glow (large soft stroke)
+        ctx.strokeStyle = 'rgba(255, 180, 60, 0.35)';
+        ctx.lineWidth = 14;
         ctx.strokeRect(-crossW/2, -crossH/2, crossW, crossH);
         ctx.strokeRect(-crossH/2, -crossW/2, crossH, crossW);
+
+        // Inner bright border (sharp, clearly visible)
+        ctx.strokeStyle = '#D4881A';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(-crossW/2, -crossH/2, crossW, crossH);
+        ctx.strokeRect(-crossH/2, -crossW/2, crossH, crossW);
+
+        // Wood grain lines for texture
+        ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+        ctx.lineWidth = 1.5;
+        for (let gx = -crossW/2 + 25; gx < crossW/2; gx += 30) {
+            ctx.beginPath(); ctx.moveTo(gx, -crossH/2); ctx.lineTo(gx, crossH/2); ctx.stroke();
+        }
+        for (let gy = -crossW/2 + 25; gy < crossW/2; gy += 30) {
+            ctx.beginPath(); ctx.moveTo(-crossH/2, gy); ctx.lineTo(crossH/2, gy); ctx.stroke();
+        }
 
         // ── Corps humain ligoté sur la roue ────────────────────────────────
         const SK = '#F4C082', SD = '#C4834A'; // skin / shadow
