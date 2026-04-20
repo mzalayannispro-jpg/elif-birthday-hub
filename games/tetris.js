@@ -68,15 +68,60 @@ window.initTetris = function(container) {
     function drawBoard() {
         ctx.clearRect(0,0,cvs.width,cvs.height);
 
-        // Grid drawn behind pieces
+        // Grid
         ctx.strokeStyle = "rgba(212,175,55,0.1)";
         ctx.lineWidth = 1;
         for(let r = 0; r <= ROW; r++) { ctx.beginPath(); ctx.moveTo(0, r*SQ); ctx.lineTo(cvs.width, r*SQ); ctx.stroke(); }
         for(let c = 0; c <= COL; c++) { ctx.beginPath(); ctx.moveTo(c*SQ, 0); ctx.lineTo(c*SQ, cvs.height); ctx.stroke(); }
-        
-        for(let r = 0; r < ROW; r++){ for(let c = 0; c < COL; c++){ drawSquare(c, r, board[r][c]); } }
-        
-        // Locked pieces multicolored strokes
+
+        // Pass 1 : solid color fill for cells without a sticker image
+        for(let r = 0; r < ROW; r++){
+            for(let c = 0; c < COL; c++){
+                let cell = board[r][c];
+                if(cell.color !== VACANT && !cell.img) {
+                    ctx.fillStyle = cell.color;
+                    ctx.fillRect(c*SQ, r*SQ, SQ, SQ);
+                }
+            }
+        }
+
+        // Pass 2 : sticker images for locked pieces (one drawImage per pieceId)
+        const drawnIds = new Set();
+        for(let r = 0; r < ROW; r++) {
+            for(let c = 0; c < COL; c++) {
+                let cell = board[r][c];
+                if(cell.color === VACANT || !cell.img || !cell.pieceId) continue;
+                if(drawnIds.has(cell.pieceId)) continue;
+                drawnIds.add(cell.pieceId);
+
+                // Find bounding box of all cells sharing this pieceId
+                let minR = ROW, maxR = 0, minC = COL, maxC = 0;
+                for(let rr = 0; rr < ROW; rr++) {
+                    for(let cc = 0; cc < COL; cc++) {
+                        if(board[rr][cc].pieceId === cell.pieceId) {
+                            if(rr < minR) minR = rr; if(rr > maxR) maxR = rr;
+                            if(cc < minC) minC = cc; if(cc > maxC) maxC = cc;
+                        }
+                    }
+                }
+
+                if(cell.img.complete && cell.img.naturalWidth > 0) {
+                    ctx.save();
+                    ctx.beginPath();
+                    for(let rr = 0; rr < ROW; rr++) {
+                        for(let cc = 0; cc < COL; cc++) {
+                            if(board[rr][cc].pieceId === cell.pieceId)
+                                ctx.rect(cc*SQ, rr*SQ, SQ, SQ);
+                        }
+                    }
+                    ctx.clip();
+                    ctx.drawImage(cell.img, minC*SQ, minR*SQ, (maxC-minC+1)*SQ, (maxR-minR+1)*SQ);
+                    ctx.restore();
+                }
+            }
+        }
+
+        // Pass 3 : colored outline around each locked piece
         ctx.lineWidth = 3;
         for(let r = 0; r < ROW; r++) {
             for(let c = 0; c < COL; c++) {
@@ -160,35 +205,33 @@ window.initTetris = function(container) {
     Piece.prototype.fill = function(color) {
         let bounds = this.getBounds();
 
-        // Draw solid color for each occupied cell (always, as base layer)
-        for(let r = 0; r < this.activeTetromino.length; r++) {
-            for(let c = 0; c < this.activeTetromino.length; c++) {
-                if(this.activeTetromino[r][c]) {
-                    ctx.fillStyle = color + '55'; // semi-transparent tint
-                    ctx.fillRect((this.x+c)*SQ, (this.y+r)*SQ, SQ, SQ);
-                }
-            }
-        }
-
-        // Draw image ONCE stretched over the full bounding box of the piece
         if (this.img && this.img.complete && this.img.naturalWidth > 0) {
-            let destX = (this.x + bounds.minC) * SQ;
-            let destY = (this.y + bounds.minR) * SQ;
-            let destW = bounds.wCells * SQ;
-            let destH = bounds.hCells * SQ;
+            // Sticker mode: stretch image over the piece bounding box, clip to active cells only
             ctx.save();
-            // Clip to only the occupied cells of the piece
             ctx.beginPath();
             for(let r = 0; r < this.activeTetromino.length; r++) {
                 for(let c = 0; c < this.activeTetromino.length; c++) {
-                    if(this.activeTetromino[r][c]) {
+                    if(this.activeTetromino[r][c])
                         ctx.rect((this.x+c)*SQ, (this.y+r)*SQ, SQ, SQ);
-                    }
                 }
             }
             ctx.clip();
-            ctx.drawImage(this.img, destX, destY, destW, destH);
+            ctx.drawImage(
+                this.img,
+                (this.x + bounds.minC) * SQ, (this.y + bounds.minR) * SQ,
+                bounds.wCells * SQ, bounds.hCells * SQ
+            );
             ctx.restore();
+        } else {
+            // Fallback: solid color fill
+            for(let r = 0; r < this.activeTetromino.length; r++) {
+                for(let c = 0; c < this.activeTetromino.length; c++) {
+                    if(this.activeTetromino[r][c]) {
+                        ctx.fillStyle = color;
+                        ctx.fillRect((this.x+c)*SQ, (this.y+r)*SQ, SQ, SQ);
+                    }
+                }
+            }
         }
     }
 
@@ -303,7 +346,7 @@ window.initTetris = function(container) {
                 }
                 board[this.y+r][this.x+c] = {
                     color: this.color,
-                    img: null, // image drawn by fill(); locked cells use solid color only
+                    img: this.img,   // stored so drawBoard can render the sticker when locked
                     pieceId: pieceId
                 };
             }
