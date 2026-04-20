@@ -3,11 +3,11 @@ window.initAxeThrow = function(container) {
         container.innerHTML = `
         <div style="width:95vw; max-width:900px; margin:auto; background:linear-gradient(160deg, #1A0D00, #3B1C00); border:3px solid #D4AF37; border-radius:16px; padding:20px; box-shadow:0 0 40px rgba(212,175,55,0.25); text-align:center; position:relative;">
             <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-                <h2 style="font-family:'Cinzel Decorative',cursive; color:#D4AF37; font-size:24px; letter-spacing:3px;">🪓 UZINAGAZ : L'ÉPREUVE DE LA ROUE</h2>
+                <h2 style="font-family:'Cinzel Decorative',cursive; color:#D4AF37; font-size:24px; letter-spacing:3px;" data-i18n="game.axe">🪓 UZINAGAZ</h2>
                 <div>
-                    <span style="color:#ff4d4d; margin-right:15px; font-weight:bold; font-size:18px;">VIES: <span id="axe-lives">3</span></span>
+                    <span style="color:#ff4d4d; margin-right:15px; font-weight:bold; font-size:18px;"><span data-i18n="si.lives">LIVES: </span><span id="axe-lives">3</span></span>
                     <span style="color:#D4AF37; margin-right:20px; font-weight:bold; font-size:18px;">SCORE: <span id="axe-score">0</span></span>
-                    <button onclick="if(window.axeReqId) cancelAnimationFrame(window.axeReqId); hideGame()" style="background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:8px 16px; border-radius:5px; cursor:pointer; font-weight:bold;">← Menu</button>
+                    <button onclick="if(window.axeReqId) cancelAnimationFrame(window.axeReqId); hideGame()" style="background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:8px 16px; border-radius:5px; cursor:pointer; font-weight:bold;" data-i18n="game.back">← Menu</button>
                 </div>
             </header>
             <div style="position:relative; display:inline-block;">
@@ -31,6 +31,7 @@ window.initAxeThrow = function(container) {
     
     let score = 0;
     let lives = 3;
+    let bleeding = 0;
     let gameState = 'start'; // start, playing, gameover
     let axes = []; // flying ones
     let lodgedAxes = []; // lodged in target
@@ -66,15 +67,14 @@ window.initAxeThrow = function(container) {
     targetBoardImg.onload = () => { cleanTarget = removeWhite(targetBoardImg, 245); };
     targetBoardImg.src = 'assets/wooden_dummy.png';
     
-    // Explicitly restrict to face stickers
-    let faceUrls = [
-        'assets/{039CA1E5-BA4D-496F-B625-D9F572C058F9}.png', // Ataturk
-        'assets/tetris/82e4f251-83ee-43ac-a13f-ab8f212e5364.webp',
-        'assets/tetris/alien2.webp',
-        'assets/tetris/f0c20484-97a9-4757-90d2-c4a7088b3cfb.webp',
-        'assets/tetris/STK-20240608-WA0032.webp',
-        'assets/tetris/09eb6161-134e-43e3-af95-7c8004c45547.webp'
-    ];
+    // Explicitly restrict to face stickers from lancer-hache folder
+    let faceUrls = window.GAME_ASSETS && window.GAME_ASSETS['lancer-hache'] && window.GAME_ASSETS['lancer-hache'].length > 0
+        ? window.GAME_ASSETS['lancer-hache']
+        : [
+            'assets/{039CA1E5-BA4D-496F-B625-D9F572C058F9}.png',
+            'assets/alien2.webp',
+            'assets/player.webp'
+          ];
     const faceImages = faceUrls.map(src => {
         const i = new Image(); i.src = src; return i;
     });

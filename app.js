@@ -43,7 +43,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!window.GAME_ASSETS) return;
         const allStickers = [];
         for (let key in window.GAME_ASSETS) {
-            allStickers.push(...window.GAME_ASSETS[key]);
+            const val = window.GAME_ASSETS[key];
+            if (Array.isArray(val)) {
+                allStickers.push(...val);
+            } else if (val && typeof val === 'object') {
+                // Nested object (e.g. tetris: { I: [], J: [], ... })
+                for (let subKey in val) {
+                    if (Array.isArray(val[subKey])) allStickers.push(...val[subKey]);
+                }
+            }
         }
         if (allStickers.length === 0) return;
         

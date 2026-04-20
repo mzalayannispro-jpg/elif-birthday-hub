@@ -3,34 +3,39 @@
 window.GAME_ASSETS = {
   "tetris": {
     "I": [
-      
+      "assets/tetris/I/STK-20241117-WA0004.webp",
+      "assets/tetris/I/STK-20241217-WA0049 - Copie.webp"
     ],
     "J": [
-      
+      "assets/tetris/J/STK-20241217-WA0045 - Copie.png"
     ],
     "L": [
-      
+      "assets/tetris/L/2576ded6-55a4-4ae3-8a65-b2958364772d.webp",
+      "assets/tetris/L/9c08de24-fc9a-4106-8483-430a0f546023.webp"
     ],
     "O": [
-      
+      "assets/tetris/O/1f6c5518-609c-4db4-ae89-77325c921daf.webp",
+      "assets/tetris/O/STK-20241108-WA0002.webp",
+      "assets/tetris/O/STK-20241217-WA0048 - Copie.webp"
     ],
     "S": [
-      
+      "assets/tetris/S/alien3.webp"
     ],
     "T": [
-      
+      "assets/tetris/T/OwnSticker_20250616_233551646.png.jpg"
     ],
     "Z": [
-      
+      "assets/tetris/Z/STK-20240102-WA0000.webp"
     ]
   },
   "mahjong": [
-    "assets/mahjong/2576ded6-55a4-4ae3-8a65-b2958364772d.webp",
     "assets/mahjong/94d92225-07d4-44fa-b633-1b3daa63f094.webp",
-    "assets/mahjong/alien3.webp",
-    "assets/mahjong/STK-20240102-WA0000.webp",
-    "assets/mahjong/STK-20240715-WA0002 - Copie.webp",
-    "assets/mahjong/STK-20241217-WA0045 - Copie.png"
+    "assets/mahjong/alien4.webp",
+    "assets/mahjong/STK-20240506-WA0001.webp",
+    "assets/mahjong/STK-20251010-WA0030.webp",
+    "assets/mahjong/STK-20251028-WA0007.webp",
+    "assets/mahjong/STK-20251110-WA0000.webp",
+    "assets/mahjong/STK-20251113-WA0023.webp"
   ],
   "space-invaders": [
     "assets/space-invaders/09eb6161-134e-43e3-af95-7c8004c45547.webp",
@@ -41,26 +46,12 @@ window.GAME_ASSETS = {
     "assets/space-invaders/f0c20484-97a9-4757-90d2-c4a7088b3cfb.webp"
   ],
   "sudoku": [
-    "assets/sudoku/1f6c5518-609c-4db4-ae89-77325c921daf.webp",
     "assets/sudoku/51454260-68c0-4744-83da-9203fbfb76e4.webp",
     "assets/sudoku/52652cc6-3dcf-46c8-9a6e-12e51c82ade5.webp",
-    "assets/sudoku/9c08de24-fc9a-4106-8483-430a0f546023.webp",
     "assets/sudoku/a9dcfb00-509c-41dd-891f-8a842927fdcf.webp",
-    "assets/sudoku/ec0ac460-aae3-4039-bac7-21eb98d88b09.webp",
-    "assets/sudoku/lose.webp",
-    "assets/sudoku/player.webp",
-    "assets/sudoku/STK-20240506-WA0000.webp",
-    "assets/sudoku/STK-20240625-WA0014 - Copie.webp",
-    "assets/sudoku/STK-20240627-WA0020 - Copie.webp",
-    "assets/sudoku/STK-20240715-WA0000 - Copie.webp",
-    "assets/sudoku/STK-20240715-WA0003 - Copie.webp",
-    "assets/sudoku/STK-20240715-WA0004 - Copie.webp",
-    "assets/sudoku/STK-20240715-WA0004.webp",
+    "assets/sudoku/OwnSticker_20240403_172721695.png.jpg",
     "assets/sudoku/STK-20240808-WA0039.webp",
-    "assets/sudoku/STK-20241126-WA0007 - Copie.webp",
-    "assets/sudoku/STK-20241217-WA0046 - Copie.webp",
     "assets/sudoku/STK-20241217-WA0052 - Copie.webp",
-    "assets/sudoku/STK-20241217-WA0053 - Copie.webp",
     "assets/sudoku/STK-20241217-WA0054.webp",
     "assets/sudoku/STK-20241217-WA0055.webp",
     "assets/sudoku/win.webp"

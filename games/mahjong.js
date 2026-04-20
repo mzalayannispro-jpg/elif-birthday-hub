@@ -5,18 +5,19 @@ window.initMahjong = function(container) {
         'assets/player.webp', 'assets/win.webp', 'assets/lose.webp', 'assets/baklava.png'
     ];
 
+    container.innerHTML = `
     <div style="width:95vw; max-width:860px; background:linear-gradient(160deg, rgba(20,3,0,0.96), rgba(50,5,5,0.92)); border:3px solid #D4AF37; border-radius:16px; padding:20px; box-shadow:0 0 40px rgba(212,175,55,0.25);">
         <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
             <h2 style="font-family:'Cinzel Decorative',cursive; color:#D4AF37; font-size:20px; letter-spacing:3px;" data-i18n="game.mj">🀄 MAHJONG SOLITAIRE</h2>
             <div>
-                <button onclick="initMahjong(document.getElementById('game-slot'))" style="background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:6px 14px; border-radius:5px; cursor:pointer; margin-right:6px;" data-i18n="game.replay">Recommencer</button>
+                <button onclick="initMahjong(document.getElementById('game-slot'))" style="background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:6px 14px; border-radius:5px; cursor:pointer; margin-right:6px;" data-i18n="game.replay">Play Again</button>
                 <button onclick="hideGame()" style="background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:6px 14px; border-radius:5px; cursor:pointer;" data-i18n="game.back">← Menu</button>
             </div>
         </header>
         <div id="mahjong-board" style="position:relative; width:100%; height:480px; background:rgba(0,0,0,0.4); border-radius:10px; border:1px solid rgba(212,175,55,0.3); overflow:hidden;"></div>
         <p id="mahjong-status" style="text-align:center; margin-top:12px; color:#4ECDC4; font-family:'Lora',serif; font-style:italic; font-size:14px;" data-i18n="mj.rules">
-            <strong>Règles :</strong> Clique sur deux tuiles pour les retourner. Si ce sont les mêmes images de stickers (paires identiques), elles disparaîtront.<br>
-            <em>Attention : Tu as besoin d'une bonne mémoire car les tuiles se recouvrent rapidement. Vide le plateau complet pour gagner 100 points !</em>
+            <strong>Rules:</strong> Click on two tiles to flip them. If they match, they disappear.<br>
+            <em>Warning: You need a good memory. Clear the board to earn 100 points!</em>
         </p>
     </div>
     `;

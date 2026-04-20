@@ -57,14 +57,9 @@ window.initTetris = function(container) {
 
     function drawSquare(x, y, cell) {
         if (cell.color === VACANT) return;
-        
-        if (cell.img && cell.img.complete && cell.img.naturalWidth > 0 && cell.wCells) {
-            let srcW = cell.img.naturalWidth / cell.wCells;
-            let srcH = cell.img.naturalHeight / cell.hCells;
-            let srcX = cell.imgOx * cell.img.naturalWidth;
-            let srcY = cell.imgOy * cell.img.naturalHeight;
-            ctx.drawImage(cell.img, srcX, srcY, srcW, srcH, x*SQ, y*SQ, SQ, SQ);
-        } else {
+        // Image rendering is handled in fill() as a single drawImage over the bounding box.
+        // drawSquare only handles solid color fallback for locked board cells without images.
+        if (!cell.img) {
             ctx.fillStyle = cell.color;
             ctx.fillRect(x*SQ, y*SQ, SQ, SQ);
         }
@@ -164,20 +159,36 @@ window.initTetris = function(container) {
 
     Piece.prototype.fill = function(color) {
         let bounds = this.getBounds();
+
+        // Draw solid color for each occupied cell (always, as base layer)
         for(let r = 0; r < this.activeTetromino.length; r++) {
             for(let c = 0; c < this.activeTetromino.length; c++) {
                 if(this.activeTetromino[r][c]) {
-                    let cell = {
-                        color: color,
-                        img: this.img,
-                        imgOx: (c - bounds.minC) / bounds.wCells,
-                        imgOy: (r - bounds.minR) / bounds.hCells,
-                        wCells: bounds.wCells,
-                        hCells: bounds.hCells
-                    };
-                    drawSquare(this.x + c, this.y + r, cell);
+                    ctx.fillStyle = color + '55'; // semi-transparent tint
+                    ctx.fillRect((this.x+c)*SQ, (this.y+r)*SQ, SQ, SQ);
                 }
             }
+        }
+
+        // Draw image ONCE stretched over the full bounding box of the piece
+        if (this.img && this.img.complete && this.img.naturalWidth > 0) {
+            let destX = (this.x + bounds.minC) * SQ;
+            let destY = (this.y + bounds.minR) * SQ;
+            let destW = bounds.wCells * SQ;
+            let destH = bounds.hCells * SQ;
+            ctx.save();
+            // Clip to only the occupied cells of the piece
+            ctx.beginPath();
+            for(let r = 0; r < this.activeTetromino.length; r++) {
+                for(let c = 0; c < this.activeTetromino.length; c++) {
+                    if(this.activeTetromino[r][c]) {
+                        ctx.rect((this.x+c)*SQ, (this.y+r)*SQ, SQ, SQ);
+                    }
+                }
+            }
+            ctx.clip();
+            ctx.drawImage(this.img, destX, destY, destW, destH);
+            ctx.restore();
         }
     }
 
@@ -291,13 +302,9 @@ window.initTetris = function(container) {
                     return;
                 }
                 board[this.y+r][this.x+c] = {
-                    color: this.color, 
-                    img: this.img,
-                    pieceId: pieceId,
-                    imgOx: (c - bounds.minC) / bounds.wCells,
-                    imgOy: (r - bounds.minR) / bounds.hCells,
-                    wCells: bounds.wCells,
-                    hCells: bounds.hCells
+                    color: this.color,
+                    img: null, // image drawn by fill(); locked cells use solid color only
+                    pieceId: pieceId
                 };
             }
         }

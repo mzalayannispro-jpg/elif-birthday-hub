@@ -4,8 +4,8 @@ window.initSpaceInvaders = function(container) {
         <div id="game-container" style="width:800px; height:650px;">
             <div id="ui-layer">
                 <header style="padding:10px 20px; display:flex; justify-content:space-between; z-index:10; pointer-events:all;">
-                    <div style="color:#D4AF37; font-weight:700;">VIES: <span id="si-lives">5</span> | SCORE: <span id="si-score">0</span></div>
-                    <button style="padding:5px 15px; font-size:13px; margin:0; background:transparent; border:1px solid #D4AF37; color:#D4AF37; border-radius:5px; cursor:pointer;" onclick="if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame();">Quitter ✕</button>
+                    <div style="color:#D4AF37; font-weight:700;"><span data-i18n="si.lives">LIVES: </span><span id="si-lives">5</span> | SCORE: <span id="si-score">0</span></div>
+                    <button style="padding:5px 15px; font-size:13px; margin:0; background:transparent; border:1px solid #D4AF37; color:#D4AF37; border-radius:5px; cursor:pointer;" onclick="if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame();" data-i18n="game.quit">Quit ✕</button>
                 </header>
                 
                 <div id="start-screen" class="screen active">
@@ -19,7 +19,7 @@ window.initSpaceInvaders = function(container) {
                     <h2 data-i18n="si.failed">MISSION FAILED</h2>
                     <p><span data-i18n="si.final">Final Score: </span><span id="final-score">0</span></p>
                     <button id="restart-btn" data-i18n="si.try">TRY AGAIN</button>
-                    <button style="margin-top:20px; background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:10px 20px; border-radius:6px; cursor:pointer;" onclick="if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame();" data-i18n="si.menu">RETOUR MENU</button>
+                    <button style="margin-top:20px; background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:10px 20px; border-radius:6px; cursor:pointer;" onclick="if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame();" data-i18n="si.menu">RETURN TO MENU</button>
                 </div>
                 
                 <div id="victory-screen" class="screen">
@@ -27,7 +27,7 @@ window.initSpaceInvaders = function(container) {
                     <h2 style="font-size:30px; text-align:center;" data-i18n="si.won">You Won (my heart babylovebutterfly) 🌹</h2>
                     <p><span data-i18n="si.final">Final Score: </span><span id="victory-score">0</span></p>
                     <button id="next-level-btn" data-i18n="si.next">NEXT SECTOR</button>
-                    <button style="margin-top:20px; background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:10px 20px; border-radius:6px; cursor:pointer;" onclick="if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame();" data-i18n="si.menu">RETOUR MENU</button>
+                    <button style="margin-top:20px; background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:10px 20px; border-radius:6px; cursor:pointer;" onclick="if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame();" data-i18n="si.menu">RETURN TO MENU</button>
                 </div>
             </div>
             <canvas id="gameCanvas"></canvas>
@@ -135,7 +135,7 @@ window.initSpaceInvaders = function(container) {
         const stickerPaths = [
             'assets/player.webp', 'assets/win.webp', 'assets/lose.webp', 'assets/baklava.png'
         ];
-        potentialImages = window.ALL_SPACE_INVADER_IMAGES || stickerPaths;
+        const potentialImages = window.ALL_SPACE_INVADER_IMAGES || stickerPaths;
 
         // Create Boss!
         aliens.push({
