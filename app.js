@@ -54,32 +54,48 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         if (allStickers.length === 0) return;
-        
-        // Remove duplicates
+
         const uniqueStickers = [...new Set(allStickers)];
-        
+
         const collageLayer = document.createElement('div');
-        collageLayer.style.position = 'fixed';
-        collageLayer.style.top = '0'; collageLayer.style.left = '0';
-        collageLayer.style.width = '100%'; collageLayer.style.height = '100%';
-        collageLayer.style.pointerEvents = 'none';
-        collageLayer.style.zIndex = '-1'; 
-        collageLayer.style.overflow = 'hidden';
+        collageLayer.style.cssText = `
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: -1; overflow: hidden;
+        `;
         document.body.appendChild(collageLayer);
-        
-        // Add 25 random stickers floating in the background
-        for (let i = 0; i < 25; i++) {
-            const img = document.createElement('img');
-            img.src = uniqueStickers[Math.floor(Math.random() * uniqueStickers.length)];
-            img.style.position = 'absolute';
-            img.style.left = Math.random() * 95 + '%';
-            img.style.top = Math.random() * 95 + '%';
-            img.style.width = (Math.random() * 100 + 40) + 'px'; // 40px to 140px
-            img.style.transform = `rotate(${(Math.random() - 0.5) * 80}deg)`;
-            img.style.opacity = '0.9';
-            img.style.objectFit = 'contain';
-            img.style.filter = 'drop-shadow(4px 4px 6px rgba(0,0,0,0.8))';
-            collageLayer.appendChild(img);
+
+        // ── Dense mosaic: grille couvrant tout le viewport ──────────────────
+        const STEP = 90;  // pas de grille en px
+        const vw   = Math.max(window.innerWidth,  screen.width)  + STEP * 2;
+        const vh   = Math.max(window.innerHeight, screen.height) + STEP * 2;
+        const cols = Math.ceil(vw / STEP) + 1;
+        const rows = Math.ceil(vh / STEP) + 1;
+
+        let idx = 0;
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                const img = document.createElement('img');
+                img.src = uniqueStickers[idx % uniqueStickers.length];
+                idx++;
+
+                const size   = 70 + Math.random() * 50;              // 70–120 px
+                const jx     = (Math.random() - 0.5) * STEP * 0.55;
+                const jy     = (Math.random() - 0.5) * STEP * 0.55;
+                const rot    = (Math.random() - 0.5) * 50;           // –25° à +25°
+
+                img.style.cssText = `
+                    position: absolute;
+                    left: ${c * STEP + jx - STEP}px;
+                    top:  ${r * STEP + jy - STEP}px;
+                    width: ${size}px; height: ${size}px;
+                    object-fit: contain;
+                    transform: rotate(${rot}deg);
+                    opacity: 0.82;
+                    filter: drop-shadow(2px 3px 5px rgba(0,0,0,0.75));
+                `;
+                collageLayer.appendChild(img);
+            }
         }
     }, 500);
 });
