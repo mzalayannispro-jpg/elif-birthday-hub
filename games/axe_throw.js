@@ -119,11 +119,13 @@ window.initAxeThrow = function(container) {
     }
 
     function isHitPerson(dx, dy) {
-        // dx, dy respect to target center in unrotated coordinates
-        if (dx >= -45 && dx <= 45 && dy >= -105 && dy <= -20) return true; // head/neck
-        if (dx >= -50 && dx <= 50 && dy >= -20 && dy <= 120) return true; // body
-        if (dx >= -140 && dx <= 140 && dy >= -30 && dy <= 30) return true; // arms
-        if (dx >= -80 && dx <= 80 && dy >= 100 && dy <= 160) return true; // legs
+        // Hitboxes match drawn character proportions (coordonnées locales, centre roue = 0,0)
+        if (dx*dx + (dy+112)*(dy+112) < 42*42) return true;               // Tête (cercle)
+        if (dx >= -40 && dx <= 40 && dy >= -72 && dy <= 86) return true;  // Cou + Torse
+        if (dx >= -130 && dx <= -38 && dy >= -38 && dy <= -8) return true; // Bras gauche
+        if (dx >= 38 && dx <= 130 && dy >= -38 && dy <= -8) return true;   // Bras droit
+        if (dx >= -38 && dx <= -8 && dy >= 86 && dy <= 157) return true;   // Jambe gauche
+        if (dx >= 8 && dx <= 38 && dy >= 86 && dy <= 157) return true;     // Jambe droite
         return false;
     }
 
@@ -278,32 +280,102 @@ window.initAxeThrow = function(container) {
         ctx.strokeRect(-crossW/2, -crossH/2, crossW, crossH);
         ctx.strokeRect(-crossH/2, -crossW/2, crossH, crossW);
 
-        // Draw Big Target Background (Wooden Dummy)
-        if (targetBoardImg.complete && targetBoardImg.naturalWidth > 0) {
-            let imgToDraw = cleanTarget || targetBoardImg;
-            // Drawn centered
-            ctx.drawImage(imgToDraw, -140, -140, 280, 280);
-        } else {
-            ctx.fillStyle = '#8B4513';
-            ctx.beginPath(); ctx.arc(0, 0, target.radius, 0, Math.PI*2); ctx.fill();
-        }
+        // ── Corps humain ligoté sur la roue ────────────────────────────────
+        const SK = '#F4C082', SD = '#C4834A'; // skin / shadow
 
-        // Draw the Face (Sticker)
-        let faceW = 75;
-        let faceH = 85;
-        let faceOffsetY = -105; // Tête placée plus haute
+        // Bras gauche (horizontal, attaché à la barre)
+        ctx.fillStyle = SK;
+        ctx.beginPath(); ctx.roundRect(-130, -38, 92, 28, 10); ctx.fill();
+        ctx.strokeStyle = SD; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.roundRect(-130, -38, 92, 28, 10); ctx.stroke();
+
+        // Bras droit
+        ctx.fillStyle = SK;
+        ctx.beginPath(); ctx.roundRect(38, -38, 92, 28, 10); ctx.fill();
+        ctx.strokeStyle = SD;
+        ctx.beginPath(); ctx.roundRect(38, -38, 92, 28, 10); ctx.stroke();
+
+        // Torse
+        ctx.fillStyle = SK;
+        ctx.beginPath(); ctx.roundRect(-40, -72, 80, 160, 12); ctx.fill();
+        ctx.strokeStyle = SD; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.roundRect(-40, -72, 80, 160, 12); ctx.stroke();
+
+        // Pectoraux
+        ctx.strokeStyle = SD; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(-18, -38, 14, 0.3, Math.PI - 0.3); ctx.stroke();
+        ctx.beginPath(); ctx.arc(18, -38, 14, 0.3, Math.PI - 0.3); ctx.stroke();
+
+        // Abdos
+        ctx.lineWidth = 1.5;
+        [-5, 18, 41].forEach(ay => {
+            ctx.beginPath(); ctx.moveTo(-18, ay); ctx.lineTo(18, ay); ctx.stroke();
+        });
+        ctx.beginPath(); ctx.moveTo(0, -10); ctx.lineTo(0, 52); ctx.stroke(); // ligne médiane
+
+        // Slip panthère/tigré (waist region)
+        ctx.save();
+        ctx.beginPath(); ctx.roundRect(-40, 50, 80, 42, 6); ctx.clip();
+        ctx.fillStyle = '#F5A30A'; ctx.fillRect(-40, 50, 80, 42);         // fond orange
+        ctx.fillStyle = 'rgba(8, 3, 0, 0.72)';                           // rayures noires
+        [-28, -14, 0, 14, 28].forEach(sx => {
+            ctx.save();
+            ctx.translate(sx + 20, 71);
+            ctx.rotate(0.42);
+            ctx.fillRect(-3, -26, 7, 52);
+            ctx.restore();
+        });
+        ctx.fillStyle = '#7A3E00'; ctx.fillRect(-40, 50, 80, 7);          // ceinture
+        ctx.restore();
+
+        // Jambe gauche
+        ctx.fillStyle = SK;
+        ctx.beginPath(); ctx.roundRect(-38, 86, 30, 70, 10); ctx.fill();
+        ctx.strokeStyle = SD; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.roundRect(-38, 86, 30, 70, 10); ctx.stroke();
+
+        // Jambe droite
+        ctx.fillStyle = SK;
+        ctx.beginPath(); ctx.roundRect(8, 86, 30, 70, 10); ctx.fill();
+        ctx.strokeStyle = SD;
+        ctx.beginPath(); ctx.roundRect(8, 86, 30, 70, 10); ctx.stroke();
+
+        // Cou
+        ctx.fillStyle = SK;
+        ctx.beginPath(); ctx.roundRect(-13, -82, 26, 16, 5); ctx.fill();
+
+        // Tête (cercle de base recouverte par le sticker)
+        ctx.beginPath(); ctx.arc(0, -112, 40, 0, Math.PI * 2);
+        ctx.fillStyle = SK; ctx.fill();
+        ctx.strokeStyle = SD; ctx.lineWidth = 2; ctx.stroke();
+
+        // Cordes — poignets liés à la barre horizontale
+        ctx.strokeStyle = '#9B7B2A'; ctx.lineWidth = 7; ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(-130, -38); ctx.lineTo(-130, -8); ctx.stroke();
+        ctx.beginPath(); ctx.arc(-130, -23, 10, 0, Math.PI * 2);
+        ctx.fillStyle = '#6B4E10'; ctx.fill();
+        ctx.beginPath(); ctx.moveTo(130, -38); ctx.lineTo(130, -8); ctx.stroke();
+        ctx.beginPath(); ctx.arc(130, -23, 10, 0, Math.PI * 2);
+        ctx.fillStyle = '#6B4E10'; ctx.fill();
+
+        // Cordes — chevilles liées à la barre verticale
+        ctx.beginPath(); ctx.moveTo(-38, 157); ctx.lineTo(-8, 157); ctx.stroke();
+        ctx.beginPath(); ctx.arc(-23, 157, 8, 0, Math.PI * 2);
+        ctx.fillStyle = '#6B4E10'; ctx.fill();
+        ctx.beginPath(); ctx.moveTo(8, 157); ctx.lineTo(38, 157); ctx.stroke();
+        ctx.beginPath(); ctx.arc(23, 157, 8, 0, Math.PI * 2);
+        ctx.fillStyle = '#6B4E10'; ctx.fill();
+
+        // Sticker visage clipé sur la tête
         if (target.faceImg && target.faceImg.complete && target.faceImg.naturalWidth > 0) {
             ctx.save();
-            ctx.beginPath();
-            ctx.arc(0, faceOffsetY, 35, 0, Math.PI*2); 
-            ctx.clip(); // Circle clip the face
+            ctx.beginPath(); ctx.arc(0, -112, 38, 0, Math.PI * 2); ctx.clip();
             if (bleeding > 0) {
-                // Red flash tint
-                ctx.fillStyle = 'rgba(255, 0, 0, 0.4)';
-                ctx.fillRect(-faceW/2, faceOffsetY - faceH/2, faceW, faceH);
-                ctx.globalAlpha = 0.8;
+                ctx.fillStyle = 'rgba(255, 0, 0, 0.55)';
+                ctx.fill();
+                ctx.globalAlpha = 0.72;
             }
-            ctx.drawImage(target.faceImg, -faceW/2, faceOffsetY - faceH/2, faceW, faceH);
+            ctx.drawImage(target.faceImg, -38, -150, 76, 76);
             ctx.restore();
         }
 
