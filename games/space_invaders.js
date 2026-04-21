@@ -60,7 +60,7 @@ window.initSpaceInvaders = function(container) {
 
     const playerImg = new Image(); playerImg.src = 'assets/player.webp';
     const realBaklavaImg = new Image(); realBaklavaImg.src = 'assets/tetris/bonus/rapidfire.png';
-    const flagImg = new Image(); flagImg.src = 'assets/tetris/bonus/extralife.png';
+    const flagImg = new Image(); flagImg.src = 'assets/STK-20260216-WA0001.webp';
     const ataturkImg = new Image(); ataturkImg.src = 'assets/tetris/bonus/doublegun.png';
     const bgSofiaImg = new Image(); bgSofiaImg.src = 'assets/hagia_sophia_8bit_1776606429857.png';
     const winImg = new Image(); winImg.src = 'assets/win.webp';
