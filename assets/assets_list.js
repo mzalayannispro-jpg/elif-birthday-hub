@@ -3,6 +3,8 @@
 window.GAME_ASSETS = {
   "tetris": {
     "I": [
+      "assets/tetris/I/meme2.jpg",
+      "assets/tetris/I/real_baklava.png",
       "assets/tetris/I/STK-20241117-WA0004.webp",
       "assets/tetris/I/STK-20241217-WA0049 - Copie.webp"
     ],
@@ -11,7 +13,8 @@ window.GAME_ASSETS = {
     ],
     "L": [
       "assets/tetris/L/2576ded6-55a4-4ae3-8a65-b2958364772d.webp",
-      "assets/tetris/L/9c08de24-fc9a-4106-8483-430a0f546023.webp"
+      "assets/tetris/L/9c08de24-fc9a-4106-8483-430a0f546023.webp",
+      "assets/tetris/L/alien5.webp"
     ],
     "O": [
       "assets/tetris/O/1f6c5518-609c-4db4-ae89-77325c921daf.webp",
@@ -29,15 +32,17 @@ window.GAME_ASSETS = {
     ]
   },
   "mahjong": [
-    "assets/mahjong/94d92225-07d4-44fa-b633-1b3daa63f094.webp",
     "assets/mahjong/alien4.webp",
+    "assets/mahjong/meme3.jpg",
+    "assets/mahjong/STK-20240506-WA0000.webp",
     "assets/mahjong/STK-20240506-WA0001.webp",
-    "assets/mahjong/STK-20251010-WA0030.webp",
-    "assets/mahjong/STK-20251028-WA0007.webp",
+    "assets/mahjong/STK-20240625-WA0014 - Copie.webp",
+    "assets/mahjong/STK-20250323-WA0004.webp",
     "assets/mahjong/STK-20251110-WA0000.webp",
     "assets/mahjong/STK-20251113-WA0023.webp"
   ],
   "space-invaders": [
+    "assets/space-invaders/06557c01-4024-47ed-97e3-056edb1b8041.webp",
     "assets/space-invaders/09eb6161-134e-43e3-af95-7c8004c45547.webp",
     "assets/space-invaders/47f38fdf-b18e-40a1-bb06-35b98630d987.webp",
     "assets/space-invaders/82e4f251-83ee-43ac-a13f-ab8f212e5364.webp",
