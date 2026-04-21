@@ -119,7 +119,36 @@ window.ALL_COLLAGE_IMGS = [
   "assets/lancer-hache/STK-20251011-WA0035.webp","assets/lancer-hache/STK-20260419-WA0011.webp",
   "assets/lancer-hache/STK-20260419-WA0012.webp","assets/lancer-hache/STK-20260419-WA0013.webp",
   "assets/lancer-hache/STK-20260419-WA0023.webp","assets/lancer-hache/STK-20260419-WA0024.webp",
-  "assets/lancer-hache/STK-20260419-WA0026.webp"
+  "assets/lancer-hache/STK-20260419-WA0026.webp",
+  // ── assets/intro/ — statiques confirmés (5 animés exclus) ──────────────
+  "assets/intro/09eb6161-134e-43e3-af95-7c8004c45547.webp",
+  "assets/intro/2576ded6-55a4-4ae3-8a65-b2958364772d.webp",
+  "assets/intro/52652cc6-3dcf-46c8-9a6e-12e51c82ade5.webp",
+  "assets/intro/82e4f251-83ee-43ac-a13f-ab8f212e5364.webp",
+  "assets/intro/94d92225-07d4-44fa-b633-1b3daa63f094.webp",
+  "assets/intro/9c08de24-fc9a-4106-8483-430a0f546023.webp",
+  "assets/intro/alien2.webp","assets/intro/player.webp",
+  "assets/intro/STK-20240627-WA0020 - Copie.webp",
+  "assets/intro/STK-20240715-WA0002 - Copie.webp",
+  "assets/intro/STK-20240715-WA0004 - Copie.webp",
+  "assets/intro/STK-20240715-WA0004.webp",
+  "assets/intro/STK-20241108-WA0001.webp",
+  "assets/intro/STK-20241126-WA0007 - Copie.webp",
+  "assets/intro/STK-20241217-WA0045 - Copie.png",
+  "assets/intro/STK-20241217-WA0046 - Copie.webp",
+  "assets/intro/STK-20241217-WA0053 - Copie.webp",
+  "assets/intro/STK-20250306-WA0000.webp",
+  "assets/intro/STK-20250316-WA0023.webp",
+  "assets/intro/STK-20250616-WA0002.webp",
+  "assets/intro/STK-20251010-WA0030.webp",
+  "assets/intro/STK-20251011-WA0034.webp",
+  "assets/intro/STK-20251110-WA0000.webp",
+  "assets/intro/STK-20260216-WA0001.webp",
+  "assets/intro/STK-20260408-WA0021.webp",
+  "assets/intro/STK-20260419-WA0004.webp",
+  "assets/intro/STK-20260419-WA0006.webp",
+  "assets/intro/STK-20260419-WA0007.webp",
+  "assets/intro/STK-20260419-WA0018.webp"
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
