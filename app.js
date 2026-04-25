@@ -9,14 +9,26 @@ window.TETRIS_IMAGES = window.GAME_ASSETS && window.GAME_ASSETS['tetris'] && win
 window.HACHE_IMAGES = window.GAME_ASSETS && window.GAME_ASSETS['lancer-hache'] && window.GAME_ASSETS['lancer-hache'].length > 0 ? window.GAME_ASSETS['lancer-hache'] : ['assets/player.webp'];
 let globalScore = parseInt(localStorage.getItem('elifScore') || '0', 10);
 
+// ============ BACKGROUND MUSIC ============
+const bgMusic = new Audio('assets/Özdemir Erdoğan - Gurbet.mp3');
+bgMusic.addEventListener('timeupdate', () => {
+    // Loop the first 22 seconds
+    if (bgMusic.currentTime >= 22) {
+        bgMusic.currentTime = 0;
+        bgMusic.play().catch(e => console.log("Audio loop error:", e));
+    }
+});
+
 // ============ OVERLAY + MODAL FLOW ============
 window.addEventListener('DOMContentLoaded', () => {
     const overlay = document.getElementById('kitsch-overlay');
     const modal = document.getElementById('personal-modal');
     const mainContent = document.getElementById('main-content');
 
-    // Click anywhere on overlay → show modal
+    // Click anywhere on overlay → show modal & start music
     overlay.addEventListener('click', () => {
+        bgMusic.play().catch(e => console.log("Audio play error:", e));
+        
         overlay.classList.add('fade-out');
         setTimeout(() => {
             modal.classList.add('visible');

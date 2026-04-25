@@ -788,6 +788,19 @@ body {
     pointer-events: none;
 }
 
+.game-over-title {
+    font-family: 'Bungee', cursive;
+    font-size: 4rem;
+    font-weight: normal;
+    color: #D93A46;
+    -webkit-text-stroke: 2px #F5D673;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0 #F5D673, 4px 4px 0 #F5D673, 6px 6px 0 #F5D673, 8px 8px 0 #F5D673, 10px 10px 0 #F5D673, 12px 12px 15px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.6);
+    margin-bottom: 20px;
+    text-align: center;
+    animation: blink 0.7s infinite alternate;
+}
+
 .game-over-sticker {
     width: 320px;
     height: 320px;
