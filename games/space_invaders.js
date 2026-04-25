@@ -86,8 +86,17 @@ window.initSpaceInvaders = function(container) {
     const loseImg = new Image(); loseImg.src = 'assets/lose.webp';
     
     // Boss images
-    const bossImg1 = new Image(); bossImg1.src = 'assets/{E17D989C-5A4D-46FE-BBCB-849FF254697F}.png';
-    const bossImg2 = new Image(); bossImg2.src = 'assets/{347EE3DB-A94C-453B-B8D7-D6DD5BFDEDED}.png';
+    const bossImages = [];
+    const bossPaths = [
+        'assets/space-invaders/erdohan/{522943D5-2AB0-450C-AF58-F8173D5B1AB5}.png',
+        'assets/space-invaders/erdohan/{900A8480-6481-4505-9B89-C8863D1C8E15}.png',
+        'assets/space-invaders/erdohan/{BB995C9C-83D0-49D7-9564-8BE6879C385E}.png'
+    ];
+    bossPaths.forEach(path => {
+        const img = new Image();
+        img.src = path;
+        bossImages.push(img);
+    });
 
     const scoreEl = document.getElementById('si-score');
     const livesEl = document.getElementById('si-lives');
@@ -445,7 +454,7 @@ window.initSpaceInvaders = function(container) {
 
     function drawAliens() {
         const now = Date.now();
-        const animBossImg = Math.floor(now / 500) % 2 === 0 ? bossImg1 : bossImg2;
+        const animBossImg = bossImages[Math.floor(now / 150) % bossImages.length];
         
         for (const a of aliens) {
             const drawY = a.y + Math.sin((now + a.x) * 0.003) * 10;

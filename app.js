@@ -38,16 +38,17 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============ DASHBOARD COLLAGE EFFECT ============
-// ── Liste complète dynamiquement chargée via assets_list.js ──────────
-// (window.ALL_COLLAGE_IMGS est défini dans assets/assets_list.js)
+// ── Liste dynamiquement chargée (dossier intro = stickers statiques) ──────────
+// (window.GAME_ASSETS['intro'] est défini dans assets/assets_list.js)
 
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         // Mélange aléatoire (Fisher-Yates) pour maximiser la variété
-        const pool = [...window.ALL_COLLAGE_IMGS].sort(() => Math.random() - 0.5);
+        const pool = [...window.GAME_ASSETS['intro']].sort(() => Math.random() - 0.5);
         if (pool.length === 0) return;
 
         const collageLayer = document.createElement('div');
+        collageLayer.id = 'dashboard-collage';
         collageLayer.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;overflow:hidden;';
         document.body.appendChild(collageLayer);
 
@@ -58,35 +59,59 @@ document.addEventListener('DOMContentLoaded', () => {
         const cols = Math.ceil(vw / STEP) + 2;
         const rows = Math.ceil(vh / STEP) + 2;
 
-        // Crée les éléments img en batch via DocumentFragment (plus rapide)
+        // Crée les éléments canvas en batch via DocumentFragment pour figer les animations
         const frag = document.createDocumentFragment();
         let idx = 0;
-        for (let r = 0; r < rows; r++) {
-            for (let c = 0; c < cols; c++) {
-                const img = document.createElement('img');
-                img.src = pool[idx % pool.length];
-                img.loading = 'lazy';   // ne bloque pas le rendu du jeu
-                idx++;
+        
+        // Précharger les images pour extraire la première frame via canvas
+        const loadedImages = {};
+        const loadPromises = pool.map(src => {
+            return new Promise(resolve => {
+                const img = new Image();
+                img.onload = () => {
+                    loadedImages[src] = img;
+                    resolve();
+                };
+                img.onerror = () => resolve();
+                img.src = src;
+            });
+        });
 
-                const size = 82 + Math.random() * 36;          // 82–118 px
-                const jx   = (Math.random() - 0.5) * STEP * 0.6;
-                const jy   = (Math.random() - 0.5) * STEP * 0.6;
-                const rot  = (Math.random() - 0.5) * 52;       // –26° à +26°
+        Promise.all(loadPromises).then(() => {
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const src = pool[idx % pool.length];
+                    idx++;
+                    const sourceImg = loadedImages[src];
+                    if (!sourceImg) continue;
 
-                img.style.cssText = `
-                    position:absolute;
-                    left:${c * STEP + jx - STEP}px;
-                    top:${r  * STEP + jy - STEP}px;
-                    width:${size}px;height:${size}px;
-                    object-fit:contain;
-                    transform:rotate(${rot}deg);
-                    opacity:0.93;
-                    filter:drop-shadow(1px 2px 4px rgba(0,0,0,0.7));
-                `;
-                frag.appendChild(img);
+                    // Utilisation d'un canvas pour "geler" l'image sur sa première frame
+                    const canvas = document.createElement('canvas');
+                    canvas.width = sourceImg.naturalWidth || 100;
+                    canvas.height = sourceImg.naturalHeight || 100;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(sourceImg, 0, 0, canvas.width, canvas.height);
+
+                    const size = 82 + Math.random() * 36;          // 82–118 px
+                    const jx   = (Math.random() - 0.5) * STEP * 0.6;
+                    const jy   = (Math.random() - 0.5) * STEP * 0.6;
+                    const rot  = (Math.random() - 0.5) * 52;       // –26° à +26°
+
+                    canvas.style.cssText = `
+                        position:absolute;
+                        left:${c * STEP + jx - STEP}px;
+                        top:${r  * STEP + jy - STEP}px;
+                        width:${size}px;height:${size}px;
+                        object-fit:contain;
+                        transform:rotate(${rot}deg);
+                        opacity:0.93;
+                        filter:drop-shadow(1px 2px 4px rgba(0,0,0,0.7));
+                    `;
+                    frag.appendChild(canvas);
+                }
             }
-        }
-        collageLayer.appendChild(frag);
+            collageLayer.appendChild(frag);
+        });
     }, 300);
 });
 
@@ -116,7 +141,17 @@ function updateScoreUI() {
 // ============ GAME ROUTING ============
 window.showGame = function(gameId) {
     document.getElementById('game-menu').style.display = 'none';
+    const dashCollage = document.getElementById('dashboard-collage');
+    if (dashCollage) dashCollage.style.display = 'none';
     document.getElementById('active-game-area').style.display = 'block';
+    
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch(err => {
+            console.log(`Error attempting to enable fullscreen: ${err.message}`);
+        });
+    }
+
     const slot = document.getElementById('game-slot');
     slot.innerHTML = '';
 
@@ -128,11 +163,16 @@ window.showGame = function(gameId) {
 };
 
 window.hideGame = function() {
+    if (document.fullscreenElement) {
+        document.exitFullscreen().catch(err => console.log(err));
+    }
     if (window.siReqId) cancelAnimationFrame(window.siReqId);
     if (window.axeReqId) cancelAnimationFrame(window.axeReqId);
     if (window.tetrisReqId) cancelAnimationFrame(window.tetrisReqId);
     document.getElementById('active-game-area').style.display = 'none';
     document.getElementById('game-menu').style.display = 'block';
+    const dashCollage = document.getElementById('dashboard-collage');
+    if (dashCollage) dashCollage.style.display = 'block';
     updateScoreUI();
 };
 

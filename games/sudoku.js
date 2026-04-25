@@ -1,6 +1,7 @@
 window.initSudoku = function(container) {
     // ── Les punchlines personnalisées de l'utilisateur (remplace les phrases FR auto-générées) ──
     const legendaryPunchlines = [
+        "I want fruit liquid=juice 11.09.25",
         "🎬 ElXulo=Pelicula=Hairdraiser · 24.04.26",
         "🐬 Where are my flipper Slipper+FlipFlop · 02.07.24",
         "☀️ 15.07.24 · Manana por la morningo",

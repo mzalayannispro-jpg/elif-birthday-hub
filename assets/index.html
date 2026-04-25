@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌙 Elif'in Doğum Günü Partisi 🌙</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Outfit:wght@300;500;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app-container">
+        <!-- Floating decorative elements -->
+        <div class="floating-deco" id="deco1">🧿</div>
+        <div class="floating-deco" id="deco2">🌙</div>
+        <div class="floating-deco" id="deco3">⭐</div>
+        <div class="floating-deco" id="deco4">🌹</div>
+        <div class="floating-deco" id="deco5">🧿</div>
+        <div class="floating-deco" id="deco6">🌺</div>
+
+        <!-- Global Header -->
+        <header id="global-header">
+            <div class="header-ornament">✦ ✦ ✦</div>
+            <div class="header-center" onclick="showLandingPage()" style="cursor:pointer;">
+                <div class="header-subtitle">✦ HOŞGELDINIZ ✦</div>
+                <h1>ELIF'İN <span class="highlight">DÜNYASINA</span></h1>
+                <div class="header-subtitle">✦ WELCOME TO ELIF'S WORLD ✦</div>
+            </div>
+            <div class="score-board-header">
+                <div class="score-inner">
+                    <div class="score-label">✦ PUAN ✦</div>
+                    <div class="score-value" id="global-score">0</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Nav Bar -->
+        <nav id="game-nav">
+            <button class="nav-btn" onclick="showLandingPage()">🏠 Accueil</button>
+            <span class="nav-sep">❊</span>
+            <button class="nav-btn" onclick="startSpaceInvaders()">👾 Space Invaders</button>
+            <span class="nav-sep">❊</span>
+            <button class="nav-btn" onclick="startMahjong()">🀄 Mahjong</button>
+            <span class="nav-sep">❊</span>
+            <button class="nav-btn" onclick="startSudoku()">🔢 Sudoku</button>
+        </nav>
+
+        <!-- Modules Container -->
+        <main id="main-content">
+            <div id="module-landing" class="module-container"></div>
+            <div id="module-space-invaders" class="module-container" style="display:none;"></div>
+            <div id="module-mahjong" class="module-container" style="display:none;"></div>
+            <div id="module-sudoku" class="module-container" style="display:none;"></div>
+            <div id="module-easter-egg" class="module-container" style="display:none;"></div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="landing.js"></script>
+    <script src="space_invaders.js"></script>
+    <script src="mahjong.js"></script>
+    <script src="sudoku.js"></script>
+</body>
+</html>
