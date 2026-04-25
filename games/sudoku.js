@@ -1,15 +1,5 @@
 window.initSudoku = function(container) {
-    const fallbackPunchlines = [
-        "Remplis bien tes cases, mon amour 💛",
-        "Tu es plus forte que ce Sudoku !",
-        "Chaque chiffre que tu mets = un bisou 🌹",
-        "Mon cœur a plus de niveaux que ce puzzle 🧿",
-        "İyi ki doğdun, ma petite cervelle de génie ⭐",
-        "Baklava pour toi si tu gagnes ! 🍯",
-        "La femme la plus intelligente du bosphore 🌙"
-    ];
-
-    // ── Legendary punchlines ticker ──────────────────────────────────────────
+    // ── Les punchlines personnalisées de l'utilisateur (remplace les phrases FR auto-générées) ──
     const legendaryPunchlines = [
         "🎬 ElXulo=Pelicula=Hairdraiser · 24.04.26",
         "🐬 Where are my flipper Slipper+FlipFlop · 02.07.24",
@@ -22,6 +12,9 @@ window.initSudoku = function(container) {
         "🌽 This is corn without pop · 11.12.23",
         "🤔 Difficult + complicated : diflicated · 12.12.23"
     ];
+    
+    // On force les punchlines personnelles comme seul fallback
+    const fallbackPunchlines = legendaryPunchlines;
 
     const sourceQuotes = (window.ELIF_QUOTES && window.ELIF_QUOTES.length > 0) ? window.ELIF_QUOTES : fallbackPunchlines;
     const randomPunchline = sourceQuotes[Math.floor(Math.random() * sourceQuotes.length)];
