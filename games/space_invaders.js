@@ -1,12 +1,23 @@
 window.initSpaceInvaders = function(container) {
     if (!container.innerHTML.includes('gameCanvas')) {
         container.innerHTML = `
-        <div style="overflow-x:auto; max-width:100%; width:100%;">
-        <div id="game-container" style="width:800px; height:650px; transform-origin:top left; position:relative;">
+        <style>
+            #si-outer { width:100%; max-width:800px; margin:auto; }
+            #game-container {
+                width:800px; height:650px;
+                transform-origin:top left;
+                position:relative;
+            }
+            #si-scale-wrap { overflow:hidden; width:100%; }
+            #si-touch-row button { -webkit-tap-highlight-color: transparent; }
+        </style>
+        <div id="si-outer">
+        <div id="si-scale-wrap">
+        <div id="game-container">
             <div id="ui-layer">
                 <header style="padding:10px 20px; display:flex; justify-content:space-between; z-index:10; pointer-events:all;">
                     <div style="color:#D4AF37; font-weight:700;"><span data-i18n="si.lives">LIVES: </span><span id="si-lives">5</span> | SCORE: <span id="si-score">0</span></div>
-                    <button style="padding:5px 15px; font-size:13px; margin:0; background:transparent; border:1px solid #D4AF37; color:#D4AF37; border-radius:5px; cursor:pointer;" onclick="if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame();" data-i18n="game.quit">Quit ✕</button>
+                    <button style="padding:5px 15px; font-size:13px; margin:0; background:transparent; border:1px solid #D4AF37; color:#D4AF37; border-radius:5px; cursor:pointer;" id="si-quit-btn" data-i18n="game.quit">Quit ✕</button>
                 </header>
                 
                 <div id="start-screen" class="screen active">
@@ -20,7 +31,7 @@ window.initSpaceInvaders = function(container) {
                     <h2 data-i18n="si.failed">MISSION FAILED</h2>
                     <p><span data-i18n="si.final">Final Score: </span><span id="final-score">0</span></p>
                     <button id="restart-btn" data-i18n="si.try">TRY AGAIN</button>
-                    <button style="margin-top:20px; background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:10px 20px; border-radius:6px; cursor:pointer;" onclick="if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame();" data-i18n="si.menu">RETURN TO MENU</button>
+                    <button id="si-menu-btn" style="margin-top:20px; background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:10px 20px; border-radius:6px; cursor:pointer;" data-i18n="si.menu">RETURN TO MENU</button>
                 </div>
                 
                 <div id="victory-screen" class="screen">
@@ -28,7 +39,7 @@ window.initSpaceInvaders = function(container) {
                     <h2 style="font-size:30px; text-align:center;" data-i18n="si.won">You Won (my heart babylovebutterfly) 🌹</h2>
                     <p><span data-i18n="si.final">Final Score: </span><span id="victory-score">0</span></p>
                     <button id="next-level-btn" data-i18n="si.next">NEXT SECTOR</button>
-                    <button style="margin-top:20px; background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:10px 20px; border-radius:6px; cursor:pointer;" onclick="if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame();" data-i18n="si.menu">RETURN TO MENU</button>
+                    <button id="si-menu-btn2" style="margin-top:20px; background:transparent; border:1px solid #D4AF37; color:#D4AF37; padding:10px 20px; border-radius:6px; cursor:pointer;" data-i18n="si.menu">RETURN TO MENU</button>
                 </div>
             </div>
             <canvas id="gameCanvas"></canvas>
@@ -40,12 +51,20 @@ window.initSpaceInvaders = function(container) {
             <button id="si-t-fire"  style="background:rgba(212,175,55,0.3);border:2px solid #D4AF37;color:#D4AF37;width:90px;height:54px;border-radius:8px;font-size:24px;cursor:pointer;touch-action:manipulation;">🔫</button>
             <button id="si-t-right" style="background:rgba(212,175,55,0.15);border:1px solid #D4AF37;color:#D4AF37;width:70px;height:54px;border-radius:8px;font-size:24px;cursor:pointer;touch-action:manipulation;">➡️</button>
         </div>
+        </div>
         `;
         if(window.setLanguage) window.setLanguage(window.currentLang);
-        // Scale game container to fit viewport width on small screens
-        const gc = document.getElementById('game-container');
-        const available = Math.min(window.innerWidth - 32, 800);
-        if (available < 800) gc.style.transform = `scale(${available / 800})`;
+        // Scale game container to fit viewport width
+        const gc   = document.getElementById('game-container');
+        const wrap = document.getElementById('si-scale-wrap');
+        function applyScale() {
+            const available = Math.min(window.innerWidth - 24, 800);
+            const s = available / 800;
+            gc.style.transform = `scale(${s})`;
+            wrap.style.height  = Math.round(650 * s) + 'px';
+        }
+        applyScale();
+        window.addEventListener('resize', applyScale);
     }
 
     const canvas = document.getElementById('gameCanvas');
@@ -77,11 +96,21 @@ window.initSpaceInvaders = function(container) {
     const victoryScreen = document.getElementById('victory-screen');
     const finalScoreEl = document.getElementById('final-score');
     const victoryScoreEl = document.getElementById('victory-score');
-    // Set image srcs that are now injected as empty img tags
     const loseImgEl = document.getElementById('lose-img');
-    const winImgEl = document.getElementById('win-img');
+    const winImgEl  = document.getElementById('win-img');
     if (loseImgEl) loseImgEl.src = 'assets/lose.webp';
-    if (winImgEl) winImgEl.src = 'assets/win.webp';
+    if (winImgEl)  winImgEl.src  = 'assets/win.webp';
+
+    // Wire up buttons that were previously using inline onclick (broken in scaled containers on iOS)
+    function addBtnListeners(id, fn) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('click',      fn);
+        el.addEventListener('touchstart', (e) => { e.preventDefault(); fn(); }, { passive: false });
+    }
+    addBtnListeners('si-quit-btn',  () => { if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame(); });
+    addBtnListeners('si-menu-btn',  () => { if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame(); });
+    addBtnListeners('si-menu-btn2', () => { if(window.siReqId) cancelAnimationFrame(window.siReqId); hideGame(); });
 
     const player = {
         x: canvas.width / 2 - 35, y: canvas.height - 90,
@@ -552,24 +581,31 @@ window.initSpaceInvaders = function(container) {
         window.siReqId = requestAnimationFrame(gameLoop);
     }
 
-    document.getElementById('start-btn').onclick = () => {
+    function addGameBtnListeners(id, fn) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('click',      fn);
+        el.addEventListener('touchstart', (e) => { e.preventDefault(); fn(); }, { passive: false });
+    }
+
+    addGameBtnListeners('start-btn', () => {
         resetGame(true);
         gameState = 'playing';
         document.querySelectorAll('#game-container .screen').forEach(s => s.classList.remove('active'));
-    };
+    });
 
-    document.getElementById('restart-btn').onclick = () => {
+    addGameBtnListeners('restart-btn', () => {
         resetGame(true);
         gameState = 'playing';
         document.querySelectorAll('#game-container .screen').forEach(s => s.classList.remove('active'));
-    };
+    });
 
-    document.getElementById('next-level-btn').onclick = () => {
+    addGameBtnListeners('next-level-btn', () => {
         level++;
-        resetGame(false); 
+        resetGame(false);
         gameState = 'playing';
         document.querySelectorAll('#game-container .screen').forEach(s => s.classList.remove('active'));
-    };
+    });
 
     // Cancel old frame if exists
     if(window.siReqId) cancelAnimationFrame(window.siReqId);

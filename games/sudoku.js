@@ -9,6 +9,20 @@ window.initSudoku = function(container) {
         "La femme la plus intelligente du bosphore 🌙"
     ];
 
+    // ── Legendary punchlines ticker ──────────────────────────────────────────
+    const legendaryPunchlines = [
+        "🎬 ElXulo=Pelicula=Hairdraiser · 24.04.26",
+        "🐬 Where are my flipper Slipper+FlipFlop · 02.07.24",
+        "☀️ 15.07.24 · Manana por la morningo",
+        "🌳 Why did you refused 2 times Indian Restaurant? Because I love trees · 16.07.24",
+        "🍽️ 9.8.24 · Nécessito comer ahora porque soy muy hungriyero",
+        "💳 27.08.24 · Your bank card is not successfull to paid",
+        "💇 14.01.24 · I want to Saïd my air is curly.. tengo el pedo Rosita",
+        "📱 21.05.25 · 9pm message + vocal = I heard your mocal",
+        "🌽 This is corn without pop · 11.12.23",
+        "🤔 Difficult + complicated : diflicated · 12.12.23"
+    ];
+
     const sourceQuotes = (window.ELIF_QUOTES && window.ELIF_QUOTES.length > 0) ? window.ELIF_QUOTES : fallbackPunchlines;
     const randomPunchline = sourceQuotes[Math.floor(Math.random() * sourceQuotes.length)];
 
@@ -28,7 +42,55 @@ window.initSudoku = function(container) {
     const CELL = DIGIT_STICKER ? 54 : 44;
 
     container.innerHTML = `
-    <div style="width:90vw; max-width:700px; background:linear-gradient(160deg,rgba(20,3,0,0.96),rgba(50,5,5,0.92)); border:3px solid #D4AF37; border-radius:16px; padding:28px; box-shadow:0 0 40px rgba(212,175,55,0.25);">
+    <style>
+        @keyframes sdk-ticker-scroll {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .sdk-ticker-track {
+            display: flex;
+            width: max-content;
+            animation: sdk-ticker-scroll 38s linear infinite;
+        }
+        .sdk-ticker-track:hover { animation-play-state: paused; }
+        .sdk-ticker-item {
+            white-space: nowrap;
+            padding: 0 56px;
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 13.5px;
+            color: #F5E27A;
+            letter-spacing: 0.4px;
+        }
+        .sdk-ticker-sep {
+            color: #D4AF37;
+            padding: 0 8px;
+            font-style: normal;
+        }
+    </style>
+    <div style="width:90vw; max-width:700px;">
+
+        <!-- ── Punchlines Ticker ────────────────────────────────── -->
+        <div style="
+            overflow: hidden;
+            background: linear-gradient(90deg, rgba(30,5,0,0.97), rgba(60,8,8,0.95));
+            border: 2px solid #D4AF37;
+            border-radius: 12px 12px 0 0;
+            padding: 10px 0;
+            box-shadow: 0 0 20px rgba(212,175,55,0.3);
+            position: relative;
+        ">
+            <div style="position:absolute;top:0;left:0;width:60px;height:100%;background:linear-gradient(90deg,rgba(30,5,0,0.97),transparent);z-index:2;pointer-events:none;"></div>
+            <div style="position:absolute;top:0;right:0;width:60px;height:100%;background:linear-gradient(270deg,rgba(30,5,0,0.97),transparent);z-index:2;pointer-events:none;"></div>
+            <div class="sdk-ticker-track">
+                ${[...legendaryPunchlines, ...legendaryPunchlines].map(p =>
+                    `<span class="sdk-ticker-item">${p}<span class="sdk-ticker-sep">✦</span></span>`
+                ).join('')}
+            </div>
+        </div>
+
+        <!-- ── Main Game Card ──────────────────────────────────── -->
+        <div style="background:linear-gradient(160deg,rgba(20,3,0,0.96),rgba(50,5,5,0.92)); border:3px solid #D4AF37; border-top:none; border-radius:0 0 16px 16px; padding:28px; box-shadow:0 0 40px rgba(212,175,55,0.25);">
         <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
             <h2 style="font-family:'Cinzel Decorative',cursive; color:#D4AF37; font-size:20px; letter-spacing:3px;" data-i18n="game.sdk">🔢 SUDOKU</h2>
             <div>
@@ -61,6 +123,7 @@ window.initSudoku = function(container) {
         <div style="text-align:center;display:flex;gap:12px;justify-content:center;flex-direction:column;align-items:center;">
             <p id="sudoku-errors" style="color:#f43f5e;font-size:18px;font-weight:bold;font-family:'Outfit',sans-serif;margin:0;"></p>
             <p id="check-result" style="text-align:center;font-size:16px;font-family:'Lora',serif;min-height:20px;color:#4ECDC4;transition:all 0.3s;"></p>
+        </div>
         </div>
     </div>`;
 

@@ -27,10 +27,10 @@ window.initTetris = function(container) {
 
             <!-- Touch controls for tablet/mobile -->
             <div id="tetris-touch-btns" style="display:flex; justify-content:center; gap:10px; margin-top:12px; touch-action:manipulation;">
-                <button ontouchstart="if(piece)piece.moveLeft()" onclick="if(piece)piece.moveLeft()" style="background:rgba(212,175,55,0.15); border:1px solid #D4AF37; color:#D4AF37; width:60px; height:50px; border-radius:8px; font-size:22px; cursor:pointer; touch-action:manipulation;">⬅️</button>
-                <button ontouchstart="if(piece)piece.rotate()" onclick="if(piece)piece.rotate()" style="background:rgba(212,175,55,0.15); border:1px solid #D4AF37; color:#D4AF37; width:60px; height:50px; border-radius:8px; font-size:22px; cursor:pointer; touch-action:manipulation;">🔄</button>
-                <button ontouchstart="if(piece){while(!piece.collision(0,1,piece.activeTetromino))piece.y++;piece.moveDown();}" onclick="if(piece){while(!piece.collision(0,1,piece.activeTetromino))piece.y++;piece.moveDown();}" style="background:rgba(212,175,55,0.15); border:1px solid #D4AF37; color:#D4AF37; width:60px; height:50px; border-radius:8px; font-size:22px; cursor:pointer; touch-action:manipulation;">⬇️</button>
-                <button ontouchstart="if(piece)piece.moveRight()" onclick="if(piece)piece.moveRight()" style="background:rgba(212,175,55,0.15); border:1px solid #D4AF37; color:#D4AF37; width:60px; height:50px; border-radius:8px; font-size:22px; cursor:pointer; touch-action:manipulation;">➡️</button>
+                <button id="tk-left"  style="background:rgba(212,175,55,0.15); border:1px solid #D4AF37; color:#D4AF37; width:60px; height:50px; border-radius:8px; font-size:22px; cursor:pointer; touch-action:manipulation;">⬅️</button>
+                <button id="tk-rot"   style="background:rgba(212,175,55,0.15); border:1px solid #D4AF37; color:#D4AF37; width:60px; height:50px; border-radius:8px; font-size:22px; cursor:pointer; touch-action:manipulation;">🔄</button>
+                <button id="tk-drop"  style="background:rgba(212,175,55,0.15); border:1px solid #D4AF37; color:#D4AF37; width:60px; height:50px; border-radius:8px; font-size:22px; cursor:pointer; touch-action:manipulation;">⬇️</button>
+                <button id="tk-right" style="background:rgba(212,175,55,0.15); border:1px solid #D4AF37; color:#D4AF37; width:60px; height:50px; border-radius:8px; font-size:22px; cursor:pointer; touch-action:manipulation;">➡️</button>
             </div>
         </div>
         `;
@@ -385,34 +385,54 @@ window.initTetris = function(container) {
         drawBoard();
     }
 
-    document.getElementById('start-tetris-btn').onclick = () => {
+    // ── Start button (touch + click) ─────────────────────────────────────────
+    function startGame() {
         gameOver = false;
         piece = randomPiece();
         document.getElementById('tetris-start-screen').style.display = 'none';
         dropStart = Date.now();
         renderAll();
         loop();
-    };
+    }
+    const startBtn = document.getElementById('start-tetris-btn');
+    startBtn.addEventListener('click',      startGame);
+    startBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startGame(); }, { passive: false });
 
+    // ── Keyboard controls ─────────────────────────────────────────────────────
     window.tetrisKeydown = (e) => {
         if (!gameOver && document.getElementById('tetris-canvas')) {
             if (e.code === 'ArrowLeft') piece.moveLeft();
             else if (e.code === 'ArrowRight') piece.moveRight();
             else if (e.code === 'ArrowUp') piece.rotate();
             else if (e.code === 'ArrowDown') { piece.moveDown(); dropStart = Date.now(); }
-            else if (e.code === 'Space') { 
+            else if (e.code === 'Space') {
                 while(!piece.collision(0,1,piece.activeTetromino)) piece.y++;
-                piece.moveDown(); // to lock it
+                piece.moveDown();
                 dropStart = Date.now();
             }
-            if(e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'ArrowDown' || e.code === 'ArrowLeft' || e.code === 'ArrowRight') e.preventDefault();
+            if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
         }
     };
-    
-    // Cleanup old event to prevent multi triggers
     document.removeEventListener('keydown', window.oldTetrisKeydown);
     window.oldTetrisKeydown = window.tetrisKeydown;
     document.addEventListener('keydown', window.tetrisKeydown);
+
+    // ── Touch controls (attached via JS so they access the closure `piece`) ───
+    function addTouchBtn(id, action) {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        const run = (e) => { e.preventDefault(); if (!gameOver && piece) action(); };
+        btn.addEventListener('touchstart', run, { passive: false });
+        btn.addEventListener('click',      (e) => { if (!gameOver && piece) action(); });
+    }
+    addTouchBtn('tk-left',  () => piece.moveLeft());
+    addTouchBtn('tk-rot',   () => piece.rotate());
+    addTouchBtn('tk-right', () => piece.moveRight());
+    addTouchBtn('tk-drop',  () => {
+        while (!piece.collision(0, 1, piece.activeTetromino)) piece.y++;
+        piece.moveDown();
+        dropStart = Date.now();
+    });
 
     function loop() {
         if (gameOver || !document.getElementById('tetris-canvas')) return;
