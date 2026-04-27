@@ -72,10 +72,14 @@
                 <p class="dash-subtitle" data-i18n="dash.welcome">✦ HOŞGELDİNİZ ✦</p>
                 <h1 class="dash-title"><span data-i18n="dash.title">ELIF'İN</span> <span>MULTIVERSE</span></h1>
             </div>
-            <div style="display:flex; align-items:center; gap:15px;">
+            <div style="display:flex; align-items:center; gap:15px; flex-wrap:wrap; justify-content:center;">
                 <div style="display:flex; gap:5px;">
                     <button onclick="setLanguage('en')" style="background:none; border:none; cursor:pointer; font-size:24px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.3)); transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">🇬🇧</button>
                     <button onclick="setLanguage('tr')" style="background:none; border:none; cursor:pointer; font-size:24px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.3)); transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">🇹🇷</button>
+                </div>
+                <div class="save-load-controls" style="display:flex; gap:10px;">
+                    <button onclick="generateSaveCode()" class="save-btn" data-i18n="dash.save">💾 Save</button>
+                    <button onclick="loadSaveCode()" class="load-btn" data-i18n="dash.load">📂 Load</button>
                 </div>
                 <div class="global-score-display">
                     <div class="score-lbl" data-i18n="dash.score">PUAN</div>
@@ -89,6 +93,17 @@
             <!-- SECTION JEUX -->
             <section id="jeux" class="tab-panel active">
                 <div id="game-menu">
+                    <!-- LA PORTE MAGIQUE -->
+                    <div id="magic-door-container" class="magic-door-container hidden">
+                        <div class="door-sparkles">✨</div>
+                        <button id="magic-door-btn" class="magic-door-btn" onclick="handleMagicDoor()">
+                            <span class="door-icon">🚪</span>
+                            <span class="door-text">MAGIC DOOR</span>
+                            <span class="door-icon">🚪</span>
+                        </button>
+                        <div class="door-sparkles">✨</div>
+                    </div>
+
                     <h2 class="section-title" data-i18n="dash.play">✦ À Toi de Jouer, Championne ! ✦</h2>
                     <div class="games-container">
                         <button class="game-card-btn" onclick="showGame('space-invaders')">
@@ -141,6 +156,25 @@
             <div style="color:var(--gold); font-family:'Cinzel Decorative'; font-weight:bold; font-size:18px; margin-top:10px;" data-i18n="game.replay">REJOUER</div>
         </button>
     </div>
+
+    <!-- ===================================
+         5. OVERLAY BIM! (3000 POINTS)
+         =================================== -->
+    <div id="bim-overlay" class="bim-overlay hidden">
+        <div class="bim-content">
+            <img class="bim-sticker bim-left" src="assets/Landing page/OwnSticker_20240417_210104701.png.jpg" alt="Sticker">
+            <img class="bim-sticker bim-right" src="assets/Landing page/9c08de24-fc9a-4106-8483-430a0f546023.webp" alt="Sticker">
+            
+            <h1 class="bim-title">✨ WOW! ✨</h1>
+            <p class="bim-text" data-i18n="bim.text">Tu as débloqué la Porte Magique !</p>
+            <p class="bim-subtext" data-i18n="bim.subtext">Atteins 6000 points pour l'ouvrir...</p>
+            <button id="bim-close-btn" class="modal-cta-btn" onclick="closeBimOverlay()">GÉNIAL ! ✦</button>
+        </div>
+    </div>
+
+    <!-- LECTEUR SPOTIFY FIXE -->
+    <iframe class="spotify-player" src="https://open.spotify.com/embed/playlist/12Djx1oJKv6wfQJhY1Oi1b?utm_source=generator&theme=0" width="300" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
 
     <!-- Scripts -->
     <script src="assets/i18n.js"></script>

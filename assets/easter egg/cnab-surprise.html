@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚨 CNAB MISSION UNLOCKED 🚨</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik+Glitch&family=Oswald:wght@700&display=swap');
+
+        body {
+            background-color: #0000ff;
+            background-image: repeating-linear-gradient(45deg, #0000ff 25%, #ffff00 25%, #ffff00 50%, #0000ff 50%, #0000ff 75%, #ffff00 75%, #ffff00 100%);
+            background-size: 40px 40px;
+            animation: move-bg 2s linear infinite;
+            overflow-x: hidden;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        @keyframes move-bg {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 40px; }
+        }
+
+        .title-glitch {
+            font-family: 'Rubik Glitch', cursive;
+            animation: flash 0.5s infinite;
+        }
+
+        .pixel-font {
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        @keyframes flash {
+            0%, 100% { color: #ff00ff; text-shadow: 4px 4px #00ffff; }
+            50% { color: #00ffff; text-shadow: -4px -4px #ff00ff; }
+        }
+
+        @keyframes float-crazy {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            25% { transform: translate(20px, -30px) rotate(15deg) scale(1.2); }
+            50% { transform: translate(-20px, -50px) rotate(-15deg) scale(0.8); }
+            75% { transform: translate(-40px, 20px) rotate(30deg) scale(1.1); }
+            100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        }
+
+        .floating-sticker {
+            animation: float-crazy 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+        }
+
+        .marquee-container {
+            background: black;
+            color: lime;
+            padding: 10px 0;
+            font-size: 24px;
+            white-space: nowrap;
+            overflow: hidden;
+            border-top: 5px solid red;
+            border-bottom: 5px solid red;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 10s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .cnab-logo {
+            background: linear-gradient(135deg, #0033a0, #ffd100);
+            border: 8px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 30px #ffff00;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        /* Bouton fuyant pour le troll */
+        #accept-btn {
+            transition: all 0.1s;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Top marquee -->
+    <div class="fixed top-0 w-full marquee-container z-50">
+        <div class="marquee-content pixel-font text-sm md:text-xl">
+            ⚠️ MULTIVERSE ALERT ⚠️ NEW LEVEL UNLOCKED ⚠️ PHYSICAL PREPARATION REQUIRED ⚠️
+        </div>
+    </div>
+
+    <!-- Floating stickers in background (chemins locaux directs) -->
+    <img src="STK-20241126-WA0007 - Copie.webp" alt="[Image de mec musclé]" class="floating-sticker absolute top-10 left-10 w-32 md:w-48 z-10 opacity-90" style="animation-delay: 0s;">
+    <img src="STK-20241217-WA0054.webp" alt="[Image de femme yoga]" class="floating-sticker absolute bottom-20 right-10 w-32 md:w-48 z-10 opacity-90" style="animation-delay: 1.5s;">
+    
+    <img src="STK-20241126-WA0007 - Copie.webp" alt="[Image de mec musclé]" class="floating-sticker absolute bottom-32 left-20 w-24 md:w-32 z-10 opacity-70" style="animation-delay: 2s; transform: scaleX(-1);">
+    <img src="STK-20241217-WA0054.webp" alt="[Image de femme yoga]" class="floating-sticker absolute top-20 right-20 w-24 md:w-32 z-10 opacity-70" style="animation-delay: 0.8s;">
+
+
+    <!-- Main Container -->
+    <div class="relative bg-white/95 backdrop-blur-sm border-8 border-black p-8 md:p-12 rounded-3xl max-w-3xl w-full text-center z-20 shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] mt-16 mb-16">
+        
+        <h2 class="text-2xl md:text-3xl font-bold mb-2 uppercase text-gray-800">The Multiverse has spoken...</h2>
+        <h1 class="text-5xl md:text-7xl title-glitch mb-8 uppercase">Level GET SHREDDED</h1>
+
+        <!-- Dynamic Fake CNAB Logo -->
+        <div class="mx-auto w-48 h-48 md:w-64 md:h-64 cnab-logo flex flex-col items-center justify-center mb-8 rotate-[-5deg] hover:rotate-[5deg] transition-transform duration-300">
+            <span class="text-white text-5xl md:text-7xl font-black drop-shadow-lg">CNAB</span>
+            <span class="text-yellow-300 text-lg md:text-xl font-bold mt-2 text-center leading-tight">CLUB NATACIÓ<br>ATLÈTIC BARCELONETA</span>
+        </div>
+
+        <div class="bg-black text-white p-6 rounded-xl border-4 border-dashed border-yellow-400 mb-8 transform rotate-1">
+            <p class="text-2xl md:text-3xl mb-4 text-yellow-300">🎉 SURPRISE ASKAM 🎉</p>
+            <p class="text-xl md:text-2xl leading-relaxed">
+                Thought it was over? WRONG!<br>
+                To face the next Multiverse bosses, you need muscle and cardio.<br>
+                <span class="block mt-4 text-3xl md:text-4xl font-black text-green-400 blink">1 FULL YEAR MEMBERSHIP TO CNAB!</span>
+            </p>
+            <p class="mt-4 text-sm font-mono text-gray-400">Pool, gym, and sea view. No more chilling on the Turkish carpet!</p>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+            <button id="accept-btn" class="bg-green-500 hover:bg-green-600 text-white border-4 border-black font-bold py-4 px-8 rounded-full text-xl md:text-2xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] uppercase transition-transform active:translate-y-2 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)]" onmouseover="dodgeMouse(this)">
+                I accept my destiny 🏋️‍♀️
+            </button>
+            <button id="final-accept-btn" class="hidden bg-pink-500 hover:bg-pink-600 text-white border-4 border-black font-bold py-4 px-8 rounded-full text-xl md:text-2xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] uppercase" onclick="triggerCelebration()">
+                FINE, I'LL CLICK! 🏊‍♀️
+            </button>
+        </div>
+
+        <div id="success-msg" class="hidden mt-8 text-2xl font-bold text-red-600 pixel-font animate-bounce">
+            TIME FOR GIGA MUSCLES! 💪
+        </div>
+    </div>
+
+    <!-- Bottom marquee -->
+    <div class="fixed bottom-0 w-full marquee-container z-50">
+        <div class="marquee-content pixel-font text-sm md:text-xl" style="animation-direction: reverse;">
+            🔥 PREPARE THE BICEPS 🔥 NO MORE LAZY DAYS 🔥 VAMOS A LA PLAYA 🔥
+        </div>
+    </div>
+
+    <script>
+        let dodgeCount = 0;
+        const acceptBtn = document.getElementById('accept-btn');
+        const finalBtn = document.getElementById('final-accept-btn');
+        const successMsg = document.getElementById('success-msg');
+
+        // Fonction pour faire fuir le bouton
+        function dodgeMouse(btn) {
+            if (dodgeCount < 5) {
+                const x = Math.random() * (window.innerWidth - btn.clientWidth - 100) - ((window.innerWidth - btn.clientWidth) / 2);
+                const y = Math.random() * (window.innerHeight - btn.clientHeight - 100) - ((window.innerHeight - btn.clientHeight) / 2);
+                
+                btn.style.transform = `translate(${x}px, ${y}px)`;
+                dodgeCount++;
+            } else {
+                // Après 5 esquives, on affiche le vrai bouton cliquable
+                btn.style.display = 'none';
+                finalBtn.classList.remove('hidden');
+                
+                // Petit pop de confettis pour célébrer l'apparition du vrai bouton
+                confetti({
+                    particleCount: 50,
+                    spread: 60,
+                    origin: { y: 0.8 }
+                });
+            }
+        }
+
+        // Fonction de célébration finale
+        function triggerCelebration() {
+            finalBtn.style.transform = "scale(0.9)";
+            setTimeout(() => finalBtn.style.transform = "scale(1)", 100);
+            
+            successMsg.classList.remove('hidden');
+
+            // Pluie de confettis massive
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount,
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+                }));
+                confetti(Object.assign({}, defaults, { particleCount,
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+                }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>

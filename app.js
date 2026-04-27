@@ -9,15 +9,8 @@ window.TETRIS_IMAGES = window.GAME_ASSETS && window.GAME_ASSETS['tetris'] && win
 window.HACHE_IMAGES = window.GAME_ASSETS && window.GAME_ASSETS['lancer-hache'] && window.GAME_ASSETS['lancer-hache'].length > 0 ? window.GAME_ASSETS['lancer-hache'] : ['assets/player.webp'];
 let globalScore = parseInt(localStorage.getItem('elifScore') || '0', 10);
 
-// ============ BACKGROUND MUSIC ============
-const bgMusic = new Audio('assets/Özdemir Erdoğan - Gurbet.mp3');
-bgMusic.addEventListener('timeupdate', () => {
-    // Loop the first 22 seconds
-    if (bgMusic.currentTime >= 22) {
-        bgMusic.currentTime = 0;
-        bgMusic.play().catch(e => console.log("Audio loop error:", e));
-    }
-});
+// ============ SPOTIFY IFRAME ============
+// Spotify auto-play is not allowed by browsers, but the user can click Play on the iframe in the UI.
 
 // ============ OVERLAY + MODAL FLOW ============
 window.addEventListener('DOMContentLoaded', () => {
@@ -25,9 +18,8 @@ window.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('personal-modal');
     const mainContent = document.getElementById('main-content');
 
-    // Click anywhere on overlay → show modal & start music
+    // Click anywhere on overlay → show modal
     overlay.addEventListener('click', () => {
-        bgMusic.play().catch(e => console.log("Audio play error:", e));
         
         overlay.classList.add('fade-out');
         setTimeout(() => {
@@ -137,9 +129,15 @@ function revealDashboard(modal, main) {
 
 // ============ GLOBAL SCORE ============
 function addGlobalScore(pts) {
+    const prevScore = globalScore;
     globalScore += pts;
     localStorage.setItem('elifScore', globalScore);
     updateScoreUI();
+
+    // Vérifier si on vient de dépasser 3000 points pour la 1ère fois
+    if (prevScore < 3000 && globalScore >= 3000 && !localStorage.getItem('bimShown')) {
+        showBimOverlay();
+    }
 }
 
 function updateScoreUI() {
@@ -148,7 +146,76 @@ function updateScoreUI() {
 
     if (el) el.textContent = globalScore;
     if (inlineEl) inlineEl.textContent = globalScore;
+
+    const magicDoor = document.getElementById('magic-door-container');
+    if (magicDoor) {
+        if (globalScore >= 3000) {
+            magicDoor.classList.remove('hidden');
+        } else {
+            magicDoor.classList.add('hidden');
+        }
+    }
 }
+
+// ============ SAUVEGARDE (TABLETTE) ============
+window.generateSaveCode = function() {
+    // Simple encodage: ELIF-{score * 7}-XYZ
+    const code = `ELIF-${globalScore * 7}-XYZ`;
+    const msg = (window.t && window.t('save.code')) ? window.t('save.code').replace('{code}', code) : `Voici ton code de sauvegarde :\n\n${code}\n\nNote-le pour le rentrer sur ta tablette !`;
+    alert(msg);
+};
+
+window.loadSaveCode = function() {
+    const msg = (window.t && window.t('load.prompt')) ? window.t('load.prompt') : "Entre ton code de sauvegarde :";
+    const input = prompt(msg);
+    if (!input) return;
+    
+    const match = input.match(/^ELIF-(\d+)-XYZ$/);
+    if (match) {
+        const score = parseInt(match[1], 10) / 7;
+        if (!isNaN(score)) {
+            globalScore = score;
+            localStorage.setItem('elifScore', globalScore);
+            updateScoreUI();
+            const successMsg = (window.t && window.t('load.success')) ? window.t('load.success') : "Points récupérés avec succès !";
+            alert(successMsg);
+            
+            // Check door status
+            if (globalScore >= 3000 && !localStorage.getItem('bimShown')) {
+                showBimOverlay();
+            }
+            return;
+        }
+    }
+    const errMsg = (window.t && window.t('load.error')) ? window.t('load.error') : "Code invalide !";
+    alert(errMsg);
+};
+
+// ============ PORTE MAGIQUE ============
+window.showBimOverlay = function() {
+    const overlay = document.getElementById('bim-overlay');
+    if (overlay) {
+        overlay.classList.remove('hidden');
+        localStorage.setItem('bimShown', 'true');
+    }
+};
+
+window.closeBimOverlay = function() {
+    const overlay = document.getElementById('bim-overlay');
+    if (overlay) {
+        overlay.classList.add('hidden');
+    }
+};
+
+window.handleMagicDoor = function() {
+    if (globalScore < 6000) {
+        const lockMsg = (window.t && window.t('door.locked')) ? window.t('door.locked') : "La porte est fermée ! Reviens quand tu auras 6000 points.";
+        alert(lockMsg);
+    } else {
+        // Redirection vers l'easter egg !
+        window.location.href = "assets/easter egg/cnab-surprise.html";
+    }
+};
 
 // ============ GAME ROUTING ============
 window.showGame = function(gameId) {

@@ -837,6 +837,163 @@ body {
 }
 
 /* ================================================
+   NEW FEATURES: SAVE/LOAD, MAGIC DOOR, BIM OVERLAY
+   ================================================ */
+
+.save-btn, .load-btn {
+    background: linear-gradient(135deg, var(--teal), #005050);
+    border: 1px solid var(--gold);
+    color: var(--cream);
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.save-btn:hover, .load-btn:hover {
+    background: var(--gold);
+    color: var(--dark-brown);
+    box-shadow: 0 0 10px rgba(212,175,55,0.6);
+}
+
+.magic-door-container {
+    text-align: center;
+    margin: 20px 0 40px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.magic-door-container.hidden {
+    display: none !important;
+}
+
+.door-sparkles {
+    font-size: 24px;
+    animation: pulseGold 1.5s infinite;
+}
+
+.magic-door-btn {
+    background: linear-gradient(180deg, #501000, #200500);
+    border: 4px solid var(--gold);
+    border-radius: 16px 16px 4px 4px;
+    padding: 20px 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: inset 0 0 20px rgba(255,123,0,0.4), 0 10px 30px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.4);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.magic-door-btn:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: inset 0 0 30px rgba(255,123,0,0.6), 0 15px 40px rgba(0,0,0,0.9), 0 0 60px rgba(212,175,55,0.8);
+    border-color: var(--gold-light);
+}
+
+.door-icon {
+    font-size: 42px;
+    filter: drop-shadow(0 0 5px rgba(212,175,55,0.8));
+}
+
+.door-text {
+    font-family: 'Bungee', cursive;
+    font-size: 24px;
+    color: var(--gold-light);
+    text-shadow: 2px 2px 0 var(--deep-red), 4px 4px 10px rgba(0,0,0,0.8);
+}
+
+.bim-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 0, 0, 0.9);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(8px);
+    transition: opacity 0.5s;
+}
+
+.bim-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.bim-content {
+    background: linear-gradient(160deg, #A32000, #3E1A00);
+    border: 6px solid var(--gold);
+    border-radius: 30px;
+    padding: 50px 80px;
+    box-shadow: 0 0 0 10px rgba(255,123,0,0.4), 0 0 100px rgba(212,175,55,0.8);
+    text-align: center;
+    position: relative;
+    max-width: 600px;
+    width: 90%;
+    animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.bim-title {
+    font-family: 'Bungee', cursive;
+    font-size: 4rem;
+    color: #D93A46;
+    -webkit-text-stroke: 2px #F5D673;
+    text-shadow: 4px 4px 0 #F5D673, 8px 8px 10px rgba(0,0,0,0.8);
+    margin-bottom: 20px;
+    animation: kitschShake 0.2s infinite;
+}
+
+.bim-text {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.8rem;
+    color: var(--gold-light);
+    margin-bottom: 10px;
+}
+
+.bim-subtext {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--cream);
+    opacity: 0.9;
+    margin-bottom: 30px;
+}
+
+.bim-sticker {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 15px rgba(0,0,0,0.6));
+    animation: bounceScale 2s ease-in-out infinite alternate;
+}
+
+.bim-left { top: -60px; left: -60px; transform: rotate(-15deg); }
+.bim-right { bottom: -60px; right: -60px; transform: rotate(15deg); }
+
+.spotify-player {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 9000;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.8), 0 0 15px rgba(212,175,55,0.3);
+    border: 2px solid var(--gold-dim);
+}
+
+/* ================================================
    RESPONSIVE
    ================================================ */
 @media (max-width: 768px) {
@@ -848,4 +1005,8 @@ body {
     .game-card-btn { width: 100%; max-width: 300px; }
     .dashboard-header { padding: 10px 15px; }
     .dash-title { font-size: 18px; }
+    .spotify-player { bottom: 10px; left: 10px; right: 10px; width: calc(100% - 20px); }
+    .bim-title { font-size: 2.5rem; }
+    .bim-content { padding: 30px 20px; }
+    .bim-sticker { width: 90px; height: 90px; }
 }
