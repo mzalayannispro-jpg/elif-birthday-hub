@@ -39,8 +39,22 @@ Bienvenue dans le document de suivi ultra-détaillé du projet **Elif Birthday H
 
 ## 🛠️ WALKTHROUGH TECHNIQUE : Problèmes, Correctifs et Décisions
 
-### Note Historique
-Le projet a été initié et conceptualisé aux alentours du **19 Avril 2026**. Les premières semaines ont été dédiées à la mise en place de l'infrastructure, du système de rendu, de l'internationalisation et du Layer 1. Ce walkthrough consigne principalement les correctifs à partir de Mai, lors du polissage final et de l'intégration du Layer 2.
+### 📜 Historique & Genèse (Anniversaire Copine -> Elif Birthday Hub)
+
+Le projet a été initié le **19 Avril 2026** sous l'impulsion du projet global "Anniversaire Copine". L'objectif initial était de créer un espace web personnalisé, amusant et rempli de "private jokes" pour célébrer l'anniversaire d'Elif.
+
+**Chronologie des étapes fondatrices (Avril 2026) :**
+- **19-23 Avril :** Idéation et conceptualisation du projet "Anniversaire Copine". Décision d'adopter un style rétro/kitsch turc des années 70.
+- **24 Avril :** Mise en place des bases de l'UI (`index.html`, `style.css`), du système de rendu dynamique, et intégration du script de gestion des assets (`assets_list.js`) pour charger les stickers personnalisés.
+- **25 Avril :**
+  - Ajout des "Punchlines" dans le jeu Sudoku pour remplacer les numéros par des références personnelles.
+  - Déploiement initial sur GitHub Pages.
+  - Remplacement des fonds par des stickers animés en fond d'écran et esthétique 3D rétro.
+- **26 Avril :** Mise en place du concept de "La Porte Magique" (Layer 2) déblocable à 6000 points. Ajout de la musique d'ambiance persistante via une playlist Spotify.
+- **27-30 Avril :** Affinage du système de sauvegarde multi-devices par code généré (chiffrement basé sur le score) et de l'internationalisation dynamique (FR/TR).
+
+**Mai 2026 - Finalisation & Layer 2 :**
+Ce walkthrough technique (ci-dessous) consigne principalement les correctifs complexes et le polissage final effectués début Mai (intégration du Layer 2 "Super Elif", correction des bugs de layout, refactorisation du code de progression).
 
 ### 1. Problème de Navigation & Coupure de Musique (02/05/2026)
 * **Contexte :** Le Hub intègre une playlist Spotify persistante en arrière-plan. Lorsque le joueur cliquait sur "Cadeau 1" (la vidéo surprise), la navigation s'effectuait dans le même onglet.
