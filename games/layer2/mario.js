@@ -94,9 +94,9 @@ window.initMario = function(container) {
         height: 80,
         vx: 0,
         vy: 0,
-        speed: 6,
-        jumpForce: -16,
-        gravity: 0.8,
+        speed: 7,
+        jumpForce: -15,
+        gravity: 0.6,
         grounded: false,
         state: 'petit', // petit, base, fire, ice, yoshi
         facingRight: true,
@@ -127,6 +127,16 @@ window.initMario = function(container) {
             y: canvas.height - 150 - Math.random() * 300,
             radius: 15,
             collected: false
+        });
+    }
+
+    let clouds = [];
+    for(let i=0; i<20; i++) {
+        clouds.push({
+            x: Math.random() * 6000,
+            y: 50 + Math.random() * 200,
+            width: 100 + Math.random() * 100,
+            speed: 0.2 + Math.random() * 0.5
         });
     }
 
@@ -265,7 +275,7 @@ window.initMario = function(container) {
         }
 
         // 2.5 Spawn de Baklavas
-        if (frameCount % 300 === 0 && cameraX < LEVEL_END_X - 600) { 
+        if (frameCount % 200 === 0 && cameraX < LEVEL_END_X - 600) { 
             spawnPowerup();
         }
 
@@ -443,9 +453,26 @@ window.initMario = function(container) {
         // ==========================================
         // DESSIN (RENDER)
         // ==========================================
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Ciel de base
+        ctx.fillStyle = '#87CEEB';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
         ctx.save();
-        ctx.translate(-cameraX, 0); // Déplacement de la caméra
+        ctx.translate(-cameraX, 0);
+
+        // Nuages (Parallax)
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        for (let c of clouds) {
+            c.x -= c.speed; // Déplacement lent
+            if (c.x + c.width < cameraX) c.x = cameraX + canvas.width + 100; // Repop
+            if (c.x > cameraX - 200 && c.x < cameraX + canvas.width) {
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, c.width / 2, 0, Math.PI * 2);
+                ctx.arc(c.x + c.width * 0.4, c.y - 10, c.width / 2.5, 0, Math.PI * 2);
+                ctx.arc(c.x + c.width * 0.8, c.y, c.width / 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
 
         // Sol
         ctx.fillStyle = '#8B4513';

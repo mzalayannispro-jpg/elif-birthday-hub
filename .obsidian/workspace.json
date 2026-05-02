@@ -195,10 +195,13 @@
   },
   "active": "650e61c9029fb3b8",
   "lastOpenFiles": [
-    "Sans titre.base",
-    "assets/1f6c5518-609c-4db4-ae89-77325c921daf.webp",
+    "README.md",
     "Sans titre.canvas",
+    "Sans titre.base",
     "PROJECT_TRACKING.md",
+    "ASSETS_DOCUMENTATION.md",
+    "generate_doc.js",
+    "assets/1f6c5518-609c-4db4-ae89-77325c921daf.webp",
     "33229791-3744-444f-af52-c15fa8303963.jpg",
     "assets/wooden_dummy.png",
     "assets/uzinagaz_body.png",
@@ -212,7 +215,6 @@
     "games/space_invaders.js",
     "games/mahjong.js",
     "games/axe_throw.js",
-    "README.md",
     "assets/STK-20240627-WA0020 - dddCopie - Copie.png"
   ]
 }

@@ -179,7 +179,7 @@ function updateScoreUI() {
         
         if (globalScore >= 3000 && globalScore < 6000) {
             magicDoor.classList.remove('hidden');
-            if(doorText) doorText.textContent = "MAGIC DOOR";
+            if(doorText) doorText.textContent = window.t('door.magic');
         } else if (globalScore >= 6000) {
             if (localStorage.getItem('layer2Unlocked') === 'true') {
                 const layer2 = document.getElementById('layer-2-container');
@@ -196,8 +196,8 @@ function updateScoreUI() {
                         giftBtn.onclick = () => window.open("assets/easter egg/cnab-surprise.html", "_blank");
                         giftBtn.innerHTML = `
                             <span class="btn-icon">🎁</span>
-                            <span class="btn-label">VIDÉO SURPRISE</span>
-                            <span class="btn-sub">Ton premier cadeau !</span>
+                            <span class="btn-label" data-i18n="gift1.title">${window.t('gift1.title')}</span>
+                            <span class="btn-sub" data-i18n="gift1.sub">${window.t('gift1.sub')}</span>
                         `;
                         giftsList.appendChild(giftBtn);
                     }
@@ -206,7 +206,7 @@ function updateScoreUI() {
                 // Logique pour le Layer 3
                 if (globalScore >= 9000 && globalScore < 12000) {
                     magicDoor.classList.remove('hidden');
-                    if(doorText) doorText.textContent = "MAGIC DOOR (NIV 3)";
+                    if(doorText) doorText.textContent = window.t('door.magic3');
                 } else if (globalScore >= 12000) {
                     if (localStorage.getItem('layer3Unlocked') === 'true') {
                         magicDoor.classList.add('hidden');
@@ -219,18 +219,18 @@ function updateScoreUI() {
                                 const giftBtn = document.createElement('button');
                                 giftBtn.id = 'gift-2';
                                 giftBtn.className = 'game-card-btn';
-                                giftBtn.onclick = () => alert("Deuxième surprise en construction !");
+                                giftBtn.onclick = () => alert("Second surprise coming soon!");
                                 giftBtn.innerHTML = `
                                     <span class="btn-icon">🎁</span>
-                                    <span class="btn-label">CADEAU 2</span>
-                                    <span class="btn-sub">Pour tes 12000 pts</span>
+                                    <span class="btn-label" data-i18n="gift2.title">${window.t('gift2.title')}</span>
+                                    <span class="btn-sub" data-i18n="gift2.sub">${window.t('gift2.sub')}</span>
                                 `;
                                 giftsList.appendChild(giftBtn);
                             }
                         }
                     } else {
                         magicDoor.classList.remove('hidden');
-                        if(doorText) doorText.textContent = "OUVRIR NIVEAU 3";
+                        if(doorText) doorText.textContent = window.t('door.open3');
                     }
                 } else {
                     magicDoor.classList.add('hidden');
@@ -238,7 +238,7 @@ function updateScoreUI() {
 
             } else {
                 magicDoor.classList.remove('hidden');
-                if(doorText) doorText.textContent = "OUVRIR NIVEAU 2";
+                if(doorText) doorText.textContent = window.t('door.open2');
             }
         } else {
             magicDoor.classList.add('hidden');
@@ -248,36 +248,37 @@ function updateScoreUI() {
 
 // ============ SAUVEGARDE (TABLETTE) ============
 window.generateSaveCode = function() {
-    // Simple encodage: ELIF-{score * 7}-XYZ
-    const code = `ELIF-${globalScore * 7}-XYZ`;
-    const msg = (window.t && window.t('save.code')) ? window.t('save.code').replace('{code}', code) : `Voici ton code de sauvegarde :\n\n${code}\n\nNote-le pour le rentrer sur ta tablette !`;
-    alert(msg);
+    // Check if translation exists, else fallback
+    const code = btoa("ELIF-" + (window.globalScore * 7) + "-XYZ");
+    alert((window.t('alert.save_code')) + "\n\n" + code);
 };
 
 window.loadSaveCode = function() {
-    const msg = (window.t && window.t('load.prompt')) ? window.t('load.prompt') : "Entre ton code de sauvegarde :";
-    const input = prompt(msg);
+    const input = prompt(window.t('alert.load_code'));
     if (!input) return;
-    
-    const match = input.match(/^ELIF-(\d+)-XYZ$/);
-    if (match) {
-        const score = parseInt(match[1], 10) / 7;
-        if (!isNaN(score)) {
-            globalScore = score;
-            localStorage.setItem('elifScore', globalScore);
-            updateScoreUI();
-            const successMsg = (window.t && window.t('load.success')) ? window.t('load.success') : "Points récupérés avec succès !";
-            alert(successMsg);
-            
-            // Check door status
-            if (globalScore >= 3000 && !localStorage.getItem('bimShown')) {
-                showBimOverlay();
+    try {
+        const decoded = atob(input);
+        if (decoded.startsWith("ELIF-") && decoded.endsWith("-XYZ")) {
+            const numStr = decoded.replace("ELIF-", "").replace("-XYZ", "");
+            const score = parseInt(numStr, 10) / 7;
+            if (!isNaN(score)) {
+                window.globalScore = score;
+                localStorage.setItem('elifScore', score);
+                
+                // Débloquer selon le score
+                if (score >= 6000) localStorage.setItem('layer2Unlocked', 'true');
+                if (score >= 12000) localStorage.setItem('layer3Unlocked', 'true');
+                if (score >= 3000) localStorage.setItem('bimShown', 'true');
+
+                updateScoreUI();
+                alert("Score Loaded: " + score);
+                return;
             }
-            return;
         }
+        alert(window.t('alert.invalid_code'));
+    } catch(e) {
+        alert(window.t('alert.invalid_code'));
     }
-    const errMsg = (window.t && window.t('load.error')) ? window.t('load.error') : "Code invalide !";
-    alert(errMsg);
 };
 
 // ============ PORTE MAGIQUE ============
@@ -302,9 +303,9 @@ window.handleMagicDoor = function() {
     } else if (globalScore >= 12000 && localStorage.getItem('layer3Unlocked') !== 'true') {
         unlockLayer3();
     } else if (globalScore < 6000) {
-        alert("La porte est fermée ! Reviens quand tu auras 6000 points.");
+        alert(window.t('alert.door_locked'));
     } else if (globalScore < 12000) {
-        alert("La porte du Niveau 3 est fermée ! Reviens quand tu auras 12000 points.");
+        alert(window.t('alert.l3_locked'));
     }
 };
 
@@ -327,7 +328,7 @@ window.unlockLayer3 = function() {
         localStorage.setItem('layer3Unlocked', 'true');
         updateScoreUI(); // Pour faire apparaître le bouton du cadeau
         
-        alert("✨ INCROYABLE ! Tu as débloqué le NIVEAU 3 (Jeux 3D) et un NOUVEAU CADEAU ! ✨");
+        alert(window.t('alert.l3_unlocked'));
     }, 1500);
 };
 
@@ -366,7 +367,7 @@ window.unlockLayer2 = function() {
 
         localStorage.setItem('layer2Unlocked', 'true');
         
-        alert("✨ FÉLICITATIONS ! Tu as débloqué le NIVEAU 2 et ton premier CADEAU ! ✨\n\nRegarde au-dessus des jeux !");
+        alert("✨ INCREDIBLE! You unlocked LAYER 2 and your first GIFT! ✨\n\nLook above the games!");
     }, 1500);
 };
 
@@ -388,24 +389,56 @@ window.showGame = function(gameId) {
 
         const slot = document.getElementById('game-slot');
         slot.innerHTML = '';
-
-        if (gameId === 'space-invaders' && window.initSpaceInvaders) window.initSpaceInvaders(slot);
-        else if (gameId === 'mahjong' && window.initMahjong) window.initMahjong(slot);
-        else if (gameId === 'sudoku' && window.initSudoku) window.initSudoku(slot);
-        else if (gameId === 'tetris' && window.initTetris) window.initTetris(slot);
-        else if (gameId === 'axe-throw' && window.initAxeThrow) window.initAxeThrow(slot);
-        else if (gameId === 'mario' && window.initMario) window.initMario(slot);
-        else if (gameId === 'angry-birds' && window.initAngryBirds) window.initAngryBirds(slot);
-        else if (gameId === 'tower-defense' && window.initTowerDefense) window.initTowerDefense(slot);
-        else {
-            alert("⚠️ Erreur de chargement du module : " + gameId + "\nLe code du jeu n'a pas pu être chargé. (Videz votre cache Safari/Chrome)");
-            window.hideGame();
+        
+        const overlay = document.getElementById('game-instructions-overlay');
+        const textElem = document.getElementById('game-instructions-text');
+        const startBtn = document.getElementById('start-game-btn');
+        
+        const instMap = {
+            'space-invaders': 'inst.si',
+            'mahjong': 'inst.mj',
+            'sudoku': 'inst.sdk',
+            'tetris': 'inst.tetris',
+            'axe-throw': 'inst.axe',
+            'mario': 'inst.mario',
+            'angry-birds': 'inst.ab',
+            'tower-defense': 'inst.td'
+        };
+        
+        textElem.innerHTML = window.t(instMap[gameId] || 'inst.title');
+        
+        // Show the instruction overlay and hide it when PLAY is clicked
+        if (overlay) {
+            overlay.style.display = 'flex';
+            startBtn.onclick = () => {
+                overlay.style.display = 'none';
+                launchGameModule(gameId, slot);
+            };
+        } else {
+            // Fallback if overlay doesn't exist
+            launchGameModule(gameId, slot);
         }
+
     } catch(err) {
-        alert("CRITICAL ERROR in showGame: " + err.message);
+        alert(window.t('alert.crit_err') + err.message);
         window.hideGame();
     }
 };
+
+function launchGameModule(gameId, slot) {
+    if (gameId === 'space-invaders' && window.initSpaceInvaders) window.initSpaceInvaders(slot);
+    else if (gameId === 'mahjong' && window.initMahjong) window.initMahjong(slot);
+    else if (gameId === 'sudoku' && window.initSudoku) window.initSudoku(slot);
+    else if (gameId === 'tetris' && window.initTetris) window.initTetris(slot);
+    else if (gameId === 'axe-throw' && window.initAxeThrow) window.initAxeThrow(slot);
+    else if (gameId === 'mario' && window.initMario) window.initMario(slot);
+    else if (gameId === 'angry-birds' && window.initAngryBirds) window.initAngryBirds(slot);
+    else if (gameId === 'tower-defense' && window.initTowerDefense) window.initTowerDefense(slot);
+    else {
+        alert(window.tReplace ? window.tReplace('alert.module_err', {game: gameId}) : "Module Error");
+        window.hideGame();
+    }
+}
 
 window.hideGame = function() {
     if (document.fullscreenElement) {

@@ -11,16 +11,16 @@ window.initTowerDefense = function(container) {
                     ❤️ <span id="td-lives">10</span>
                 </div>
                 <div style="color:white; font-size:20px; font-weight:800;">
-                    VAGUE: <span id="td-wave">1</span>
+                    WAVE: <span id="td-wave">1</span>
                 </div>
             </div>
             
             <div id="td-msg" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:gold; font-size:40px; font-weight:800; text-shadow:2px 2px 0 #000; display:none; z-index:20; text-align:center;">
-                VICTOIRE !<br><span style="font-size:24px; color:white;">+1500 Points</span>
+                VICTORY!<br><span style="font-size:24px; color:white;">+1500 Points</span>
             </div>
 
             <div style="position:absolute; bottom:15px; left:20px; color:white; font-weight:bold; text-shadow:1px 1px 0 #000; z-index:10; background:rgba(0,0,0,0.5); padding:5px 15px; border-radius:5px;">
-                Clique sur l'herbe pour placer une tour (Coût: 50 💰)
+                Click on the grass to build a tower (Cost: 50 💰)
             </div>
 
             <!-- Canvas -->
@@ -204,11 +204,13 @@ window.initTowerDefense = function(container) {
                 if (targetEnemy) {
                     // Tirer
                     projectiles.push({
+                        startX: t.x,
+                        startY: t.y - 20,
                         x: t.x,
                         y: t.y - 20,
                         target: targetEnemy,
-                        speed: 10,
-                        damage: 25
+                        speed: 15,
+                        damage: 30
                     });
                     t.cooldown = 30; // 0.5 seconde à 60fps
                 }
@@ -309,14 +311,20 @@ window.initTowerDefense = function(container) {
             ctx.fillRect(e.x - 15, e.y - e.radius - 10, 30 * (e.hp / e.maxHp), 5);
         }
 
-        // Projectiles
+        // Projectiles (Lasers)
         for (let p of projectiles) {
-            ctx.fillStyle = '#FFD700';
             ctx.beginPath();
-            ctx.arc(p.x, p.y, 5, 0, Math.PI*2);
-            ctx.fill();
-            ctx.strokeStyle = 'white';
+            ctx.moveTo(p.startX, p.startY);
+            ctx.lineTo(p.x, p.y);
+            ctx.strokeStyle = '#00ffff';
+            ctx.lineWidth = 4;
             ctx.stroke();
+            
+            // Laser head
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 3, 0, Math.PI*2);
+            ctx.fill();
         }
 
         animId = requestAnimationFrame(render);

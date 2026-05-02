@@ -10,14 +10,14 @@ window.initAngryBirds = function(container) {
             </div>
             
             <div id="ab-msg" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:gold; font-size:40px; font-weight:800; text-shadow:2px 2px 0 #000; display:none; z-index:20;">
-                NIVEAU RÉUSSI !
+                LEVEL CLEARED!
             </div>
 
             <!-- Canvas -->
             <canvas id="ab-canvas" style="width:100%; height:100%; display:block; touch-action:none;"></canvas>
             
             <div style="position:absolute; bottom:15px; left:20px; color:white; font-weight:bold; text-shadow:1px 1px 0 #000;">
-                Glisse le pigeon en arrière et relâche pour tirer !
+                Drag the bird back and release to shoot!
             </div>
         </div>
     `;
@@ -79,22 +79,29 @@ window.initAngryBirds = function(container) {
         enemies = [];
         blocks = [];
 
-        // Créer une structure (château) simple
-        const startX = canvas.width - 300;
+        // Créer une structure (château) plus complexe
+        const startX = canvas.width - 350;
         const groundY = canvas.height - groundHeight;
 
-        // Blocs (Bois/Pierre)
+        // Base pillars
         blocks.push({ x: startX, y: groundY - 100, w: 40, h: 100, vx: 0, vy: 0 });
-        blocks.push({ x: startX + 120, y: groundY - 100, w: 40, h: 100, vx: 0, vy: 0 });
-        blocks.push({ x: startX - 20, y: groundY - 140, w: 200, h: 40, vx: 0, vy: 0 }); // Toit 1
+        blocks.push({ x: startX + 100, y: groundY - 100, w: 40, h: 100, vx: 0, vy: 0 });
+        blocks.push({ x: startX + 200, y: groundY - 100, w: 40, h: 100, vx: 0, vy: 0 });
         
-        blocks.push({ x: startX + 40, y: groundY - 240, w: 40, h: 100, vx: 0, vy: 0 });
-        blocks.push({ x: startX + 80, y: groundY - 240, w: 40, h: 100, vx: 0, vy: 0 });
-        blocks.push({ x: startX + 20, y: groundY - 280, w: 120, h: 40, vx: 0, vy: 0 }); // Toit 2
+        // Floor 1
+        blocks.push({ x: startX - 20, y: groundY - 140, w: 280, h: 40, vx: 0, vy: 0 }); 
+        
+        // Floor 2 pillars
+        blocks.push({ x: startX + 20, y: groundY - 240, w: 40, h: 100, vx: 0, vy: 0 });
+        blocks.push({ x: startX + 140, y: groundY - 240, w: 40, h: 100, vx: 0, vy: 0 });
+        
+        // Roof
+        blocks.push({ x: startX, y: groundY - 280, w: 200, h: 40, vx: 0, vy: 0 }); 
 
         // Ennemis (Cochons/Méchants) posés sur les blocs
         enemies.push({ x: startX + 50, y: groundY - 60, radius: 30, vx: 0, vy: 0, dead: false });
-        enemies.push({ x: startX + 50, y: groundY - 200, radius: 30, vx: 0, vy: 0, dead: false });
+        enemies.push({ x: startX + 150, y: groundY - 60, radius: 30, vx: 0, vy: 0, dead: false });
+        enemies.push({ x: startX + 80, y: groundY - 200, radius: 30, vx: 0, vy: 0, dead: false });
     }
 
     // ==========================================
@@ -259,7 +266,7 @@ window.initAngryBirds = function(container) {
         ctx.fillStyle = '#5C4033';
         ctx.fillRect(slingshot.x - 10, slingshot.y, 20, groundY - slingshot.y);
 
-        // Élastique (Arrière)
+        // Élastique (Arrière) et Trajectoire
         if (bird.isDragging) {
             ctx.beginPath();
             ctx.moveTo(slingshot.x - 10, slingshot.y);
@@ -267,6 +274,26 @@ window.initAngryBirds = function(container) {
             ctx.lineWidth = 5;
             ctx.strokeStyle = '#301934';
             ctx.stroke();
+            
+            // Trajectoire
+            ctx.beginPath();
+            let simX = bird.x;
+            let simY = bird.y;
+            let simVX = (slingshot.x - bird.x) * 0.15;
+            let simVY = (slingshot.y - bird.y) * 0.15;
+            ctx.moveTo(simX, simY);
+            for (let i = 0; i < 20; i++) {
+                simVY += gravity;
+                simX += simVX * 3; // Step 3 frames
+                simY += simVY * 3;
+                if (simY > groundY) break;
+                ctx.lineTo(simX, simY);
+            }
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 10]);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.stroke();
+            ctx.setLineDash([]);
         }
 
         // Blocs

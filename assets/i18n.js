@@ -10,6 +10,17 @@ window.I18N = {
         "dash.title": "ELIF'S",
         "dash.score": "SCORE",
         "dash.play": "✦ Your turn to play, Champion! ✦",
+        "dash.global_score": "🏆 Global Score : ",
+        "dash.load": "📂 Load",
+        "dash.msg": "💌 Message",
+        "gift1.title": "SURPRISE VIDEO",
+        "gift1.sub": "Your first gift!",
+        "gift2.title": "GIFT 2",
+        "gift2.sub": "For 12000 pts",
+        "door.magic": "MAGIC DOOR",
+        "door.magic3": "MAGIC DOOR (LVL 3)",
+        "door.open2": "OPEN LAYER 2",
+        "door.open3": "OPEN LAYER 3",
         "game.si": "ASKAM INVADERS",
         "game.si.sub": "Defend the galaxy",
         "game.mj": "MAHJONG",
@@ -20,11 +31,40 @@ window.I18N = {
         "game.tetris.sub": "Stacked classic",
         "game.axe": "KILLORNOT",
         "game.axe.sub": "Axe Throwing",
-        "dash.global_score": "🏆 Global Score : ",
         "game.back": "← Back to games",
         "game.quit": "Quit ✕",
         "game.replay": "PLAY AGAIN",
         "game.ready": "READY?",
+        "layer2.title": "✦ Layer 2: Advanced Games ✦",
+        "game.mario": "SUPER ELIF",
+        "game.mario.sub": "Kitsch Adventure",
+        "game.ab": "ANGRY STICKERS",
+        "game.ab.sub": "Slingshot",
+        "game.td": "TOWER DEFENSE",
+        "game.td.sub": "Protect the base",
+        "layer3.title": "✦ Layer 3: 3D Experiences ✦",
+        "game.cs": "COUNTER STICKERS",
+        "game.cs.sub": "Coming soon",
+        "bim.text": "You unlocked the Magic Door!",
+        "bim.subtext": "Reach 6000 points to open it...",
+        "alert.l3_locked": "Layer 3 door is locked! Come back when you reach 12000 points.",
+        "alert.l3_unlocked": "✨ INCREDIBLE! You unlocked LAYER 3 (3D Games) and a NEW GIFT! ✨",
+        "alert.door_locked": "⚠️ The Magic Door is locked... Reach 3000 points first!",
+        "alert.save_code": "Copy this code to resume your game later:",
+        "alert.load_code": "Enter your save code:",
+        "alert.invalid_code": "Invalid or expired code.",
+        "alert.module_err": "⚠️ Module loading error: {game}\nThe game code could not be loaded. (Clear your cache)",
+        "alert.crit_err": "CRITICAL ERROR: ",
+        "inst.title": "How to Play",
+        "inst.play_btn": "▶ PLAY NOW",
+        "inst.si": "Use Left/Right arrows to move. Press Space to shoot the invaders.",
+        "inst.mj": "Click on two matching tiles to remove them. Clear the board to win!",
+        "inst.sdk": "Fill the grid so every row, column, and 3x3 box contains numbers 1-9. Use your personal memories!",
+        "inst.tetris": "Use Arrow keys to move and rotate the falling blocks. Complete lines to clear them.",
+        "inst.axe": "Click or press Space when the target aligns with the center. Don't hit the person in the middle!",
+        "inst.mario": "Use Arrow keys to move and Jump. Collect Baklavas for power-ups and jump on enemies to defeat them.",
+        "inst.ab": "Click and drag the slingshot to aim. Release to shoot stickers at the enemies hiding in the blocks.",
+        "inst.td": "Click on empty slots to place towers. Defend your base from incoming waves of enemies.",
         "si.threat": "ASKAM INVADERS 👾",
         "si.controls": "Use Left/Right arrows to move. Space to shoot.",
         "si.engage": "ENGAGE",
@@ -64,6 +104,17 @@ window.I18N = {
         "dash.title": "ELİF'İN",
         "dash.score": "PUAN",
         "dash.play": "✦ Oynama sırası sende Şampiyon! ✦",
+        "dash.global_score": "🏆 Genel Puan : ",
+        "dash.load": "📂 Yükle",
+        "dash.msg": "💌 Mesaj",
+        "gift1.title": "SÜRPRİZ VİDEO",
+        "gift1.sub": "İlk hediyen!",
+        "gift2.title": "HEDİYE 2",
+        "gift2.sub": "12000 puan için",
+        "door.magic": "SİHİRLİ KAPI",
+        "door.magic3": "SİHİRLİ KAPI (SEVİYE 3)",
+        "door.open2": "2. SEVİYEYİ AÇ",
+        "door.open3": "3. SEVİYEYİ AÇ",
         "game.si": "ASKAM INVADERS",
         "game.si.sub": "Galaksiyi koru",
         "game.mj": "MAHJONG",
@@ -74,11 +125,40 @@ window.I18N = {
         "game.tetris.sub": "Klasik efsane",
         "game.axe": "KILLORNOT",
         "game.axe.sub": "Balta Fırlatma",
-        "dash.global_score": "🏆 Genel Puan : ",
         "game.back": "← Oyunlara dön",
         "game.quit": "Çıkış ✕",
         "game.replay": "TEKRAR OYNA",
         "game.ready": "HAZIR MISIN?",
+        "layer2.title": "✦ 2. Seviye: İleri Düzey Oyunlar ✦",
+        "game.mario": "SÜPER ELİF",
+        "game.mario.sub": "Kitsch Macerası",
+        "game.ab": "ANGRY STICKERS",
+        "game.ab.sub": "Sapan",
+        "game.td": "KULE SAVUNMASI",
+        "game.td.sub": "Üssü koru",
+        "layer3.title": "✦ 3. Seviye: 3D Deneyimler ✦",
+        "game.cs": "COUNTER STICKERS",
+        "game.cs.sub": "Yakında",
+        "bim.text": "Sihirli Kapı'yı açtın!",
+        "bim.subtext": "Açmak için 6000 puana ulaş...",
+        "alert.l3_locked": "3. Seviye kapısı kilitli! 12000 puana ulaştığında geri gel.",
+        "alert.l3_unlocked": "✨ İNANILMAZ! 3. SEVİYE'yi (3D Oyunlar) ve YENİ BİR HEDİYE'yi açtın! ✨",
+        "alert.door_locked": "⚠️ Sihirli Kapı kilitli... Önce 3000 puana ulaş!",
+        "alert.save_code": "Oyununa daha sonra devam etmek için bu kodu kopyala:",
+        "alert.load_code": "Kayıt kodunu gir:",
+        "alert.invalid_code": "Geçersiz veya süresi dolmuş kod.",
+        "alert.module_err": "⚠️ Modül yükleme hatası: {game}\nOyun kodu yüklenemedi. (Önbelleğinizi temizleyin)",
+        "alert.crit_err": "KRİTİK HATA: ",
+        "inst.title": "Nasıl Oynanır",
+        "inst.play_btn": "▶ ŞİMDİ OYNA",
+        "inst.si": "Hareket etmek için Sol/Sağ okları kullan. İstilacılara ateş etmek için Boşluk tuşuna bas.",
+        "inst.mj": "İki eşleşen taşa tıklayarak onları kaldır. Kazanmak için tahtayı temizle!",
+        "inst.sdk": "Her satır, sütun ve 3x3 kutu 1-9 sayılarını içerecek şekilde ızgarayı doldur.",
+        "inst.tetris": "Düşen blokları hareket ettirmek ve döndürmek için Yön tuşlarını kullan.",
+        "inst.axe": "Hedef ortaya geldiğinde tıkla veya Boşluk tuşuna bas. Ortadaki kişiye vurma!",
+        "inst.mario": "Hareket etmek ve zıplamak için Yön tuşlarını kullan. Güçlenmek için Baklavaları topla ve düşmanların üstüne zıpla.",
+        "inst.ab": "Nişan almak için sapanı tıkla ve sürükle. Blokların arkasına saklanan düşmanlara fırlatmak için bırak.",
+        "inst.td": "Kule yerleştirmek için boş yuvalara tıkla. Üssünü düşman dalgalarından koru.",
         "si.threat": "ASKAM INVADERS 👾",
         "si.controls": "Hareket için Sol/Sağ oklar. Ateş için Boşluk.",
         "si.engage": "BAŞLA",
@@ -118,19 +198,31 @@ window.t = function(key) {
     return key; // fallback
 };
 
+window.tReplace = function(key, replacements) {
+    let str = window.t(key);
+    for (let k in replacements) {
+        str = str.replace('{'+k+'}', replacements[k]);
+    }
+    return str;
+};
+
 window.setLanguage = function(lang) {
     window.currentLang = lang;
     localStorage.setItem('elifLanguage', lang);
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        el.innerHTML = window.t(key); // using innerHTML mostly for tetris.controls <br>
+        el.innerHTML = window.t(key);
     });
-    // Trigger any custom updates needed
     if (window.updateUIDynamicTexts) {
         window.updateUIDynamicTexts();
     }
 };
 
 window.addEventListener('DOMContentLoaded', () => {
-    window.setLanguage(window.currentLang);
+    // Default to English if not set
+    if (!localStorage.getItem('elifLanguage')) {
+        window.setLanguage('en');
+    } else {
+        window.setLanguage(window.currentLang);
+    }
 });

@@ -78,7 +78,7 @@
                     <button onclick="setLanguage('tr')" style="background:none; border:none; cursor:pointer; font-size:24px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.3)); transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">🇹🇷</button>
                 </div>
                 <div class="save-load-controls" style="display:flex; gap:10px;">
-                    <button onclick="reopenPersonalModal()" class="save-btn" title="Relire le message personnel" style="background: var(--gold); color: var(--dark-brown);">💌 Message</button>
+                    <button onclick="reopenPersonalModal()" class="save-btn" data-i18n="dash.msg" style="background: var(--gold); color: var(--dark-brown);">💌 Message</button>
                     <button onclick="generateSaveCode()" class="save-btn" data-i18n="dash.save">💾 Save</button>
                     <button onclick="loadSaveCode()" class="load-btn" data-i18n="dash.load">📂 Load</button>
                 </div>
@@ -147,34 +147,34 @@
 
                     <!-- LAYER 2 -->
                     <div id="layer-2-container" class="hidden">
-                        <h2 class="section-title" style="color: #ff5e62;">✦ Niveau 2 : Jeux Avancés ✦</h2>
+                        <h2 class="section-title" style="color: #ff5e62;" data-i18n="layer2.title">✦ Layer 2: Advanced Games ✦</h2>
                         <div class="games-container">
                             <button class="game-card-btn" onclick="showGame('mario')">
                                 <span class="btn-icon">🍄</span>
-                                <span class="btn-label">SUPER ELIF</span>
-                                <span class="btn-sub">Aventure Kitsch</span>
+                                <span class="btn-label" data-i18n="game.mario">SUPER ELIF</span>
+                                <span class="btn-sub" data-i18n="game.mario.sub">Kitsch Adventure</span>
                             </button>
                             <button class="game-card-btn" onclick="showGame('angry-birds')">
                                 <span class="btn-icon">🐦</span>
-                                <span class="btn-label">ANGRY STICKERS</span>
-                                <span class="btn-sub">Lance-pierre</span>
+                                <span class="btn-label" data-i18n="game.ab">ANGRY STICKERS</span>
+                                <span class="btn-sub" data-i18n="game.ab.sub">Slingshot</span>
                             </button>
                             <button class="game-card-btn" onclick="showGame('tower-defense')">
                                 <span class="btn-icon">🏰</span>
-                                <span class="btn-label">TOWER DEFENSE</span>
-                                <span class="btn-sub">Protège la base</span>
+                                <span class="btn-label" data-i18n="game.td">TOWER DEFENSE</span>
+                                <span class="btn-sub" data-i18n="game.td.sub">Protect the base</span>
                             </button>
                         </div>
                     </div>
 
                     <!-- LAYER 3 -->
                     <div id="layer-3-container" class="hidden">
-                        <h2 class="section-title" style="color: #00d2ff; text-shadow: 0 0 10px #00d2ff;">✦ Niveau 3 : Expériences 3D ✦</h2>
+                        <h2 class="section-title" style="color: #00d2ff; text-shadow: 0 0 10px #00d2ff;" data-i18n="layer3.title">✦ Layer 3: 3D Experiences ✦</h2>
                         <div class="games-container">
                             <button class="game-card-btn" onclick="showGame('cs-clone')">
                                 <span class="btn-icon">🔫</span>
-                                <span class="btn-label">COUNTER STICKERS</span>
-                                <span class="btn-sub">Bientôt dispo</span>
+                                <span class="btn-label" data-i18n="game.cs">COUNTER STICKERS</span>
+                                <span class="btn-sub" data-i18n="game.cs.sub">Coming soon</span>
                             </button>
                         </div>
                     </div>
@@ -184,8 +184,15 @@
                     </div>
                 </div>
 
-                <div id="active-game-area" style="display:none;">
+                <div id="active-game-area" style="display:none; position:relative;">
                     <button class="back-to-menu-btn" onclick="hideGame()" data-i18n="game.back">← Retour aux jeux</button>
+                    
+                    <div id="game-instructions-overlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; flex-direction:column; align-items:center; justify-content:center; padding:20px; text-align:center;">
+                        <h2 style="color:var(--gold); font-family:'Cinzel Decorative', cursive; margin-bottom:20px; font-size:32px;" data-i18n="inst.title">How to Play</h2>
+                        <p id="game-instructions-text" style="color:#fff; font-size:18px; max-width:600px; margin-bottom:30px; line-height:1.5;"></p>
+                        <button id="start-game-btn" class="save-btn" style="font-size:24px; padding:15px 40px; background:var(--gold); color:var(--dark-brown);" data-i18n="inst.play_btn">▶ PLAY NOW</button>
+                    </div>
+
                     <div id="game-slot"></div>
                 </div>
             </section>
