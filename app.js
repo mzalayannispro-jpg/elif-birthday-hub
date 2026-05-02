@@ -18,25 +18,31 @@ window.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('personal-modal');
     const mainContent = document.getElementById('main-content');
 
-    // Click anywhere on overlay → show modal
-    overlay.addEventListener('click', () => {
-        
-        overlay.classList.add('fade-out');
-        setTimeout(() => {
-            modal.classList.add('visible');
-        }, 600);
-    });
+    if (sessionStorage.getItem('visited') === 'true') {
+        if (overlay) overlay.style.display = 'none';
+        if (modal) modal.style.display = 'none';
+        if (mainContent) mainContent.classList.remove('hidden');
+    } else {
+        // Click anywhere on overlay → show modal
+        if (overlay) overlay.addEventListener('click', () => {
+            overlay.classList.add('fade-out');
+            setTimeout(() => {
+                if (modal) modal.classList.add('visible');
+            }, 600);
+        });
 
-    // Modal close button
-    document.getElementById('close-modal').addEventListener('click', () => {
-        revealDashboard(modal, mainContent);
-    });
+        // Modal close button
+        const closeBtn = document.getElementById('close-modal');
+        if (closeBtn) closeBtn.addEventListener('click', () => {
+            revealDashboard(modal, mainContent);
+        });
 
-    // Modal CTA button
-    const ctaBtn = document.getElementById('to-dashboard-btn');
-    if (ctaBtn) ctaBtn.addEventListener('click', () => {
-        revealDashboard(modal, mainContent);
-    });
+        // Modal CTA button
+        const ctaBtn = document.getElementById('to-dashboard-btn');
+        if (ctaBtn) ctaBtn.addEventListener('click', () => {
+            revealDashboard(modal, mainContent);
+        });
+    }
 
     updateScoreUI();
 });
@@ -124,6 +130,7 @@ function revealDashboard(modal, main) {
     setTimeout(() => {
         modal.style.display = 'none';
         main.classList.remove('hidden');
+        sessionStorage.setItem('visited', 'true');
     }, 500);
 }
 

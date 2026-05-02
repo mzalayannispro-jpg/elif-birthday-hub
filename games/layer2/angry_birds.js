@@ -65,6 +65,7 @@ window.initAngryBirds = function(container) {
 
     let enemies = [];
     let blocks = [];
+    let particles = [];
     
     function initLevel() {
         bird.x = slingshot.x;
@@ -164,14 +165,38 @@ window.initAngryBirds = function(container) {
             
             // Collision avec l'oiseau
             if (bird.isFlying && rectIntersect(bird, b)) {
-                b.vx = bird.vx * 0.5;
-                b.vy = bird.vy * 0.5;
+                let impact = Math.abs(bird.vx) + Math.abs(bird.vy);
+                b.vx = bird.vx * 0.4;
+                b.vy = bird.vy * 0.4;
                 bird.vx *= 0.5;
                 bird.vy *= 0.5;
+                
+                if (impact > 8) {
+                    // Particules de destruction
+                    for(let k=0; k<8; k++) {
+                        particles.push({
+                            x: b.x + b.w/2, 
+                            y: b.y + b.h/2, 
+                            vx: (Math.random()-0.5)*15, 
+                            vy: (Math.random()-0.5)*15, 
+                            life: 25,
+                            color: '#8B4513'
+                        });
+                    }
+                }
             }
             b.x += b.vx;
             // Amortissement horizontal
             if(b.y + b.h >= groundY) b.vx *= 0.8;
+        }
+
+        // Particules update
+        for(let i = particles.length - 1; i >= 0; i--) {
+            let p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.life--;
+            if(p.life <= 0) particles.splice(i, 1);
         }
 
         let allDead = true;
@@ -192,6 +217,14 @@ window.initAngryBirds = function(container) {
                 e.dead = true;
                 score += 500;
                 document.getElementById('ab-pts').textContent = score;
+                // Particules ennemi
+                for(let k=0; k<15; k++) {
+                    particles.push({
+                        x: e.x, y: e.y, 
+                        vx: (Math.random()-0.5)*20, vy: (Math.random()-0.5)*20, 
+                        life: 30, color: '#00FF00'
+                    });
+                }
             }
             // Si l'ennemi tombe violemment (plus de force) on le tue aussi, mais restons simple
         }
@@ -256,6 +289,14 @@ window.initAngryBirds = function(container) {
                 ctx.beginPath(); ctx.arc(e.x, e.y, e.radius, 0, Math.PI*2); ctx.fill();
             }
         }
+
+        // Particules
+        for (let p of particles) {
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.life / 30;
+            ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI*2); ctx.fill();
+        }
+        ctx.globalAlpha = 1;
 
         // Oiseau
         let bImg = ASSETS.bird;

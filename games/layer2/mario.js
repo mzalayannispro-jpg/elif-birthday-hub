@@ -106,6 +106,29 @@ window.initMario = function(container) {
     let enemies = [];
     let projectiles = [];
     let powerups = [];
+    let platforms = [
+        {x: 300, y: canvas.height - 250, w: 150, h: 20},
+        {x: 600, y: canvas.height - 350, w: 150, h: 20},
+        {x: 1000, y: canvas.height - 300, w: 150, h: 20},
+        {x: 1400, y: canvas.height - 450, w: 200, h: 20},
+        {x: 1800, y: canvas.height - 350, w: 150, h: 20},
+        {x: 2300, y: canvas.height - 250, w: 150, h: 20},
+        {x: 2800, y: canvas.height - 400, w: 200, h: 20},
+        {x: 3300, y: canvas.height - 300, w: 150, h: 20},
+        {x: 3800, y: canvas.height - 450, w: 150, h: 20},
+        {x: 4300, y: canvas.height - 350, w: 150, h: 20},
+        {x: 4800, y: canvas.height - 250, w: 150, h: 20},
+        {x: 5300, y: canvas.height - 400, w: 200, h: 20}
+    ];
+    let coins = [];
+    for(let i=0; i<50; i++) {
+        coins.push({
+            x: 400 + Math.random() * 5000,
+            y: canvas.height - 150 - Math.random() * 300,
+            radius: 15,
+            collected: false
+        });
+    }
 
     // Terrain basique (sol infini)
     const groundHeight = 100;
@@ -196,12 +219,42 @@ window.initMario = function(container) {
             cameraX = player.x - canvas.width / 3;
         }
 
+        // Plateformes Collision
+        let onPlatform = false;
+        for(let p of platforms) {
+            if (player.vy >= 0 && 
+                player.x + player.width > p.x && 
+                player.x < p.x + p.w && 
+                player.y + player.height >= p.y &&
+                player.y + player.height - player.vy <= p.y + 15) {
+                
+                player.y = p.y - player.height;
+                player.vy = 0;
+                player.grounded = true;
+                onPlatform = true;
+            }
+        }
+
         // Sol
         const groundY = canvas.height - groundHeight;
-        if (player.y + player.height > groundY) {
+        if (!onPlatform && player.y + player.height > groundY) {
             player.y = groundY - player.height;
             player.vy = 0;
             player.grounded = true;
+        }
+
+        // Pièces (Coins)
+        for(let c of coins) {
+            if(!c.collected) {
+                let dx = (player.x + player.width/2) - c.x;
+                let dy = (player.y + player.height/2) - c.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                if(dist < c.radius + player.width/2) {
+                    c.collected = true;
+                    score += 10;
+                    document.getElementById('mario-pts').textContent = score;
+                }
+            }
         }
 
         if (player.invulnerableTimer > 0) player.invulnerableTimer--;
@@ -399,6 +452,34 @@ window.initMario = function(container) {
         ctx.fillRect(cameraX, groundY, canvas.width, groundHeight);
         ctx.fillStyle = '#228B22';
         ctx.fillRect(cameraX, groundY, canvas.width, 20);
+
+        // Plateformes
+        ctx.fillStyle = '#8B4513';
+        ctx.strokeStyle = '#D2691E';
+        ctx.lineWidth = 3;
+        for(let p of platforms) {
+            if (p.x + p.w > cameraX && p.x < cameraX + canvas.width) {
+                ctx.fillRect(p.x, p.y, p.w, p.h);
+                ctx.strokeRect(p.x, p.y, p.w, p.h);
+            }
+        }
+
+        // Pièces
+        ctx.fillStyle = 'gold';
+        ctx.strokeStyle = '#DAA520';
+        ctx.lineWidth = 2;
+        for(let c of coins) {
+            if(!c.collected && c.x + c.radius > cameraX && c.x - c.radius < cameraX + canvas.width) {
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, c.radius, 0, Math.PI*2);
+                ctx.fill();
+                ctx.stroke();
+                // Inner ring
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, c.radius - 5, 0, Math.PI*2);
+                ctx.stroke();
+            }
+        }
 
         // Dessiner le joueur (clignote si invulnérable)
         if (player.invulnerableTimer % 10 < 5) {
