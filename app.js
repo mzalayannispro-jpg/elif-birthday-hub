@@ -164,6 +164,16 @@ function updateScoreUI() {
     if (inlineEl) inlineEl.textContent = globalScore;
 
     const magicDoor = document.getElementById('magic-door-container');
+    const layer2 = document.getElementById('layer-2-container');
+    const layer3 = document.getElementById('layer-3-container');
+    const giftsContainer = document.getElementById('gifts-container');
+    
+    // Reset visibility if score drops or on load
+    if (layer2) layer2.classList.add('hidden');
+    if (layer3) layer3.classList.add('hidden');
+    if (giftsContainer) giftsContainer.classList.add('hidden');
+    if (magicDoor) magicDoor.classList.add('hidden');
+
     if (magicDoor) {
         const doorText = magicDoor.querySelector('.door-text');
         

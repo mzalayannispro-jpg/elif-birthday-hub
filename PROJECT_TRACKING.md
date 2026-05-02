@@ -1,53 +1,62 @@
-# 🌙 Elif Birthday Hub - Development & Task Log
+# 🌙 Elif Birthday Hub - Development & Project Tracking
 
-Ce document trace l'historique complet des développements, les walkthroughs techniques ainsi que la liste détaillée des tâches passées et futures pour le projet **Elif Birthday Hub**. Ce fichier sera mis à jour à chaque intervention.
-
-## 📋 Task List
-
-### ✅ Tâches Complétées
-- **Core Hub & UI :**
-  - Mise en place du thème Kitsch Turc 70s (fonds, tapis, couleurs).
-  - Overlay d'entrée avec texte clignotant.
-  - Modale de message personnel d'anniversaire.
-  - Intégration du lecteur Spotify persistant.
-- **Système de Progression (Layers) :**
-  - **Layer 1** (Classiques) : Space Invaders, Mahjong Solitaire, Sudoku, Tetris, Uzinagaz (Hache).
-  - **Layer 2** (2D Avancés - 6000 pts) : Super Elif (Mario), Angry Stickers, Tower Defense.
-  - **Layer 3** (3D - 12000 pts) : Counter Stickers.
-  - Logique de scoring persistant (`localStorage`) avec codes de sauvegarde/chargement multi-supports.
-- **Améliorations UX & Navigation :**
-  - **Gestion de Session :** Implémentation du `sessionStorage` pour éviter que l'overlay et la modale personnelle ne s'ouvrent en boucle lors des allers-retours sur le Hub.
-  - **Continuité Musicale (Spotify) :** La surprise "Easter Egg" (Cadeau 1) s'ouvre désormais dans un nouvel onglet (`_blank`) pour ne pas couper la musique du Hub.
-  - **Retour UX :** Le bouton de retour sur la page surprise utilise `window.close()` pour fermer l'onglet proprement et ramener l'utilisateur sur le Hub principal dans son état initial.
-  - **Bouton Message :** Ajout d'un bouton discret "💌 Message" dans le header pour permettre de relire le mot personnel d'anniversaire à tout moment sans relancer de session.
-
-### ⏳ Tâches Futures / En cours
-- `[ ]` Compléter l'implémentation de **Super Elif** (Layer 2) avec des assets personnalisés ("Baklava" power-ups, stickers spécifiques pour les états).
-- `[ ]` Affiner les physiques de sauts et les collisions dans les jeux Layer 2.
-- `[ ]` Intégrer les surprises et cadeaux supplémentaires pour les seuils de score supérieurs (ex: Cadeau 2 pour 12000 pts).
-- `[ ]` Finaliser l'expérience 3D "Counter Stickers" pour le Layer 3.
+Bienvenue dans le document de suivi ultra-détaillé du projet **Elif Birthday Hub**. Ce fichier retrace l'historique exhaustif des décisions architecturales, des implémentations techniques, des bugs corrigés, et des tâches accomplies depuis le tout début du projet, ainsi que les tâches futures. Ce document est le point central de référence pour l'évolution du code.
 
 ---
 
-## 📖 Walkthrough Détaillé (Dernières Mises à Jour)
+## 📋 TASK LIST : Historique Complet
 
-### Mise à jour : Navigation UX, Modales et Musique (02 Mai 2026)
-**Problématique :** 
-Lors de la navigation vers la page "Surprise" (Easter Egg), la musique Spotify se coupait. De plus, lors du retour sur le Hub, l'état de la page était réinitialisé, les modales d'accueil réapparaissaient, et l'interface semblait "cassée". L'utilisateur n'avait par ailleurs plus aucun moyen de relire le message personnel d'anniversaire après l'avoir fermé.
+### Phase 1 : Fondation & Esthétique 🎨
+- `[x]` **Thème Kitsch Turc 70s :** Création du design system dans `style.css` (Tapis persans, Couleurs Or, Rouge Sang, Teal Turc).
+- `[x]` **Structure Core :** Mise en place de `index.html` et `app.js` pour gérer le rendu dynamique.
+- `[x]` **Asset Manager :** Implémentation d'un script Node.js récursif pour scanner les dossiers d'images et générer `assets_list.js`, permettant aux jeux de charger dynamiquement les stickers personnels au lieu d'images génériques.
+- `[x]` **Internationalisation (i18n) :** Mise en place d'un système de langues dynamique (Anglais 🇬🇧 / Turc 🇹🇷) pour toute l'interface.
 
-**Implémentation Technique :**
-1. **Gestion des Modales par Session :**
-   - **Fichier :** `app.js`
-   - **Action :** Utilisation de `sessionStorage.getItem('visited')` dans l'événement `DOMContentLoaded`. Si l'utilisateur a déjà vu l'overlay lors de la session actuelle, il est masqué par défaut, empêchant la réapparition intempestive lors des actualisations de la page ou des retours.
-2. **Continuité de la Musique Spotify :**
-   - **Fichier :** `app.js`
-   - **Action :** Remplacement de `window.location.href` par `window.open(..., "_blank")` pour l'ouverture du lien du cadeau surprise. Cela maintient l'onglet du Hub (et son iframe Spotify) actif en arrière-plan, sans couper l'audio.
-3. **Retour Propre au Hub :**
-   - **Fichier :** `assets/easter egg/cnab-surprise.html`
-   - **Action :** Modification de l'attribut `onclick` du bouton "RETOUR AUX JEUX" pour exécuter `window.close()`. L'utilisateur ferme ainsi l'onglet surprise et retourne de manière fluide sur l'onglet principal du Hub, dans l'état exact où il l'a laissé.
-4. **Bouton de Réouverture du Message :**
-   - **Fichiers :** `index.html` & `app.js`
-   - **Action :** Ajout d'un bouton "💌 Message" dans l'en-tête (classe `.save-load-controls`). Ce bouton appelle la nouvelle fonction globale `window.reopenPersonalModal()`, qui restaure le style `display: block` et réinitialise les classes d'animation (`fade-out`, `visible`) de l'élément `#personal-modal`.
+### Phase 2 : Layer 1 - Les Jeux Classiques 🕹️
+- `[x]` **Space Invaders :** Adaptation du classique où les ennemis sont remplacés par des images du dossier `space-invaders`.
+- `[x]` **Mahjong Solitaire :** Implémentation du système d'association de tuiles utilisant les images du dossier `mahjong`.
+- `[x]` **Sudoku (Punchlines) :** Modification du Sudoku classique pour remplacer les numéros par des clins d'œil et des punchlines personnelles ("inside jokes") afin d'éliminer le texte par défaut (français).
+- `[x]` **Tetris :** Empilement de tuiles personnalisées avec logique de destruction de lignes.
+- `[x]` **Uzinagaz (Lancer de hache) :** Jeu de timing basé sur le lancer d'objets pour atteindre des cibles mouvantes.
 
-**Statut du Déploiement :**
-Ces correctifs ont été poussés avec succès sur la branche `main` et sont synchronisés avec la production Cloudflare Pages.
+### Phase 3 : Système de Progression & Sauvegarde 💾
+- `[x]` **Score Global (`localStorage`) :** Chaque victoire dans un jeu du Layer 1 ajoute 100 points au score global persistant.
+- `[x]` **Sauvegarde Multi-Supports (Tablette) :** Création d'un algorithme de chiffrement simple (`ELIF-{score * 7}-XYZ`) permettant de générer un code sur PC et de le rentrer sur tablette via un bouton "Load" pour récupérer la progression.
+- `[x]` **La Porte Magique (The Magic Door) :** Bouton conditionnel qui apparaît à 3000 points et devient cliquable à 6000 points.
+
+### Phase 4 : Layer 2 - Jeux 2D Avancés & Cadeaux 🎁
+- `[x]` **Super Elif (Platformer) :** Clone de Mario intégrant des "Baklavas" comme power-ups, et changeant dynamiquement le sprite du joueur selon son état (petit, grand, invincible).
+- `[x]` **Angry Stickers :** Mécanique de lance-pierre à l'aide de la souris.
+- `[x]` **Tower Defense :** Protection de base avec placement d'unités.
+- `[x]` **Cadeau 1 (Easter Egg) :** Page vidéo surprise `cnab-surprise.html` débloquée après l'ouverture de la porte à 6000 points.
+
+### Phase 5 : Layer 3 - Expériences 3D 🧊 (En cours)
+- `[x]` **Structure d'Unlock :** Porte magique de niveau 3 cliquable à 12000 points.
+- `[/]` **Counter Stickers :** Base du moteur 3D web préparée. *(En construction)*
+- `[/]` **Cadeau 2 :** Bouton préparé dans l'UI pour la récompense finale des 12000 points.
+
+---
+
+## 🛠️ WALKTHROUGH TECHNIQUE : Problèmes, Correctifs et Décisions
+
+### 1. Problème de Navigation & Coupure de Musique (02/05/2026)
+* **Contexte :** Le Hub intègre une playlist Spotify persistante en arrière-plan. Lorsque le joueur cliquait sur "Cadeau 1" (la vidéo surprise), la navigation s'effectuait dans le même onglet.
+* **Problème :** Cela rechargeait la page et **coupait la musique Spotify**. De plus, revenir en arrière avec le navigateur réinitialisait visuellement l'état du Hub.
+* **Correctif :** 
+  - Dans `app.js`, le bouton cadeau utilise désormais `window.open(..., "_blank")` pour ouvrir la surprise dans un nouvel onglet, préservant ainsi l'onglet principal et l'audio.
+  - Dans `cnab-surprise.html`, le bouton de retour appelle `window.close()` pour refermer proprement l'onglet surprise et replacer directement l'utilisateur sur le Hub en pleine action.
+
+### 2. Spam des Modales d'Accueil & Bouton "Message" (02/05/2026)
+* **Contexte :** À l'ouverture du Hub, un "overlay Kitsch" clignotant s'affiche, suivi d'une modale contenant un long message d'anniversaire personnel.
+* **Problème :** Lors des rechargements de page, ces modales s'ouvraient en boucle, ruinant l'expérience.
+* **Correctif :**
+  - Ajout du `sessionStorage.getItem('visited')`. Si la session est déjà ouverte, l'overlay et la modale reçoivent un `display: none` d'office. L'utilisateur arrive directement sur le dashboard.
+  - **Effet Secondaire corrigé :** Comme la modale ne s'ouvrait plus, il était impossible de relire le mot d'amour. Une fonction globale `window.reopenPersonalModal()` a été ajoutée et liée à un nouveau bouton **"💌 Message"** situé dans le header du dashboard, permettant de ré-invoquer la modale à volonté sans recharger.
+
+### 3. Le "Bug du Layer 3" - Apparition fantôme (02/05/2026)
+* **Contexte :** Si un joueur entrait un code de 12000 points (`ELIF-84000-XYZ`), il débloquait le Layer 3, et l'information `layer3Unlocked = 'true'` était stockée en local. S'il entrait ensuite un code pour redescendre à 6000 points (`ELIF-42000-XYZ`) pour tester le Layer 2, il voyait **toujours** le Layer 3 affiché.
+* **Problème :** La fonction `updateScoreUI()` se chargeait uniquement d'**enlever** la classe `.hidden` lorsque le score montait, mais elle ne ré-appliquait jamais `.hidden` si le score redescendait (ou au rechargement initial avant les calculs). Cela créait des états UI incohérents.
+* **Correctif (Comment & Pourquoi) :**
+  - Modification de `updateScoreUI()` dans `app.js` pour qu'elle soit *idempotente*.
+  - Au tout début de la fonction, les éléments `layer-2-container`, `layer-3-container`, `gifts-container` et `magic-door-container` reçoivent **obligatoirement** la classe `.hidden`.
+  - Ensuite, le code évalue le score actuel et ne révèle (`classList.remove('hidden')`) que les sections légitimes. Ainsi, à 6000 points stricts, le Layer 3 reste fermement caché.

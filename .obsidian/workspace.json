@@ -11,10 +11,24 @@
             "id": "650e61c9029fb3b8",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Vue graphique"
+              "type": "markdown",
+              "state": {
+                "file": "PROJECT_TRACKING.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "PROJECT_TRACKING"
             }
           }
         ]
@@ -179,15 +193,26 @@
       "bases:Créer une nouvelle base": false
     }
   },
-  "active": "5af6f593cb8f2fac",
+  "active": "650e61c9029fb3b8",
   "lastOpenFiles": [
+    "Sans titre.base",
+    "assets/1f6c5518-609c-4db4-ae89-77325c921daf.webp",
+    "Sans titre.canvas",
+    "PROJECT_TRACKING.md",
+    "33229791-3744-444f-af52-c15fa8303963.jpg",
+    "assets/wooden_dummy.png",
+    "assets/uzinagaz_body.png",
+    "assets/STK-20260419-WA0025.webp",
+    "assets/STK-20260419-WA0017.webp",
+    "assets/STK-20260419-WA0014.webp",
+    "assets/STK-20260419-WA0016.webp",
+    "assets/STK-20260419-WA0022.webp",
     "games/tetris.js",
     "games/sudoku.js",
     "games/space_invaders.js",
     "games/mahjong.js",
     "games/axe_throw.js",
     "README.md",
-    "assets/STK-20240627-WA0020 - dddCopie - Copie.png",
-    "assets/STK-20240627-WA0020 - Copie - Copie.webp"
+    "assets/STK-20240627-WA0020 - dddCopie - Copie.png"
   ]
 }
