@@ -372,29 +372,39 @@ window.unlockLayer2 = function() {
 
 // ============ GAME ROUTING ============
 window.showGame = function(gameId) {
-    document.getElementById('game-menu').style.display = 'none';
-    const dashCollage = document.getElementById('dashboard-collage');
-    if (dashCollage) dashCollage.style.display = 'none';
-    document.getElementById('active-game-area').style.display = 'flex';
-    
-    const elem = document.documentElement;
-    if (elem.requestFullscreen) {
-        elem.requestFullscreen().catch(err => {
-            console.log(`Error attempting to enable fullscreen: ${err.message}`);
-        });
+    try {
+        console.log("showGame called with:", gameId);
+        document.getElementById('game-menu').style.display = 'none';
+        const dashCollage = document.getElementById('dashboard-collage');
+        if (dashCollage) dashCollage.style.display = 'none';
+        document.getElementById('active-game-area').style.display = 'flex';
+        
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(err => {
+                console.log(`Error attempting to enable fullscreen: ${err.message}`);
+            });
+        }
+
+        const slot = document.getElementById('game-slot');
+        slot.innerHTML = '';
+
+        if (gameId === 'space-invaders' && window.initSpaceInvaders) window.initSpaceInvaders(slot);
+        else if (gameId === 'mahjong' && window.initMahjong) window.initMahjong(slot);
+        else if (gameId === 'sudoku' && window.initSudoku) window.initSudoku(slot);
+        else if (gameId === 'tetris' && window.initTetris) window.initTetris(slot);
+        else if (gameId === 'axe-throw' && window.initAxeThrow) window.initAxeThrow(slot);
+        else if (gameId === 'mario' && window.initMario) window.initMario(slot);
+        else if (gameId === 'angry-birds' && window.initAngryBirds) window.initAngryBirds(slot);
+        else if (gameId === 'tower-defense' && window.initTowerDefense) window.initTowerDefense(slot);
+        else {
+            alert("⚠️ Erreur de chargement du module : " + gameId + "\nLe code du jeu n'a pas pu être chargé. (Videz votre cache Safari/Chrome)");
+            window.hideGame();
+        }
+    } catch(err) {
+        alert("CRITICAL ERROR in showGame: " + err.message);
+        window.hideGame();
     }
-
-    const slot = document.getElementById('game-slot');
-    slot.innerHTML = '';
-
-    if (gameId === 'space-invaders' && window.initSpaceInvaders) window.initSpaceInvaders(slot);
-    else if (gameId === 'mahjong' && window.initMahjong) window.initMahjong(slot);
-    else if (gameId === 'sudoku' && window.initSudoku) window.initSudoku(slot);
-    else if (gameId === 'tetris' && window.initTetris) window.initTetris(slot);
-    else if (gameId === 'axe-throw' && window.initAxeThrow) window.initAxeThrow(slot);
-    else if (gameId === 'mario' && window.initMario) window.initMario(slot);
-    else if (gameId === 'angry-birds' && window.initAngryBirds) window.initAngryBirds(slot);
-    else if (gameId === 'tower-defense' && window.initTowerDefense) window.initTowerDefense(slot);
 };
 
 window.hideGame = function() {
