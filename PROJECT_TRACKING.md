@@ -1,12 +1,12 @@
 # 🌙 Elif Birthday Hub - Development & Project Tracking
 
-Bienvenue dans le document de suivi ultra-détaillé du projet **Elif Birthday Hub**. Ce fichier retrace l'historique exhaustif des décisions architecturales, des implémentations techniques, des bugs corrigés, et des tâches accomplies depuis le tout début du projet, ainsi que les tâches futures. Ce document est le point central de référence pour l'évolution du code.
+Bienvenue dans le document de suivi ultra-détaillé du projet **Elif Birthday Hub**. Ce fichier retrace l'historique exhaustif des décisions architecturales, des implémentations techniques, des bugs corrigés, et des tâches accomplies depuis le tout début du projet (initié vers le **19 Avril 2026**), ainsi que les tâches futures. Ce document est le point central de référence pour l'évolution du code.
 
 ---
 
 ## 📋 TASK LIST : Historique Complet
 
-### Phase 1 : Fondation & Esthétique 🎨
+### Phase 1 : Fondation & Esthétique 🎨 (Depuis le 19 Avril)
 - `[x]` **Thème Kitsch Turc 70s :** Création du design system dans `style.css` (Tapis persans, Couleurs Or, Rouge Sang, Teal Turc).
 - `[x]` **Structure Core :** Mise en place de `index.html` et `app.js` pour gérer le rendu dynamique.
 - `[x]` **Asset Manager :** Implémentation d'un script Node.js récursif pour scanner les dossiers d'images et générer `assets_list.js`, permettant aux jeux de charger dynamiquement les stickers personnels au lieu d'images génériques.
@@ -38,6 +38,9 @@ Bienvenue dans le document de suivi ultra-détaillé du projet **Elif Birthday H
 ---
 
 ## 🛠️ WALKTHROUGH TECHNIQUE : Problèmes, Correctifs et Décisions
+
+### Note Historique
+Le projet a été initié et conceptualisé aux alentours du **19 Avril 2026**. Les premières semaines ont été dédiées à la mise en place de l'infrastructure, du système de rendu, de l'internationalisation et du Layer 1. Ce walkthrough consigne principalement les correctifs à partir de Mai, lors du polissage final et de l'intégration du Layer 2.
 
 ### 1. Problème de Navigation & Coupure de Musique (02/05/2026)
 * **Contexte :** Le Hub intègre une playlist Spotify persistante en arrière-plan. Lorsque le joueur cliquait sur "Cadeau 1" (la vidéo surprise), la navigation s'effectuait dans le même onglet.
