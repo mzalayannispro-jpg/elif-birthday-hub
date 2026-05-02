@@ -274,9 +274,9 @@ window.initMario = function(container) {
         if (!levelFinished && player.x > LEVEL_END_X - canvas.width) {
             if (rectIntersect(player, princess)) {
                 levelFinished = true;
-                score += 250;
+                score += 100;
                 document.getElementById('mario-pts').textContent = score;
-                if(window.addGlobalScore) window.addGlobalScore(250);
+                if(window.addGlobalScore) window.addGlobalScore(100);
                 triggerWinAnimation();
                 return; // Stop update loop
             }
@@ -332,7 +332,6 @@ window.initMario = function(container) {
                         updateUI();
                     } else {
                         // GAME OVER
-                        addGlobalScore(score); // Ajoute au vrai score
                         showGlobalGameOver(() => {
                             // Restart callback
                             score = 0;
@@ -425,7 +424,6 @@ window.initMario = function(container) {
                         player.invulnerableTimer = 60;
                         updateUI();
                     } else {
-                        addGlobalScore(score);
                         showGlobalGameOver(() => {
                             score = 0; cameraX = 0; player.x = 100; player.y = 0; player.state = 'petit'; enemies = []; projectiles = [];
                         });
@@ -623,7 +621,7 @@ window.initMario = function(container) {
             ctx.fillText("LEVEL CLEARED !", canvas.width/2, canvas.height/2);
             ctx.fillStyle = 'white';
             ctx.font = '20px Outfit';
-            ctx.fillText("+250 Points !", canvas.width/2, canvas.height/2 + 40);
+            ctx.fillText("+100 Points !", canvas.width/2, canvas.height/2 + 40);
 
             if (winFrame < 180) {
                 animId = requestAnimationFrame(winLoop);
@@ -633,7 +631,7 @@ window.initMario = function(container) {
                     loadLevel(currentLevel);
                     animId = requestAnimationFrame(update); // Resume game loop
                 } else {
-                    if(window.addGlobalScore) window.addGlobalScore(1000); // Bonus fin
+                    if(window.addGlobalScore) window.addGlobalScore(250); // Bonus fin
                     alert(window.t ? window.t("inst.mario_win", "Congratulations! You finished the Super Elif World Tour!") : "Congratulations!");
                     if (window.hideGame) window.hideGame();
                 }

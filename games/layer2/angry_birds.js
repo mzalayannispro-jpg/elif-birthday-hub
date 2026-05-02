@@ -238,7 +238,7 @@ window.initAngryBirds = function(container) {
 
         if (allDead && enemies.length > 0) {
             document.getElementById('ab-msg').style.display = 'block';
-            if(window.addGlobalScore) window.addGlobalScore(score);
+            if(window.addGlobalScore) window.addGlobalScore(100);
             setTimeout(() => {
                 if (window.hideGame) window.hideGame();
             }, 3000);

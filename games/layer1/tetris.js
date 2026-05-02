@@ -378,10 +378,10 @@ window.initTetris = function(container) {
         }
         
         if (linesCleared > 0) {
-            score += linesCleared * 100;
-            scoreEl.innerText = score;
-            if (typeof addGlobalScore === 'function') addGlobalScore(linesCleared * 100);
-        }
+            lines += linesCleared;
+            score += linesCleared * 10;
+            if (typeof addGlobalScore === 'function') addGlobalScore(linesCleared * 10);
+            document.getElementById('tetris-score').textContent = score;  }
         drawBoard();
     }
 

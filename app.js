@@ -1,6 +1,6 @@
 // app.js — Elif Birthday Hub
 const SCORE_THRESHOLD = 4000;
-const POINTS_PER_WIN = 100;
+const POINTS_PER_WIN = 50;
 
 window.SUDOKU_IMAGES = window.GAME_ASSETS && window.GAME_ASSETS['sudoku'] && window.GAME_ASSETS['sudoku'].length > 0 ? window.GAME_ASSETS['sudoku'] : [];
 window.NIVEAU_IMAGES = window.GAME_ASSETS && window.GAME_ASSETS['mahjong'] && window.GAME_ASSETS['mahjong'].length > 0 ? window.GAME_ASSETS['mahjong'] : ['assets/player.webp'];

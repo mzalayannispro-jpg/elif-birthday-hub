@@ -114,7 +114,7 @@ window.initTowerDefense = function(container) {
                 // VICTOIRE
                 isVictory = true;
                 scoreEarned = 1500;
-                if(window.addGlobalScore) window.addGlobalScore(scoreEarned);
+                if(window.addGlobalScore) window.addGlobalScore(100);
                 document.getElementById('td-msg').style.display = 'block';
                 setTimeout(() => {
                     if (window.hideGame) window.hideGame();

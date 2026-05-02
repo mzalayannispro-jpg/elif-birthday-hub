@@ -255,7 +255,7 @@ window.initAxeThrow = function(container) {
                     } else {
                          score += 10;
                          scoreEl.innerText = score;
-                         if (typeof addGlobalScore === 'function') addGlobalScore(10);
+                         if (typeof addGlobalScore === 'function') addGlobalScore(2);
                          createParticles(tipX, tipY, 'wood');
                          
                          lodgedAxes.push({ dx: unrotX, dy: unrotY, rotation: axe.rotation - target.angle });
