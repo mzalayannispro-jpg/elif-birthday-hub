@@ -104,34 +104,80 @@
                         <div class="door-sparkles">✨</div>
                     </div>
 
-                    <h2 class="section-title" data-i18n="dash.play">✦ À Toi de Jouer, Championne ! ✦</h2>
-                    <div class="games-container">
-                        <button class="game-card-btn" onclick="showGame('space-invaders')">
-                            <span class="btn-icon">👾</span>
-                            <span class="btn-label" data-i18n="game.si">SPACE INVADERS</span>
-                            <span class="btn-sub" data-i18n="game.si.sub">Défends la galaxie</span>
-                        </button>
-                        <button class="game-card-btn" onclick="showGame('mahjong')">
-                            <span class="btn-icon">🀄</span>
-                            <span class="btn-label" data-i18n="game.mj">MAHJONG</span>
-                            <span class="btn-sub" data-i18n="game.mj.sub">Trouve les paires</span>
-                        </button>
-                        <button class="game-card-btn" onclick="showGame('sudoku')">
-                            <span class="btn-icon">🔢</span>
-                            <span class="btn-label" data-i18n="game.sdk">SUDOKU</span>
-                            <span class="btn-sub" data-i18n="game.sdk.sub">Remplis la grille</span>
-                        </button>
-                        <button class="game-card-btn" onclick="showGame('tetris')">
-                            <span class="btn-icon">🧱</span>
-                            <span class="btn-label" data-i18n="game.tetris">TETRIS</span>
-                            <span class="btn-sub" data-i18n="game.tetris.sub">Classique empilé</span>
-                        </button>
-                        <button class="game-card-btn" onclick="showGame('axe-throw')">
-                            <span class="btn-icon">🪓</span>
-                            <span class="btn-label" data-i18n="game.axe">UZINAGAZ</span>
-                            <span class="btn-sub" data-i18n="game.axe.sub">Lancer de Hache</span>
-                        </button>
+                    <!-- INVENTAIRE CADEAUX -->
+                    <div id="gifts-container" class="gifts-container hidden">
+                        <h2 class="section-title" style="color: var(--gold); text-shadow: 0 0 10px var(--gold);">🎁 Mes Cadeaux 🎁</h2>
+                        <div class="games-container" id="gifts-list">
+                            <!-- Les cadeaux débloqués s'afficheront ici -->
+                        </div>
                     </div>
+
+                    <!-- LAYER 1 -->
+                    <div id="layer-1-container">
+                        <h2 class="section-title" data-i18n="dash.play">✦ À Toi de Jouer, Championne ! ✦</h2>
+                        <div class="games-container">
+                            <button class="game-card-btn" onclick="showGame('space-invaders')">
+                                <span class="btn-icon">👾</span>
+                                <span class="btn-label" data-i18n="game.si">SPACE INVADERS</span>
+                                <span class="btn-sub" data-i18n="game.si.sub">Défends la galaxie</span>
+                            </button>
+                            <button class="game-card-btn" onclick="showGame('mahjong')">
+                                <span class="btn-icon">🀄</span>
+                                <span class="btn-label" data-i18n="game.mj">MAHJONG</span>
+                                <span class="btn-sub" data-i18n="game.mj.sub">Trouve les paires</span>
+                            </button>
+                            <button class="game-card-btn" onclick="showGame('sudoku')">
+                                <span class="btn-icon">🔢</span>
+                                <span class="btn-label" data-i18n="game.sdk">SUDOKU</span>
+                                <span class="btn-sub" data-i18n="game.sdk.sub">Remplis la grille</span>
+                            </button>
+                            <button class="game-card-btn" onclick="showGame('tetris')">
+                                <span class="btn-icon">🧱</span>
+                                <span class="btn-label" data-i18n="game.tetris">TETRIS</span>
+                                <span class="btn-sub" data-i18n="game.tetris.sub">Classique empilé</span>
+                            </button>
+                            <button class="game-card-btn" onclick="showGame('axe-throw')">
+                                <span class="btn-icon">🪓</span>
+                                <span class="btn-label" data-i18n="game.axe">UZINAGAZ</span>
+                                <span class="btn-sub" data-i18n="game.axe.sub">Lancer de Hache</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- LAYER 2 -->
+                    <div id="layer-2-container" class="hidden">
+                        <h2 class="section-title" style="color: #ff5e62;">✦ Niveau 2 : Jeux Avancés ✦</h2>
+                        <div class="games-container">
+                            <button class="game-card-btn" onclick="showGame('mario')">
+                                <span class="btn-icon">🍄</span>
+                                <span class="btn-label">SUPER ELIF</span>
+                                <span class="btn-sub">Aventure Kitsch</span>
+                            </button>
+                            <button class="game-card-btn" onclick="showGame('angry-birds')">
+                                <span class="btn-icon">🐦</span>
+                                <span class="btn-label">ANGRY STICKERS</span>
+                                <span class="btn-sub">Lance-pierre</span>
+                            </button>
+                            <button class="game-card-btn" onclick="showGame('tower-defense')">
+                                <span class="btn-icon">🏰</span>
+                                <span class="btn-label">TOWER DEFENSE</span>
+                                <span class="btn-sub">Protège la base</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- LAYER 3 -->
+                    <div id="layer-3-container" class="hidden">
+                        <h2 class="section-title" style="color: #00d2ff; text-shadow: 0 0 10px #00d2ff;">✦ Niveau 3 : Expériences 3D ✦</h2>
+                        <div class="games-container">
+                            <button class="game-card-btn" onclick="showGame('cs-clone')">
+                                <span class="btn-icon">🔫</span>
+                                <span class="btn-label">COUNTER STICKERS</span>
+                                <span class="btn-sub">Bientôt dispo</span>
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="score-info-box">
                         <p><span data-i18n="dash.global_score">🏆 Score Global : </span><strong id="score-inline">0</strong> pts</p>
                     </div>
@@ -181,10 +227,13 @@
     <script src="assets/quotes.js"></script>
     <script src="assets/assets_list.js"></script>
     <script src="app.js"></script>
-    <script src="games/space_invaders.js"></script>
-    <script src="games/mahjong.js"></script>
-    <script src="games/sudoku.js"></script>
-    <script src="games/tetris.js"></script>
-    <script src="games/axe_throw.js"></script>
+    <script src="games/layer1/space_invaders.js"></script>
+    <script src="games/layer1/mahjong.js"></script>
+    <script src="games/layer1/sudoku.js"></script>
+    <script src="games/layer1/tetris.js"></script>
+    <script src="games/layer1/axe_throw.js"></script>
+    <script src="games/layer2/mario.js"></script>
+    <script src="games/layer2/angry_birds.js"></script>
+    <script src="games/layer2/tower_defense.js"></script>
 </body>
 </html>

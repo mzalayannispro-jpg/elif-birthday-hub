@@ -149,8 +149,71 @@ function updateScoreUI() {
 
     const magicDoor = document.getElementById('magic-door-container');
     if (magicDoor) {
-        if (globalScore >= 3000) {
+        const doorText = magicDoor.querySelector('.door-text');
+        
+        if (globalScore >= 3000 && globalScore < 6000) {
             magicDoor.classList.remove('hidden');
+            if(doorText) doorText.textContent = "MAGIC DOOR";
+        } else if (globalScore >= 6000) {
+            if (localStorage.getItem('layer2Unlocked') === 'true') {
+                const layer2 = document.getElementById('layer-2-container');
+                if (layer2) layer2.classList.remove('hidden');
+                const giftsContainer = document.getElementById('gifts-container');
+                if (giftsContainer) giftsContainer.classList.remove('hidden');
+                
+                if (!document.getElementById('gift-1')) {
+                    const giftsList = document.getElementById('gifts-list');
+                    if (giftsList) {
+                        const giftBtn = document.createElement('button');
+                        giftBtn.id = 'gift-1';
+                        giftBtn.className = 'game-card-btn';
+                        giftBtn.onclick = () => window.open("assets/easter egg/cnab-surprise.html", "_blank");
+                        giftBtn.innerHTML = `
+                            <span class="btn-icon">🎁</span>
+                            <span class="btn-label">VIDÉO SURPRISE</span>
+                            <span class="btn-sub">Ton premier cadeau !</span>
+                        `;
+                        giftsList.appendChild(giftBtn);
+                    }
+                }
+
+                // Logique pour le Layer 3
+                if (globalScore >= 9000 && globalScore < 12000) {
+                    magicDoor.classList.remove('hidden');
+                    if(doorText) doorText.textContent = "MAGIC DOOR (NIV 3)";
+                } else if (globalScore >= 12000) {
+                    if (localStorage.getItem('layer3Unlocked') === 'true') {
+                        magicDoor.classList.add('hidden');
+                        const layer3 = document.getElementById('layer-3-container');
+                        if (layer3) layer3.classList.remove('hidden');
+                        // Affichage du cadeau 2 si besoin
+                        if (!document.getElementById('gift-2')) {
+                            const giftsList = document.getElementById('gifts-list');
+                            if (giftsList) {
+                                const giftBtn = document.createElement('button');
+                                giftBtn.id = 'gift-2';
+                                giftBtn.className = 'game-card-btn';
+                                giftBtn.onclick = () => alert("Deuxième surprise en construction !");
+                                giftBtn.innerHTML = `
+                                    <span class="btn-icon">🎁</span>
+                                    <span class="btn-label">CADEAU 2</span>
+                                    <span class="btn-sub">Pour tes 12000 pts</span>
+                                `;
+                                giftsList.appendChild(giftBtn);
+                            }
+                        }
+                    } else {
+                        magicDoor.classList.remove('hidden');
+                        if(doorText) doorText.textContent = "OUVRIR NIVEAU 3";
+                    }
+                } else {
+                    magicDoor.classList.add('hidden');
+                }
+
+            } else {
+                magicDoor.classList.remove('hidden');
+                if(doorText) doorText.textContent = "OUVRIR NIVEAU 2";
+            }
         } else {
             magicDoor.classList.add('hidden');
         }
@@ -208,13 +271,77 @@ window.closeBimOverlay = function() {
 };
 
 window.handleMagicDoor = function() {
-    if (globalScore < 6000) {
-        const lockMsg = (window.t && window.t('door.locked')) ? window.t('door.locked') : "La porte est fermée ! Reviens quand tu auras 6000 points.";
-        alert(lockMsg);
-    } else {
-        // Redirection vers l'easter egg !
-        window.location.href = "assets/easter egg/cnab-surprise.html";
+    if (globalScore >= 6000 && localStorage.getItem('layer2Unlocked') !== 'true') {
+        unlockLayer2();
+    } else if (globalScore >= 12000 && localStorage.getItem('layer3Unlocked') !== 'true') {
+        unlockLayer3();
+    } else if (globalScore < 6000) {
+        alert("La porte est fermée ! Reviens quand tu auras 6000 points.");
+    } else if (globalScore < 12000) {
+        alert("La porte du Niveau 3 est fermée ! Reviens quand tu auras 12000 points.");
     }
+};
+
+window.unlockLayer3 = function() {
+    const magicDoor = document.getElementById('magic-door-container');
+    if (magicDoor) magicDoor.classList.add('door-opening');
+    
+    setTimeout(() => {
+        const layer3 = document.getElementById('layer-3-container');
+        if (layer3) {
+            layer3.classList.remove('hidden');
+            layer3.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        if (magicDoor) {
+            magicDoor.classList.add('hidden');
+            magicDoor.classList.remove('door-opening');
+        }
+
+        localStorage.setItem('layer3Unlocked', 'true');
+        updateScoreUI(); // Pour faire apparaître le bouton du cadeau
+        
+        alert("✨ INCROYABLE ! Tu as débloqué le NIVEAU 3 (Jeux 3D) et un NOUVEAU CADEAU ! ✨");
+    }, 1500);
+};
+
+window.unlockLayer2 = function() {
+    const magicDoor = document.getElementById('magic-door-container');
+    if (magicDoor) magicDoor.classList.add('door-opening');
+
+    setTimeout(() => {
+        const giftsContainer = document.getElementById('gifts-container');
+        const giftsList = document.getElementById('gifts-list');
+        if (giftsContainer) giftsContainer.classList.remove('hidden');
+        
+        if (!document.getElementById('gift-1')) {
+            const giftBtn = document.createElement('button');
+            giftBtn.id = 'gift-1';
+            giftBtn.className = 'game-card-btn';
+            giftBtn.onclick = () => window.open("assets/easter egg/cnab-surprise.html", "_blank");
+            giftBtn.innerHTML = `
+                <span class="btn-icon">🎁</span>
+                <span class="btn-label">VIDÉO SURPRISE</span>
+                <span class="btn-sub">Ton premier cadeau !</span>
+            `;
+            if (giftsList) giftsList.appendChild(giftBtn);
+        }
+
+        const layer2 = document.getElementById('layer-2-container');
+        if (layer2) {
+            layer2.classList.remove('hidden');
+            layer2.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        if (magicDoor) {
+            magicDoor.classList.add('hidden');
+            magicDoor.classList.remove('door-opening');
+        }
+
+        localStorage.setItem('layer2Unlocked', 'true');
+        
+        alert("✨ FÉLICITATIONS ! Tu as débloqué le NIVEAU 2 et ton premier CADEAU ! ✨\n\nRegarde au-dessus des jeux !");
+    }, 1500);
 };
 
 // ============ GAME ROUTING ============
@@ -239,6 +366,9 @@ window.showGame = function(gameId) {
     else if (gameId === 'sudoku' && window.initSudoku) window.initSudoku(slot);
     else if (gameId === 'tetris' && window.initTetris) window.initTetris(slot);
     else if (gameId === 'axe-throw' && window.initAxeThrow) window.initAxeThrow(slot);
+    else if (gameId === 'mario' && window.initMario) window.initMario(slot);
+    else if (gameId === 'angry-birds' && window.initAngryBirds) window.initAngryBirds(slot);
+    else if (gameId === 'tower-defense' && window.initTowerDefense) window.initTowerDefense(slot);
 };
 
 window.hideGame = function() {
@@ -248,6 +378,14 @@ window.hideGame = function() {
     if (window.siReqId) cancelAnimationFrame(window.siReqId);
     if (window.axeReqId) cancelAnimationFrame(window.axeReqId);
     if (window.tetrisReqId) cancelAnimationFrame(window.tetrisReqId);
+    if (window.marioReqId) cancelAnimationFrame(window.marioReqId);
+    
+    const slot = document.getElementById('game-slot');
+    if (slot && slot._cleanup) {
+        slot._cleanup();
+        slot._cleanup = null;
+    }
+
     document.getElementById('active-game-area').style.display = 'none';
     document.getElementById('game-menu').style.display = 'block';
     const dashCollage = document.getElementById('dashboard-collage');
