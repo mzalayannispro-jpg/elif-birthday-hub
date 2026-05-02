@@ -375,7 +375,7 @@ window.showGame = function(gameId) {
     document.getElementById('game-menu').style.display = 'none';
     const dashCollage = document.getElementById('dashboard-collage');
     if (dashCollage) dashCollage.style.display = 'none';
-    document.getElementById('active-game-area').style.display = 'block';
+    document.getElementById('active-game-area').style.display = 'flex';
     
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
