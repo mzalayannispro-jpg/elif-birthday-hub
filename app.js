@@ -134,6 +134,15 @@ function revealDashboard(modal, main) {
     }, 500);
 }
 
+window.reopenPersonalModal = function() {
+    const modal = document.getElementById('personal-modal');
+    if (modal) {
+        modal.style.display = 'block';
+        modal.classList.remove('fade-out');
+        modal.classList.add('visible');
+    }
+};
+
 // ============ GLOBAL SCORE ============
 function addGlobalScore(pts) {
     const prevScore = globalScore;

@@ -78,6 +78,7 @@
                     <button onclick="setLanguage('tr')" style="background:none; border:none; cursor:pointer; font-size:24px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.3)); transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">🇹🇷</button>
                 </div>
                 <div class="save-load-controls" style="display:flex; gap:10px;">
+                    <button onclick="reopenPersonalModal()" class="save-btn" title="Relire le message personnel" style="background: var(--gold); color: var(--dark-brown);">💌 Message</button>
                     <button onclick="generateSaveCode()" class="save-btn" data-i18n="dash.save">💾 Save</button>
                     <button onclick="loadSaveCode()" class="load-btn" data-i18n="dash.load">📂 Load</button>
                 </div>
