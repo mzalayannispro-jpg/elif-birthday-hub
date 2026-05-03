@@ -19,7 +19,13 @@ Ce document retrace l'intégralité de notre travail et des mises à jour pouss�
 * **2026-05-02** - Fix UI reset bug and update PROJECT_TRACKING with detailed history (40262d5)
 * **2026-05-02** - Add PROJECT_TRACKING.md for tracking development and walkthroughs (b1d8b44)
 
-### Fonctionnalités Hub & Surprises (Layer 3)
+### 03 Mai 2026 - Refonte Massive Layer 2 (Moteurs Open Source)
+- **Super Elif** : Réécrit avec un moteur "Tile-based" inspiré de `jakesgordon/javascript-tiny-platformer`. Implémentation d'une grille physique AABB, niveaux générés par chunks.
+- **Angry Stickers** : Réécrit avec le moteur physique `Matter.js`. Intégration via CDN, création de pyramides destructibles, slingshot physics, et victoire sur élimination des cibles.
+- **Tower Defense** : Réécrit façon `victorqribeiro/towerDefense` avec une grille bidimensionnelle, chemin paramétrable, menu de construction, placement de tourelles (Sniper & Normal) et déclenchement manuel des vagues.
+- **UI & Controls** : Ajout d'un overlay global pour Layer 2 avec D-Pad mobile et boutons Pause/Restart partagés pour alléger le code de chaque jeu.
+
+## 02 Mai 2026 - Stabilisation et Audit Moteurs de Jeux (Layer 2)
 * **2026-05-03** - Add error boundaries to showGame to debug Layer 2 load failures (2c223c3)
 * **2026-05-03** - Fix layer 2 games appearing empty (cache busting and display flex) (607fbcb)
 * **2026-05-02** - Add button to reopen personal message modal (4d30241)

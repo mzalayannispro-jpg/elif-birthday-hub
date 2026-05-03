@@ -1034,3 +1034,81 @@ body {
 .hidden {
     display: none !important;
 }
+
+/* =========================================
+   LAYER 2 GLOBAL UI OVERLAY
+   ========================================= */
+.layer2-ui-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; /* Let clicks pass through except on buttons */
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.layer2-ui-overlay:not(.hidden) {
+    display: flex;
+}
+.layer2-ui-overlay .l2-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 15px;
+    pointer-events: auto;
+}
+.layer2-ui-overlay .l2-stats {
+    background: rgba(0, 0, 0, 0.7);
+    color: #FFD700;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: 'Bungee', cursive;
+    text-align: center;
+    border: 2px solid #FFD700;
+}
+.layer2-ui-overlay .l2-stats span {
+    display: block;
+    font-size: 1.2rem;
+}
+.layer2-ui-overlay .l2-btn {
+    background: #E60000;
+    color: white;
+    border: 3px solid white;
+    padding: 10px 15px;
+    font-family: 'Bungee', cursive;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 4px 0 #8B0000;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+.layer2-ui-overlay .l2-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #8B0000;
+}
+.layer2-ui-overlay .l2-mobile-controls {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    pointer-events: auto;
+}
+.layer2-ui-overlay .d-pad, .layer2-ui-overlay .action-pad {
+    display: flex;
+    gap: 15px;
+}
+.layer2-ui-overlay .d-btn {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    border: 3px solid white;
+    color: black;
+    font-size: 20px;
+    font-family: 'Bungee', cursive;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    touch-action: manipulation;
+}
+.layer2-ui-overlay .d-btn:active {
+    background: rgba(255, 255, 255, 0.9);
+}

@@ -454,9 +454,14 @@ function launchGameModule(gameId, slot) {
     else if (gameId === 'sudoku' && window.initSudoku) window.initSudoku(slot);
     else if (gameId === 'tetris' && window.initTetris) window.initTetris(slot);
     else if (gameId === 'axe-throw' && window.initAxeThrow) window.initAxeThrow(slot);
-    else if (gameId === 'mario' && window.initMario) window.initMario(slot);
-    else if (gameId === 'angry-birds' && window.initAngryBirds) window.initAngryBirds(slot);
-    else if (gameId === 'tower-defense' && window.initTowerDefense) window.initTowerDefense(slot);
+    else if (['mario', 'angry-birds', 'tower-defense'].includes(gameId)) {
+        const l2Overlay = document.getElementById('layer2-ui-overlay');
+        if (l2Overlay) l2Overlay.classList.remove('hidden');
+        
+        if (gameId === 'mario' && window.initMario) window.initMario(slot);
+        else if (gameId === 'angry-birds' && window.initAngryBirds) window.initAngryBirds(slot);
+        else if (gameId === 'tower-defense' && window.initTowerDefense) window.initTowerDefense(slot);
+    }
     else if (gameId === 'cs-clone') {
         alert("🚨 COUNTER STICKERS\n\nComing soon! Server deployment in progress...");
         window.hideGame();
@@ -482,11 +487,18 @@ window.hideGame = function() {
         slot._cleanup = null;
     }
 
+    const l2Overlay = document.getElementById('layer2-ui-overlay');
+    if (l2Overlay) l2Overlay.classList.add('hidden');
+
     document.getElementById('active-game-area').style.display = 'none';
     document.getElementById('game-menu').style.display = 'block';
     const dashCollage = document.getElementById('dashboard-collage');
     if (dashCollage) dashCollage.style.display = 'block';
     updateScoreUI();
+};
+
+window.closeGameLayer = function() {
+    window.hideGame();
 };
 
 // ============ EASTER EGG ============
