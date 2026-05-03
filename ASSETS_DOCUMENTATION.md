@@ -164,6 +164,7 @@ Stickers flottants apparaissant en fond d'écran sur le Hub principal.
 | `STK-20260419-WA0007.webp` | `assets/intro/STK-20260419-WA0007.webp` | Utilisé dans 🌟 |
 | `STK-20260419-WA0018.webp` | `assets/intro/STK-20260419-WA0018.webp` | Utilisé dans 🌟 |
 | `turkish_flag_8bit_1776606457543.png` | `assets/intro/turkish_flag_8bit_1776606457543.png` | Utilisé dans 🌟 |
+# 🖼️ Elif Birthday Hub - Documentation Détaillée des Assets
 
 ## 🎨 Interface Globale & UI (Statiques)
 Éléments fixes d'arrière-plan ou de sprites de jeu.
@@ -184,5 +185,49 @@ Stickers flottants apparaissant en fond d'écran sur le Hub principal.
 | `real_baklava.png` | `assets/real_baklava.png` | Power-up 'Champignon' pour Super Elif |
 | `win.webp` | `assets/win.webp` | Écran de victoire générique |
 | `lose.webp` | `assets/lose.webp` | Écran de défaite générique |
+
+## 🍄 Super Elif (Platformer - Layer 2)
+Stickers utilisés pour le héros, les ennemis, et les bonus du jeu de plateforme.
+
+| Nom du Rôle | Nom de l'image | Emplacement Exact |
+|---|---|---|
+| **Joueur (Petit)** | `STK-20241217-WA0053 - Copie.webp` | `assets/STK-20241217-WA0053 - Copie.webp` |
+| **Joueur (Base/Grand)** | `STK-20240715-WA0003 - Copie.webp` | `assets/STK-20240715-WA0003 - Copie.webp` |
+| **Joueur (Fire)** | `OwnSticker_20251010_235740731.png.jpg` | `assets/OwnSticker_20251010_235740731.png.jpg` |
+| **Joueur (Ice)** | `a9dcfb00-509c-41dd-891f-8a842927fdcf.webp` | `assets/sudoku/a9dcfb00-509c-41dd-891f-8a842927fdcf.webp` |
+| **Joueur (Yoshi/Dino)** | `STK-20240627-WA0020 - dddCopie - Copie.png`| `assets/STK-20240627-WA0020 - dddCopie - Copie.png` |
+| **Ennemi (Tortue)** | `STK-20241108-WA0000.webp` | `assets/STK-20241108-WA0000.webp` |
+| **Ennemi (Axe Thrower)**| `OwnSticker_20240322_015407147.png.jpg` | `assets/OwnSticker_20240322_015407147.png.jpg` |
+| **Power-up (Champignon)**| `real_baklava.png` | `assets/real_baklava.png` |
+| **Princesse (Fin de lvl)**| `OwnSticker_20241029_163308195.png.jpg` | `assets/OwnSticker_20241029_163308195.png.jpg` |
+
+## 🐦 Angry Stickers (Lance-pierre - Layer 2)
+Stickers du jeu de physique.
+
+| Nom du Rôle | Nom de l'image | Emplacement Exact / Logique |
+|---|---|---|
+| **Projectile (Oiseau)** | `STK-20241217-WA0053 - Copie.webp` | `assets/STK-20241217-WA0053 - Copie.webp` |
+| **Cibles (Ennemis)** | Dynamique | Chargés aléatoirement depuis le pool `assets/space-invaders/` |
+| **Cibles (Fallbacks)** | `OwnSticker_20240322_015407147.png.jpg` | `assets/OwnSticker_20240322_015407147.png.jpg` |
+| **Cibles (Fallbacks)** | `alien2.webp` / `alien3.webp` | `assets/alien2.webp` |
+
+## 🏰 Tower Defense (Layer 2)
+Unités et ennemis de la défense de base.
+
+| Nom du Rôle | Nom de l'image | Emplacement Exact |
+|---|---|---|
+| **Tour (Défenseur)** | `STK-20240715-WA0003 - Copie.webp` | `assets/STK-20240715-WA0003 - Copie.webp` |
+| **Ennemi 1 (Rapide)** | `STK-20241108-WA0000.webp` | `assets/STK-20241108-WA0000.webp` |
+| **Ennemi 2 (Boss)** | `OwnSticker_20240322_015407147.png.jpg` | `assets/OwnSticker_20240322_015407147.png.jpg` |
+
+## ✨ Overlays & Cadeaux (Layer 2 & 3)
+Stickers utilisés pour les annonces d'ouverture de porte magique et de score.
+
+| Événement | Nom de l'image | Emplacement Exact |
+|---|---|---|
+| **Porte Magique (3k/6k pts)** | `OwnSticker_20240417_210104701.png.jpg` | `assets/Landing page/OwnSticker_20240417_210104701.png.jpg` |
+| **Porte Magique (3k/6k pts)** | `9c08de24-fc9a-4106-8483-430a0f546023.webp`| `assets/Landing page/9c08de24-fc9a-4106-8483-430a0f546023.webp` |
+| **Grand Gift (12k pts)** | `STK-20251113-WA0023.webp` | `assets/Landing page/STK-20251113-WA0023.webp` |
+| **Grand Gift (12k pts)** | `STK-20251113-WA0022.webp` | `assets/Landing page/STK-20251113-WA0022.webp` |
 
 *Note: Validated on 03/05/2026 that all asset paths (including Mario sprites, Angry Birds, and Grand Gift overlay) match the dynamically loaded files and perform correctly.*
