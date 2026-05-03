@@ -36,8 +36,16 @@ window.initMario = function(container) {
     const ctx = canvas.getContext('2d');
     
     function resize() {
-        canvas.width = canvas.parentElement.clientWidth;
-        canvas.height = canvas.parentElement.clientHeight;
+        if (!canvas.parentElement) return;
+        let w = canvas.parentElement.clientWidth;
+        let h = canvas.parentElement.clientHeight;
+        if (w === 0 || h === 0) {
+            // Fallback during hidden state or display transition
+            w = window.innerWidth * 0.9;
+            h = window.innerHeight * 0.8;
+        }
+        canvas.width = w;
+        canvas.height = h;
     }
     window.addEventListener('resize', resize);
     resize();
@@ -441,6 +449,7 @@ window.initMario = function(container) {
         // ==========================================
         // DESSIN (RENDER)
         // ==========================================
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // EFFACER L'ECRAN A CHAQUE FRAME !
         ctx.save();
         ctx.translate(-cameraX, 0);
 

@@ -37,10 +37,17 @@ window.initAngryBirds = function(container) {
     // ==========================================
     const ASSETS = {
         bird: new Image(),
-        enemy: new Image()
+        enemies: []
     };
     ASSETS.bird.src = 'assets/STK-20241217-WA0053 - Copie.webp'; // Pigeon
-    ASSETS.enemy.src = 'assets/OwnSticker_20240322_015407147.png.jpg'; // Hache/Méchant
+    
+    // Charger plusieurs stickers pour les ennemis
+    const enemyStickers = window.GAME_ASSETS && window.GAME_ASSETS['space-invaders'] ? window.GAME_ASSETS['space-invaders'] : ['assets/OwnSticker_20240322_015407147.png.jpg', 'assets/alien2.webp', 'assets/alien3.webp'];
+    for(let i=0; i<3; i++) {
+        let img = new Image();
+        img.src = enemyStickers[Math.floor(Math.random() * enemyStickers.length)];
+        ASSETS.enemies.push(img);
+    }
 
     // ==========================================
     // VARIABLES & PHYSIQUE
@@ -99,14 +106,18 @@ window.initAngryBirds = function(container) {
         blocks.push({ x: startX, y: groundY - 280, w: 200, h: 40, vx: 0, vy: 0 }); 
 
         // Ennemis (Cochons/Méchants) posés sur les blocs
-        enemies.push({ x: startX + 50, y: groundY - 60, radius: 30, vx: 0, vy: 0, dead: false });
-        enemies.push({ x: startX + 150, y: groundY - 60, radius: 30, vx: 0, vy: 0, dead: false });
-        enemies.push({ x: startX + 80, y: groundY - 200, radius: 30, vx: 0, vy: 0, dead: false });
+        enemies.push({ x: startX + 50, y: groundY - 140 - 60, radius: 30, vx: 0, vy: 0, dead: false, imgIdx: 0 });
+        enemies.push({ x: startX + 150, y: groundY - 140 - 60, radius: 30, vx: 0, vy: 0, dead: false, imgIdx: 1 });
+        enemies.push({ x: startX + 80, y: groundY - 280 - 60, radius: 30, vx: 0, vy: 0, dead: false, imgIdx: 2 });
     }
 
     // ==========================================
     // LOGIQUE PHYSIQUE
     // ==========================================
+    function rectIntersectRect(r1, r2) {
+        return !(r2.x > r1.x + r1.w || r2.x + r2.w < r1.x || r2.y > r1.y + r1.h || r2.y + r2.h < r1.y);
+    }
+
     function rectIntersect(circle, rect) {
         // Pseudo-collision Cercle/Rectangle (AABB étendu)
         let testX = circle.x;
@@ -165,16 +176,29 @@ window.initAngryBirds = function(container) {
         for (let b of blocks) {
             b.vy += gravity;
             b.y += b.vy;
+            let onGroundOrBlock = false;
+
             if (b.y + b.h > groundY) {
                 b.y = groundY - b.h;
                 b.vy = 0;
+                onGroundOrBlock = true;
+            } else {
+                for (let other of blocks) {
+                    if (b !== other && rectIntersectRect(b, other)) {
+                        if (b.vy >= 0 && b.y + b.h - b.vy <= other.y + 15) { 
+                            b.y = other.y - b.h;
+                            b.vy = 0;
+                            onGroundOrBlock = true;
+                        }
+                    }
+                }
             }
             
             // Collision avec l'oiseau
             if (bird.isFlying && rectIntersect(bird, b)) {
                 let impact = Math.abs(bird.vx) + Math.abs(bird.vy);
-                b.vx = bird.vx * 0.4;
-                b.vy = bird.vy * 0.4;
+                b.vx += bird.vx * 0.4;
+                b.vy += bird.vy * 0.4;
                 bird.vx *= 0.5;
                 bird.vy *= 0.5;
                 
@@ -192,9 +216,19 @@ window.initAngryBirds = function(container) {
                     }
                 }
             }
+            
             b.x += b.vx;
-            // Amortissement horizontal
-            if(b.y + b.h >= groundY) b.vx *= 0.8;
+            // Amortissement horizontal & collisions latérales
+            for (let other of blocks) {
+                if (b !== other && rectIntersectRect(b, other)) {
+                    let overlapX = (b.x < other.x) ? (b.x + b.w - other.x) : (other.x + other.w - b.x);
+                    if (b.x < other.x) { b.x -= overlapX/2; other.x += overlapX/2; }
+                    else { b.x += overlapX/2; other.x -= overlapX/2; }
+                    let avgVx = (b.vx + other.vx) / 2;
+                    b.vx = avgVx * 0.8; other.vx = avgVx * 0.8;
+                }
+            }
+            if(onGroundOrBlock) b.vx *= 0.8;
         }
 
         // Particules update
@@ -213,14 +247,38 @@ window.initAngryBirds = function(container) {
 
             e.vy += gravity;
             e.y += e.vy;
+            let onGroundOrBlock = false;
             
             if (e.y + e.radius > groundY) {
                 e.y = groundY - e.radius;
                 e.vy = 0;
+                onGroundOrBlock = true;
+            } else {
+                for (let b of blocks) {
+                    if (rectIntersect(e, b)) {
+                        if (e.vy >= 0 && e.y < b.y) {
+                            e.y = b.y - e.radius;
+                            e.vy = 0;
+                            onGroundOrBlock = true;
+                            e.vx = b.vx; // suit le mouvement du bloc
+                        }
+                    }
+                }
+            }
+            
+            e.x += e.vx;
+            if (onGroundOrBlock) e.vx *= 0.8;
+
+            let hitByBird = bird.isFlying && circleIntersect(bird, e);
+            let hitByBlock = false;
+            for (let b of blocks) {
+                if ((Math.abs(b.vx) > 3 || Math.abs(b.vy) > 3) && rectIntersect(e, b)) {
+                    hitByBlock = true;
+                }
             }
 
-            // Dégâts si l'oiseau le touche fort ou si un bloc tombe sur lui
-            if (bird.isFlying && circleIntersect(bird, e)) {
+            // Dégâts
+            if (hitByBird || hitByBlock) {
                 e.dead = true;
                 score += 500;
                 document.getElementById('ab-pts').textContent = score;
@@ -233,7 +291,6 @@ window.initAngryBirds = function(container) {
                     });
                 }
             }
-            // Si l'ennemi tombe violemment (plus de force) on le tue aussi, mais restons simple
         }
 
         if (allDead && enemies.length > 0) {
@@ -308,8 +365,8 @@ window.initAngryBirds = function(container) {
         // Ennemis
         for (let e of enemies) {
             if (e.dead) continue;
-            let img = ASSETS.enemy;
-            if (img.complete && img.naturalHeight !== 0) {
+            let img = ASSETS.enemies[e.imgIdx];
+            if (img && img.complete && img.naturalHeight !== 0) {
                 ctx.drawImage(img, e.x - e.radius, e.y - e.radius, e.radius*2, e.radius*2);
             } else {
                 ctx.fillStyle = 'green';

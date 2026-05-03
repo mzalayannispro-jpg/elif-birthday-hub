@@ -63,7 +63,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "6000",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -84,7 +84,8 @@
               "title": "Signets"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -193,14 +194,15 @@
       "bases:Créer une nouvelle base": false
     }
   },
-  "active": "650e61c9029fb3b8",
+  "active": "ce9cba661d1883f2",
   "lastOpenFiles": [
+    "GITHUB_HISTORY.md",
+    "PROJECT_TRACKING.md",
     "rewrite_mario.js",
     "rewrite_mario.py",
     "README.md",
     "Sans titre.canvas",
     "Sans titre.base",
-    "PROJECT_TRACKING.md",
     "ASSETS_DOCUMENTATION.md",
     "generate_doc.js",
     "assets/1f6c5518-609c-4db4-ae89-77325c921daf.webp",
