@@ -13,6 +13,9 @@ window.initTowerDefense = function(container) {
                 <div style="color:white; font-size:20px; font-weight:800;">
                     WAVE: <span id="td-wave">1</span>
                 </div>
+                <div style="color:white; font-size:20px; font-weight:800; margin-left:10px;">
+                    WORLD <span id="td-world">1 - Maroc Sahara Merzouga</span>
+                </div>
             </div>
             
             <div id="td-msg" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:gold; font-size:40px; font-weight:800; text-shadow:2px 2px 0 #000; display:none; z-index:20; text-align:center;">
@@ -57,24 +60,26 @@ window.initTowerDefense = function(container) {
     let money = 150;
     let lives = 10;
     let wave = 1;
-    let maxWaves = 5;
+    let maxWaves = 18; // 6 worlds * 3 waves
     let scoreEarned = 0;
     
     let isGameOver = false;
     let isVictory = false;
+    let isTransitioning = false;
 
-    // PATH (Chemin)
-    const TILE_SIZE = 60;
-    const pathNodes = [
-        {x: 0, y: 100},
-        {x: 200, y: 100},
-        {x: 200, y: 400},
-        {x: 500, y: 400},
-        {x: 500, y: 150},
-        {x: 800, y: 150},
-        {x: 800, y: 500},
-        {x: 1200, y: 500} // Sortie (adaptatif en fonction de la taille de l'écran)
+    // WORLDS (Mondes)
+    const WORLDS = [
+        { name: "Maroc Sahara Merzouga", bgTop: '#FFB347', bgBottom: '#FFCC33', path: [ {x:0,y:100}, {x:200,y:100}, {x:200,y:400}, {x:500,y:400}, {x:500,y:150}, {x:800,y:150}, {x:800,y:500}, {x:1200,y:500} ] },
+        { name: "Valencia Science City", bgTop: '#E0F7FA', bgBottom: '#B2EBF2', path: [ {x:0,y:300}, {x:300,y:300}, {x:300,y:100}, {x:700,y:100}, {x:700,y:400}, {x:1000,y:400}, {x:1000,y:500}, {x:1200,y:500} ] },
+        { name: "Venice", bgTop: '#87CEEB', bgBottom: '#4FC3F7', path: [ {x:0,y:400}, {x:300,y:400}, {x:300,y:200}, {x:600,y:200}, {x:600,y:500}, {x:900,y:500}, {x:900,y:100}, {x:1200,y:100} ] },
+        { name: "Costa Brava", bgTop: '#4DD0E1', bgBottom: '#26C6DA', path: [ {x:0,y:300}, {x:500,y:300}, {x:500,y:500}, {x:200,y:500}, {x:200,y:150}, {x:800,y:150}, {x:800,y:300}, {x:1200,y:300} ] },
+        { name: "Barcelona", bgTop: '#FFF59D', bgBottom: '#FFEB3B', path: [ {x:0,y:250}, {x:600,y:250}, {x:600,y:50}, {x:900,y:50}, {x:900,y:450}, {x:400,y:450}, {x:400,y:600}, {x:1200,y:600} ] },
+        { name: "Istanbul", bgTop: '#CE93D8', bgBottom: '#AB47BC', path: [ {x:0,y:150}, {x:400,y:150}, {x:400,y:450}, {x:700,y:450}, {x:700,y:200}, {x:1000,y:200}, {x:1000,y:500}, {x:1200,y:500} ] }
     ];
+
+    let currentWorldIndex = 0;
+    const TILE_SIZE = 60;
+    let pathNodes = JSON.parse(JSON.stringify(WORLDS[0].path));
 
     let enemies = [];
     let turrets = [];
@@ -101,9 +106,36 @@ window.initTowerDefense = function(container) {
                 radius: 20
             });
             enemiesToSpawn--;
-        } else if (enemies.length === 0 && !isGameOver && !isVictory) {
-            // Fin de la vague
-            if (wave < maxWaves) {
+        } else if (enemies.length === 0 && !isGameOver && !isVictory && !isTransitioning) {
+            if (wave % 3 === 0 && wave < maxWaves) {
+                // CHANGEMENT DE MONDE
+                isTransitioning = true;
+                currentWorldIndex++;
+                let refund = turrets.length * 50;
+                money += refund + 300; // Remboursement tours + Bonus de monde
+                turrets = [];
+                projectiles = [];
+                
+                document.getElementById('td-msg').innerHTML = `WORLD CLEARED !<br><span style="font-size:24px; color:white;">Traveling to ${WORLDS[currentWorldIndex].name}...</span><br><span style="font-size:20px; color:#4CAF50;">Towers sold: +${refund} 💰</span>`;
+                document.getElementById('td-msg').style.display = 'block';
+                updateUI();
+                
+                setTimeout(() => {
+                    document.getElementById('td-msg').style.display = 'none';
+                    pathNodes = JSON.parse(JSON.stringify(WORLDS[currentWorldIndex].path));
+                    document.getElementById('td-game').style.background = `linear-gradient(to bottom, ${WORLDS[currentWorldIndex].bgTop}, ${WORLDS[currentWorldIndex].bgBottom})`;
+                    document.getElementById('td-world').textContent = (currentWorldIndex + 1) + " - " + WORLDS[currentWorldIndex].name;
+                    
+                    wave++;
+                    document.getElementById('td-wave').textContent = wave;
+                    enemiesToSpawn = 10 + wave * 5;
+                    currentEnemyType = wave % 2 === 0 ? 'enemy2' : 'enemy1';
+                    money += 50 + wave * 10;
+                    updateUI();
+                    isTransitioning = false;
+                }, 4000);
+            } else if (wave < maxWaves) {
+                // VAGUE SUIVANTE DANS LE MEME MONDE
                 wave++;
                 document.getElementById('td-wave').textContent = wave;
                 enemiesToSpawn = 10 + wave * 5;
@@ -111,10 +143,11 @@ window.initTowerDefense = function(container) {
                 money += 50 + wave * 10;
                 updateUI();
             } else {
-                // VICTOIRE
+                // VICTOIRE FINALE
                 isVictory = true;
                 scoreEarned = 1500;
-                if(window.addGlobalScore) window.addGlobalScore(100);
+                if(window.addGlobalScore) window.addGlobalScore(500); // Gros bonus final
+                document.getElementById('td-msg').innerHTML = `VICTORY!<br><span style="font-size:24px; color:white;">+500 Points</span>`;
                 document.getElementById('td-msg').style.display = 'block';
                 setTimeout(() => {
                     if (window.hideGame) window.hideGame();
@@ -133,10 +166,13 @@ window.initTowerDefense = function(container) {
     }
 
     function update() {
-        if (isGameOver || isVictory) return;
+        if (isGameOver || isVictory || isTransitioning) return;
 
-        // Ajuster la fin du chemin en fonction de l'écran
-        pathNodes[pathNodes.length-1].x = canvas.width + 100;
+        // Ajuster la fin du chemin en fonction de l'écran pour être sûr qu'ils sortent
+        if (pathNodes.length > 0) {
+            let lastNode = pathNodes[pathNodes.length-1];
+            if(lastNode.x === 1200) lastNode.x = canvas.width + 100;
+        }
 
         spawnTimer++;
         if (spawnTimer >= 60) {
@@ -167,7 +203,12 @@ window.initTowerDefense = function(container) {
                     if(window.showGlobalGameOver) {
                         window.showGlobalGameOver(() => {
                             // Restart
-                            money = 150; lives = 10; wave = 1; enemies = []; turrets = []; projectiles = []; isGameOver = false; isVictory = false; updateUI();
+                            money = 150; lives = 10; wave = 1; enemies = []; turrets = []; projectiles = []; isGameOver = false; isVictory = false; isTransitioning = false;
+                            currentWorldIndex = 0;
+                            pathNodes = JSON.parse(JSON.stringify(WORLDS[0].path));
+                            document.getElementById('td-game').style.background = `linear-gradient(to bottom, ${WORLDS[0].bgTop}, ${WORLDS[0].bgBottom})`;
+                            document.getElementById('td-world').textContent = "1 - " + WORLDS[0].name;
+                            updateUI();
                         });
                     }
                 }
@@ -250,31 +291,28 @@ window.initTowerDefense = function(container) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // Dessiner le chemin
-        ctx.strokeStyle = '#D7CCC8';
-        ctx.lineWidth = TILE_SIZE;
+        // Dessiner le chemin (Route claire bordée)
+        ctx.beginPath();
+        if(pathNodes.length > 0) {
+            ctx.moveTo(pathNodes[0].x, pathNodes[0].y);
+            for (let i = 1; i < pathNodes.length; i++) {
+                ctx.lineTo(pathNodes[i].x, pathNodes[i].y);
+            }
+        }
+        
+        // Bordure sombre
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.lineWidth = 44;
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
-        ctx.beginPath();
-        if (pathNodes.length > 0) {
-            ctx.moveTo(pathNodes[0].x, pathNodes[0].y);
-            for (let i = 1; i < pathNodes.length; i++) {
-                ctx.lineTo(pathNodes[i].x, pathNodes[i].y);
-            }
-        }
+        ctx.strokeStyle = '#8D6E63';
+        ctx.stroke();
+        
+        // Intérieur clair
+        ctx.lineWidth = 36;
+        ctx.strokeStyle = '#E3C598';
         ctx.stroke();
 
-        // Dessiner les bordures du chemin (optionnel, pour faire joli)
-        ctx.strokeStyle = '#8D6E63';
-        ctx.lineWidth = TILE_SIZE + 4;
-        ctx.globalCompositeOperation = 'destination-over';
-        ctx.beginPath();
-        if (pathNodes.length > 0) {
-            ctx.moveTo(pathNodes[0].x, pathNodes[0].y);
-            for (let i = 1; i < pathNodes.length; i++) {
-                ctx.lineTo(pathNodes[i].x, pathNodes[i].y);
-            }
-        }
-        ctx.stroke();
         ctx.globalCompositeOperation = 'source-over';
 
         // Tourelles
