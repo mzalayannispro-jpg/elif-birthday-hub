@@ -1,88 +1,64 @@
 # 🌙 Elif Birthday Hub - Development & Project Tracking
 
-Bienvenue dans le document de suivi ultra-détaillé du projet **Elif Birthday Hub**. Ce fichier retrace l'historique exhaustif des décisions architecturales, des implémentations techniques, des bugs corrigés, et des tâches accomplies depuis le tout début du projet (initié vers le **19 Avril 2026**), ainsi que les tâches futures. Ce document est le point central de référence pour l'évolution du code.
+Bienvenue dans le document de suivi ultra-détaillé du projet **Elif Birthday Hub**. Ce fichier retrace l'historique exhaustif des décisions architecturales, des implémentations techniques, des bugs complexes résolus, et des tâches accomplies depuis le tout début du projet (initié vers le **19 Avril 2026**).
 
 ---
 
 ## 📋 TASK LIST : Historique Complet
 
-### Phase 1 : Fondation & Esthétique 🎨 (Depuis le 19 Avril)
+### Phase 1 : Fondation & Esthétique 🎨 (Avril 2026)
 - `[x]` **Thème Kitsch Turc 70s :** Création du design system dans `style.css` (Tapis persans, Couleurs Or, Rouge Sang, Teal Turc).
-- `[x]` **Structure Core :** Mise en place de `index.html` et `app.js` pour gérer le rendu dynamique.
-- `[x]` **Asset Manager :** Implémentation d'un script Node.js récursif pour scanner les dossiers d'images et générer `assets_list.js`, permettant aux jeux de charger dynamiquement les stickers personnels au lieu d'images génériques.
-- `[x]` **Internationalisation (i18n) :** Mise en place d'un système de langues dynamique (Anglais 🇬🇧 / Turc 🇹🇷) pour toute l'interface.
+- `[x]` **Structure Core :** `index.html` et `app.js` pour gérer le routage dynamique des div (sans rechargement de page).
+- `[x]` **Asset Manager :** Script Node.js récursif `update_stickers.js` générant `assets_list.js` pour charger dynamiquement les dossiers de stickers.
+- `[x]` **Internationalisation (i18n) :** Système linguistique via `data-i18n` (Anglais 🇬🇧 / Turc 🇹🇷).
 
 ### Phase 2 : Layer 1 - Les Jeux Classiques 🕹️
-- `[x]` **Space Invaders :** Adaptation du classique où les ennemis sont remplacés par des images du dossier `space-invaders`.
-- `[x]` **Mahjong Solitaire :** Implémentation du système d'association de tuiles utilisant les images du dossier `mahjong`.
-- `[x]` **Sudoku (Punchlines) :** Modification du Sudoku classique pour remplacer les numéros par des clins d'œil et des punchlines personnelles ("inside jokes") afin d'éliminer le texte par défaut (français).
-- `[x]` **Tetris :** Empilement de tuiles personnalisées avec logique de destruction de lignes.
-- `[x]` **Uzinagaz (Lancer de hache) :** Jeu de timing basé sur le lancer d'objets pour atteindre des cibles mouvantes.
+- `[x]` **Coskun Invaders (Space Invaders) :** Ennemis remplacés par les stickers.
+- `[x]` **Mahjong Solitaire :** Tuiles texturées en 3D avec les assets personnels.
+- `[x]` **Sudoku Punchlines :** Grille remplie de blagues privées au lieu de chiffres.
+- `[x]` **Tetris :** Tuiles de différentes formes (T, L, Z) générées dynamiquement.
+- `[x]` **Uzinagaz (Lancer de hache) :** Jeu de timing sur la Roue de la Mort.
 
 ### Phase 3 : Système de Progression & Sauvegarde 💾
-- `[x]` **Score Global (`localStorage`) :** Chaque victoire dans un jeu du Layer 1 ajoute 100 points au score global persistant.
-- `[x]` **Sauvegarde Multi-Supports (Tablette) :** Création d'un algorithme de chiffrement simple (`ELIF-{score * 7}-XYZ`) permettant de générer un code sur PC et de le rentrer sur tablette via un bouton "Load" pour récupérer la progression.
-- `[x]` **La Porte Magique (The Magic Door) :** Bouton conditionnel qui apparaît à 3000 points et devient cliquable à 6000 points.
+- `[x]` **Score Global (`localStorage`) :** Score synchronisé entre toutes les instances de jeux via `window.addGlobalScore`.
+- `[x]` **Sauvegarde Multi-Supports (Cross-Device) :** Génération de mots de passe (ex: `ELIF-84000-XYZ`) pour transférer la partie PC vers la Tablette.
+- `[x]` **La Porte Magique :** Verrous conditionnels (3000 pts = Annonce, 6000 pts = Layer 2).
 
-### Phase 4 : Layer 2 - Jeux 2D Avancés & Cadeaux 🎁
-- `[x]` **Super Elif (Platformer) :** Clone de Mario intégrant des "Baklavas" comme power-ups, et changeant dynamiquement le sprite du joueur selon son état (petit, grand, invincible).
-- `[x]` **Angry Stickers :** Mécanique de lance-pierre à l'aide de la souris.
-- `[x]` **Tower Defense :** Protection de base avec placement d'unités.
-- `[x]` **Cadeau 1 (Easter Egg) :** Page vidéo surprise `cnab-surprise.html` débloquée après l'ouverture de la porte à 6000 points.
+### Phase 4 : Layer 2 - Refonte Moteurs Open Source ⚙️ (Début Mai 2026)
+- `[x]` **Architecture UI Globale :** Implémentation du `<div id="layer2-ui-overlay">` pour centraliser le D-Pad Mobile, le bouton Pause, et Restart en-dehors du code de chaque jeu.
+- `[x]` **Super Elif (Tile-Based Platformer) :** Abandon du vieux code physique pour un clone de `tiny-platformer`.
+- `[x]` **Angry Stickers (Matter.js) :** Refonte intégrale avec un vrai lance-pierre (Constraint) et des pyramides de blocs (Bodies) avec gravité physique.
+- `[x]` **Tower Defense (Grid-Based) :** Remplacement de la carte libre par une grille matricielle de chemin, avec bouton manuel "Start Wave".
 
 ### Phase 5 : Layer 3 - Expériences 3D 🧊 (En cours)
-- `[x]` **Structure d'Unlock :** Porte magique de niveau 3 cliquable à 12000 points.
-- `[/]` **Counter Stickers :** Base du moteur 3D web préparée. *(En construction)*
-- `[/]` **Cadeau 2 :** Bouton préparé dans l'UI pour la récompense finale des 12000 points.
+- `[x]` **Structure d'Unlock :** Porte magique niveau 3 cliquable à 12000 points.
+- `[/]` **Counter Stickers :** Base du moteur 3D web. *(En construction)*
 
 ---
 
 ## 🛠️ WALKTHROUGH TECHNIQUE : Problèmes, Correctifs et Décisions
 
-### 📜 Historique & Genèse (Anniversaire Copine -> Elif Birthday Hub)
+Ce Walkthrough consigne la résolution des bugs techniques les plus complexes du projet, permettant de garder une trace des décisions d'ingénierie.
 
-Le projet a été initié le **19 Avril 2026** sous l'impulsion du projet global "Anniversaire Copine". L'objectif initial était de créer un espace web personnalisé, amusant et rempli de "private jokes" pour célébrer l'anniversaire d'Elif.
+### 1. La Combinaison Mortelle de "Super Elif" (Bug du 03 Mai 2026)
+* **Symptôme observé :** "Le jeu Mario apparaît, je tombe à travers le vide et le message 'Oups tu es tombé' s'affiche instantanément."
+* **Investigation :** Le problème était composé de 3 bugs superposés formant une "tempête parfaite" :
+  1. **Bug CSS Container :** Le jeu était généré avec `height: 100%`. Comme son parent `<div id="game-slot">` n'avait aucune hauteur définie, le Canvas s'écrasait à 0px de haut. Le sol n'était donc jamais affiché sur l'écran ! *(Correction: Remplacement par `height: 80vh; min-height: 500px;`)*
+  2. **Bug de Tunneling (Physique) :** Avec le nouveau moteur Tiny Platformer, la gravité (`GRAVITY`) accumulait une vitesse de chute si élevée que le joueur traversait les 50 pixels du sol en une seule frame (1/60ème de seconde). Le code de collision ne testait que la position finale, qui se retrouvait sous le sol. *(Correction: Plafonnement strict de `MAXDY` à 30 pixels par frame)*
+  3. **Bug du Spawn Ennemi :** Par hasard algorithmique, le premier ennemi généré tombait de sa plateforme, glissait vers la gauche, et touchait le point de chute exact du joueur à la milliseconde précise où celui-ci atterrissait, déclenchant le Game Over sans raison apparente. *(Correction: Décalage forcé de la zone de création des monstres à `x=10` blocs)*
 
-**Chronologie des étapes fondatrices (Avril 2026) :**
-- **19-23 Avril :** Idéation et conceptualisation du projet "Anniversaire Copine". Décision d'adopter un style rétro/kitsch turc des années 70.
-- **24 Avril :** Mise en place des bases de l'UI (`index.html`, `style.css`), du système de rendu dynamique, et intégration du script de gestion des assets (`assets_list.js`) pour charger les stickers personnalisés.
-- **25 Avril :**
-  - Ajout des "Punchlines" dans le jeu Sudoku pour remplacer les numéros par des références personnelles.
-  - Déploiement initial sur GitHub Pages.
-  - Remplacement des fonds par des stickers animés en fond d'écran et esthétique 3D rétro.
-- **26 Avril :** Mise en place du concept de "La Porte Magique" (Layer 2) déblocable à 6000 points. Ajout de la musique d'ambiance persistante via une playlist Spotify.
-- **27-30 Avril :** Affinage du système de sauvegarde multi-devices par code généré (chiffrement basé sur le score) et de l'internationalisation dynamique (FR/TR).
+### 2. Isolation des Boutons Mobiles (Layer 2)
+* **Contexte :** Chaque jeu du Layer 2 avait besoin d'un D-Pad, d'un bouton de saut/tir, et d'un bouton "Pause".
+* **Décision Technique :** Au lieu de polluer `mario.js`, `angry_birds.js` et `tower_defense.js` avec du code d'interface HTML et des EventListeners tactiles, j'ai créé un unique `l2-mobile-controls` dans `index.html`. 
+* Ce D-pad modifie directement des variables globales de touches simulées. Ainsi, `mario.js` intercepte simplement `left`, `right`, et `jump` sans se soucier de savoir s'ils proviennent du clavier ou de l'écran tactile. De plus, `app.js` est chargé d'afficher ou masquer ce D-Pad uniquement lors de la fonction `showGame()`.
 
-**Mai 2026 - Finalisation & Layer 2 :**
-Ce walkthrough technique (ci-dessous) consigne principalement les correctifs complexes et le polissage final effectués début Mai (intégration du Layer 2 "Super Elif", correction des bugs de layout, refactorisation du code de progression).
+### 3. Spam des Modales d'Accueil et Navigation Vidéo
+* **Contexte :** En quittant l'Easter Egg vidéo (`cnab-surprise.html`), l'utilisateur perdait la musique Spotify et devait se retaper l'intro d'anniversaire.
+* **Correction :** 
+  - La vidéo de surprise s'ouvre maintenant dans un nouvel onglet (`_blank`), gardant le hub et la musique vivants en fond.
+  - L'intro kitsch est bloquée par un `sessionStorage.getItem('visited')`. Si la variable est présente, on saute directement au tableau de bord.
+  - Pour compenser la disparition de la lettre d'amour initiale, un bouton "💌 Message" a été ajouté au Header global.
 
-### 1. Problème de Navigation & Coupure de Musique (02/05/2026)
-* **Contexte :** Le Hub intègre une playlist Spotify persistante en arrière-plan. Lorsque le joueur cliquait sur "Cadeau 1" (la vidéo surprise), la navigation s'effectuait dans le même onglet.
-* **Problème :** Cela rechargeait la page et **coupait la musique Spotify**. De plus, revenir en arrière avec le navigateur réinitialisait visuellement l'état du Hub.
-* **Correctif :** 
-  - Dans `app.js`, le bouton cadeau utilise désormais `window.open(..., "_blank")` pour ouvrir la surprise dans un nouvel onglet, préservant ainsi l'onglet principal et l'audio.
-  - Dans `cnab-surprise.html`, le bouton de retour appelle `window.close()` pour refermer proprement l'onglet surprise et replacer directement l'utilisateur sur le Hub en pleine action.
-
-### 2. Spam des Modales d'Accueil & Bouton "Message" (02/05/2026)
-* **Contexte :** À l'ouverture du Hub, un "overlay Kitsch" clignotant s'affiche, suivi d'une modale contenant un long message d'anniversaire personnel.
-* **Problème :** Lors des rechargements de page, ces modales s'ouvraient en boucle, ruinant l'expérience.
-* **Correctif :**
-  - Ajout du `sessionStorage.getItem('visited')`. Si la session est déjà ouverte, l'overlay et la modale reçoivent un `display: none` d'office. L'utilisateur arrive directement sur le dashboard.
-  - **Effet Secondaire corrigé :** Comme la modale ne s'ouvrait plus, il était impossible de relire le mot d'amour. Une fonction globale `window.reopenPersonalModal()` a été ajoutée et liée à un nouveau bouton **"💌 Message"** situé dans le header du dashboard, permettant de ré-invoquer la modale à volonté sans recharger.
-
-### 3. Le "Bug du Layer 3" - Apparition fantôme (02/05/2026)
-* **Contexte :** Si un joueur entrait un code de 12000 points (`ELIF-84000-XYZ`), il débloquait le Layer 3, et l'information `layer3Unlocked = 'true'` était stockée en local. S'il entrait ensuite un code pour redescendre à 6000 points (`ELIF-42000-XYZ`) pour tester le Layer 2, il voyait **toujours** le Layer 3 affiché.
-* **Problème :** La fonction `updateScoreUI()` se chargeait uniquement d'**enlever** la classe `.hidden` lorsque le score montait, mais elle ne ré-appliquait jamais `.hidden` si le score redescendait (ou au rechargement initial avant les calculs). Cela créait des états UI incohérents.
-* **Correctif (Comment & Pourquoi) :**
-  - Modification de `updateScoreUI()` dans `app.js` pour qu'elle soit *idempotente*.
-  - Au tout début de la fonction, les éléments `layer-2-container`, `layer-3-container`, `gifts-container` et `magic-door-container` reçoivent **obligatoirement** la classe `.hidden`.
-  - Ensuite, le code évalue le score actuel et ne révèle (`classList.remove('hidden')`) que les sections légitimes. Ainsi, à 6000 points stricts, le Layer 3 reste fermement caché.
-
-### 4. Audit & Polishing Final (03/05/2026)
-* **Contexte :** Finalisation de l'expérience utilisateur et corrections basées sur un audit systématique.
-* **Problèmes résolus :**
-  - **Super Elif (Mario) :** Le jeu figeait sur un écran orange au démarrage car la boucle `requestAnimationFrame(update)` n'était jamais amorcée via un appel initial à `update()`. Corrigé !
-  - **Angry Stickers :** Les tirs manquaient cruellement de puissance. Le multiplicateur de vitesse `vx/vy` est passé de `0.15` à `0.35`, offrant des tirs lointains fluides et un rebond de gravité mieux géré.
-  - **Tower Defense :** Le texte de l'interface mentionnait explicitement les noms des niveaux, ce qui a été supprimé pour préserver le mystère des ambiances visuelles (Maroc, Valencia, etc.).
-  - **Sauvegarde globale :** Réparation complète de la logique `globalScore` vs `window.globalScore` dans `app.js` pour que le "Load Code" n'écrase pas l'état visuel du Hub.
-  - **Améliorations UI :** Ajout d'une barre de progression globale et d'un écran d'alerte spécifique pour le bouton Layer 3 ("Counter Stickers - Coming soon"). Ajout de l'overlay `grand-gift-overlay` pour les 12000 points.
+### 4. Leak de Mémoire "Matter.js"
+* **Contexte :** Passer de Angry Stickers à Super Elif provoquait des ralentissements du navigateur à cause de l'accumulation d'événements.
+* **Correction :** Création d'un standard de nettoyage via `container._cleanup()`. Lorsque `app.js` ferme un jeu, il vérifie si cette fonction existe. Pour Matter.js, elle exécute `Render.stop`, `Runner.stop`, `Engine.clear` et détruit les écouteurs de clics pour vider la RAM.

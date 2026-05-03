@@ -1,73 +1,51 @@
 # 📜 Historique GitHub du Projet (Elif Multiverse)
 
-Ce document retrace l'intégralité de notre travail et des mises à jour poussées sur le dépôt GitHub `main`, de la création du projet jusqu'à aujourd'hui.
+Ce document retrace l'intégralité de notre travail, des bugs rencontrés et des résolutions poussées sur le dépôt GitHub `main`, de la création du projet jusqu'à aujourd'hui.
 
 ---
 
-### Mises à jour récentes (Layer 2 & Rééquilibrage)
-* **2026-05-03** - fix: Mario engine loop, Angry Birds physics tuning, TD world UI cleanup
-* **2026-05-03** - feat: Address audit recommendations (Save/Load sync, cs-clone placeholder, progress bar, Grand Gift UI)
-* **2026-05-03** - Hardcore economy rebalance (34b6705)
-* **2026-05-03** - Super Elif 6-level World Tour expansion (7cd0ab8)
-* **2026-05-03** - English localization, Game Instructions, and Layer 2 Polish (00e7228)
+## 🛠️ Mai 2026 : Phase 2 & Polissage des Moteurs Avancés
 
-### Documentation & Suivi de Projet
-* **2026-05-03** - Expand history to detail Anniversaire Copine project from April 19 (142f89a)
-* **2026-05-03** - Update project tracking with start date (April 19) (b3108ad)
-* **2026-05-02** - Update ASSETS_DOCUMENTATION.md with detailed file names and paths (39c3aba)
-* **2026-05-02** - Add ASSETS_DOCUMENTATION.md detailing image usage and origins (e37688a)
-* **2026-05-02** - Fix UI reset bug and update PROJECT_TRACKING with detailed history (40262d5)
-* **2026-05-02** - Add PROJECT_TRACKING.md for tracking development and walkthroughs (b1d8b44)
+### 03 Mai 2026 - Correctifs Critiques de Physique et Rendu (Layer 2)
+* **fix: resolve tunneling and spawn collision in mario (407c029)**
+  - *Symptôme :* "Le jeu apparaît, je tombe et je meurs instantanément."
+  - *Cause 1 (Tunneling) :* La constante `MAXDY` (vitesse de chute max) était si grande que le joueur "sautait" par-dessus la grille du sol (Collision `cell_curr` évaluée vraie trop tard).
+  - *Solution 1 :* Réduction de `MAXDY` de `METER * 60` à `METER * 30`.
+  - *Cause 2 (Spawn Collision) :* Les ennemis apparaissaient trop près du point de chute initial du joueur (x=2), le tuant en plein vol.
+  - *Solution 2 :* Décalage de la génération des plateformes à `x=10`.
+* **fix: set fixed height 80vh for layer 2 game containers (5ea6660)**
+  - *Symptôme :* Le jeu s'affichait comme une fine bande horizontale quasi invisible.
+  - *Cause :* Le conteneur HTML global `game-slot` dépendait du contenu (`height: 100%` en cascade renvoyait 0px).
+  - *Solution :* Passage à `height: 80vh; min-height: 500px;` pour forcer l'expansion du conteneur et corriger le calcul de hauteur de caméra.
+* **fix: adjust mario camera scaling and death bounds (78d0f2f)**
+  - Correction de l'échelle (`ctx.scale`) pour forcer l'affichage entier de la carte (600px) indépendamment de la résolution de l'écran.
+* **feat: complete rewrite of layer 2 games using open source engines (ffafa9d)**
+  - **Mario :** Remplacement de la physique flottante par une grille physique Tile-Based stricte.
+  - **Angry Birds :** Implémentation du moteur professionnel `Matter.js` pour une physique vectorielle rigide (Slingshot + Blocs destructibles).
+  - **Tower Defense :** Passage d'un code spaghetti à une structure `victorqribeiro/towerDefense` (grille matricielle, vagues manuelles).
 
-### 03 Mai 2026 - Refonte Massive Layer 2 (Moteurs Open Source)
-- **Super Elif** : Réécrit avec un moteur "Tile-based" inspiré de `jakesgordon/javascript-tiny-platformer`. Implémentation d'une grille physique AABB, niveaux générés par chunks.
-- **Angry Stickers** : Réécrit avec le moteur physique `Matter.js`. Intégration via CDN, création de pyramides destructibles, slingshot physics, et victoire sur élimination des cibles.
-- **Tower Defense** : Réécrit façon `victorqribeiro/towerDefense` avec une grille bidimensionnelle, chemin paramétrable, menu de construction, placement de tourelles (Sniper & Normal) et déclenchement manuel des vagues.
-- **UI & Controls** : Ajout d'un overlay global pour Layer 2 avec D-Pad mobile et boutons Pause/Restart partagés pour alléger le code de chaque jeu.
+### 02 Mai 2026 - Stabilisation et Audit Moteurs de Jeux (Layer 2)
+* **fix: layer 2 games appearing empty (607fbcb)** - Résolution du cache et `display: flex`.
+* **feat: ajout du systeme multi-niveaux et animation porte magique (196423d)**
+* **fix: UI navigation state (7e28f41)** - Empêcher la modale d'intro de réapparaître au retour de la vidéo Easter Egg.
+* **feat: bouton Message (4d30241)** - Possibilité de rouvrir la lettre d'amour sans recharger le site.
 
-## 02 Mai 2026 - Stabilisation et Audit Moteurs de Jeux (Layer 2)
-* **2026-05-03** - Add error boundaries to showGame to debug Layer 2 load failures (2c223c3)
-* **2026-05-03** - Fix layer 2 games appearing empty (cache busting and display flex) (607fbcb)
-* **2026-05-02** - Add button to reopen personal message modal (4d30241)
-* **2026-05-02** - Fix UI navigation state and modal reappearing when returning from Easter Egg (7e28f41)
-* **2026-05-02** - feat: ajout du systeme multi-niveaux et animation porte magique (196423d)
-* **2026-04-27** - feat: Add Magic Door, Save Code system, and Spotify integration (39602a7)
-* **2026-04-25** - Add styled Game Over title above the sticker (77b9223)
-* **2026-04-25** - Apply Bungee font to overlay title, fix Space Invaders background lag, and use localized landing page assets (322c98b)
-* **2026-04-25** - feat(i18n): update modal text with personal letter and sticker (8472d24)
+## 🚀 Avril 2026 : Phase 1 - Fondation du Projet "Anniversaire Copine"
 
-### Nettoyage & Refactorisation des Assets
-* **2026-04-25** - fix(sudoku): remove all auto-generated French quotes and replace them fully with user inside jokes (bdadb2c)
-* **2026-04-25** - fix(assets): rewrite update_stickers.js to scan recursively and generate dynamic collage list, remove hardcoded paths from app.js (5840563)
+### 25-27 Avril 2026 - Sauvegarde, Easter Eggs et Polishing Kitsch
+* **feat: Add Magic Door, Save Code system, and Spotify integration (39602a7)**
+  - Création du système de sauvegarde multi-devices par code généré (chiffrement par score `ELIF-SCORE-XYZ`).
+* **feat(i18n): update modal text with personal letter (8472d24)**
+* **fix(sudoku): remove all auto-generated French quotes (bdadb2c)**
+  - Remplacement intégral des textes par défaut par des punchlines privées ("inside jokes").
+* **fix(assets): rewrite update_stickers.js (5840563)**
+  - Scannage récursif pour générer dynamiquement `assets_list.js`, permettant un scaling facile du nombre d'images.
 
-### Période Initiale (Création Layer 1 & Esthétique 70s Kitsch)
-* **2026-04-25** - fix: tetris+spaceinvaders touch iPad (1e07a48)
-* **2026-04-22** - feat: rename -> Askam Invaders + KillorNot (EN+TR) (3c0b74c)
-* **2026-04-22** - feat: rename Space Invaders -> Coskun Invaders, player.webp as player ship (1acde43)
-* **2026-04-22** - feat: STK-20260216-WA0001 = extra life bonus in Space Invaders (40b9be1)
-* **2026-04-21** - feat: add 29 static intro/ images to collage pool (5 animated excluded) (d296970)
-* **2026-04-21** - feat: add intro assets to assets/intro/ folder + new sticker (49196f6)
-* **2026-04-21** - feat: create assets/intro/ folder for intro page assets (fb12134)
-* **2026-04-21** - chore: intro title - 'MY BABYLOVE BUTTERFLY IN THE SKY MENI ASKAM' (03fb904)
-* **2026-04-21** - refactor: move SI bonus images to assets/tetris/bonus/ (rapidfire/extralife/doublegun) (c4697dc)
-* **2026-04-21** - fix: remove all 42 animated WebPs from collage - 100% static stickers only (962eee5)
-* **2026-04-20** - fix: uzinagaz - visible amber glow border on wooden cross + grain texture (f03589c)
-* **2026-04-20** - perf: collage - 190 static imgs hardcoded, no GIFs, 65px dense grid, lazy loading, DocumentFragment batch (2ce92f4)
-* **2026-04-20** - fix: sudoku click-select, mahjong height, tablet touch controls all games (1bfba78)
-* **2026-04-20** - feat: dense sticker mosaic background covering full page (4c067b9)
-* **2026-04-20** - feat: uzinagaz - human body in tiger speedo tied to wheel, precise hitboxes (489d637)
-* **2026-04-20** - fix: tetris - sticker clips to piece shape, persists when locked, no tint (fe3ffff)
-* **2026-04-20** - feat: sudoku stickers, tetris shapes, i18n fixes, si bug fix (d502371)
-* **2026-04-19** - Add i18n support and Tetris shape-specific stickers (b1fc423)
-* **2026-04-19** - Add global Game Over overlay with custom stickers (e20f900)
-* **2026-04-19** - Refactor Uzinagaz to classic Wheel of Death mode (4b17284)
-* **2026-04-19** - Update celebration stickers float logic and double quantity (89d9a5e)
-* **2026-04-19** - Landing bg logic and Celebration spin stickers (9d2f2ff)
-* **2026-04-19** - Applied Trim to tetris, Mahjong tiles pure stickers, Sudoku quotes, Background unifier (cafd8d3)
-* **2026-04-19** - All aesthetic feedback: Wooden Dummy, cutoff axe, multicolored Tetris, Mahjong fixed imgs (140f7ca)
-* **2026-04-19** - Uzinagaz cross, Lissajous movement; Tetris Ghost piece, Wall Kicks, strict outer contours (b28cbd2)
-* **2026-04-19** - Fix Mahjong urls, Uzinagaz aim/tracksuit, Tetris single-sticker shapes (5d417b3)
-* **2026-04-19** - Fix Space Invaders ReferenceError (bd06b76)
-* **2026-04-19** - Elif Multiverse 70s refactoring & Bugfixes (d51114c)
-* **2026-04-19** - Version finale 1.0 (ede95e0)
-* **2026-04-19** - 🌙 Initial commit - Elif Birthday Hub (Turkish Kitsch 70s theme) (c84cf07)
+### 19-22 Avril 2026 - Création du Layer 1 (Jeux Classiques)
+* **feat: rename -> Askam Invaders + KillorNot (3c0b74c)**
+* **perf: collage - 190 static imgs hardcoded, no GIFs (2ce92f4)**
+  - Exclusion des WebP animés pour éviter les crashs de RAM sur mobile. Rendu via `DocumentFragment`.
+* **feat: Uzinagaz (Lancer de Hache) (489d637)**
+  - Intégration de la "Roue de la Mort" avec le sprite du corps humain en slip kangourou.
+* **feat: Tetris ghost piece, Wall Kicks, strict outer contours (b28cbd2)**
+* **19 Avril 2026 (c84cf07)** - 🌙 Initial commit - Elif Birthday Hub (Turkish Kitsch 70s theme)
