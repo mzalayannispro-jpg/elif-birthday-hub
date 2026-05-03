@@ -292,12 +292,14 @@ window.initMario = function(container) {
             updateEntity(player);
 
             // Bounds check player death
-            if (player.y > height + TILE) {
+            if (player.y > (mapHeight * TILE) + TILE) {
                 die();
             }
 
             // Camera follow
-            cameraX = Math.max(0, player.x - width/3);
+            let expectedHeight = mapHeight * TILE;
+            let logicalWidth = width / (height / expectedHeight);
+            cameraX = Math.max(0, player.x - logicalWidth/3);
 
             // Update Enemies
             for(let e of enemies) {
@@ -354,6 +356,12 @@ window.initMario = function(container) {
     function draw() {
         ctx.clearRect(0, 0, width, height);
         ctx.save();
+        
+        // Scale the game to fit the canvas height if it's smaller or larger than the map
+        let expectedHeight = mapHeight * TILE;
+        let scale = height / expectedHeight;
+        ctx.scale(scale, scale);
+
         ctx.translate(-cameraX, 0);
 
         // Draw Map
