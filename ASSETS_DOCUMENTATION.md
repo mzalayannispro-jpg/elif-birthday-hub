@@ -185,3 +185,4 @@ Stickers flottants apparaissant en fond d'écran sur le Hub principal.
 | `win.webp` | `assets/win.webp` | Écran de victoire générique |
 | `lose.webp` | `assets/lose.webp` | Écran de défaite générique |
 
+*Note: Validated on 03/05/2026 that all asset paths (including Mario sprites, Angry Birds, and Grand Gift overlay) match the dynamically loaded files and perform correctly.*

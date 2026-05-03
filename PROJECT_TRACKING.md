@@ -77,3 +77,12 @@ Ce walkthrough technique (ci-dessous) consigne principalement les correctifs com
   - Modification de `updateScoreUI()` dans `app.js` pour qu'elle soit *idempotente*.
   - Au tout début de la fonction, les éléments `layer-2-container`, `layer-3-container`, `gifts-container` et `magic-door-container` reçoivent **obligatoirement** la classe `.hidden`.
   - Ensuite, le code évalue le score actuel et ne révèle (`classList.remove('hidden')`) que les sections légitimes. Ainsi, à 6000 points stricts, le Layer 3 reste fermement caché.
+
+### 4. Audit & Polishing Final (03/05/2026)
+* **Contexte :** Finalisation de l'expérience utilisateur et corrections basées sur un audit systématique.
+* **Problèmes résolus :**
+  - **Super Elif (Mario) :** Le jeu figeait sur un écran orange au démarrage car la boucle `requestAnimationFrame(update)` n'était jamais amorcée via un appel initial à `update()`. Corrigé !
+  - **Angry Stickers :** Les tirs manquaient cruellement de puissance. Le multiplicateur de vitesse `vx/vy` est passé de `0.15` à `0.35`, offrant des tirs lointains fluides et un rebond de gravité mieux géré.
+  - **Tower Defense :** Le texte de l'interface mentionnait explicitement les noms des niveaux, ce qui a été supprimé pour préserver le mystère des ambiances visuelles (Maroc, Valencia, etc.).
+  - **Sauvegarde globale :** Réparation complète de la logique `globalScore` vs `window.globalScore` dans `app.js` pour que le "Load Code" n'écrase pas l'état visuel du Hub.
+  - **Améliorations UI :** Ajout d'une barre de progression globale et d'un écran d'alerte spécifique pour le bouton Layer 3 ("Counter Stickers - Coming soon"). Ajout de l'overlay `grand-gift-overlay` pour les 12000 points.

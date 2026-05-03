@@ -13,7 +13,7 @@ Le hub évolue maintenant sous forme de "Layers" débloquables grâce au score g
 - **🧱 Tetris** — Empilement classique
 - **🪓 Uzinagaz (Lancer de hache)** — Vise bien !
 
-### Layer 2 (Jeux 2D Avancés - *En développement*)
+### Layer 2 (Jeux 2D Avancés - *Complété*)
 - **🍄 Super Elif** — Jeu de plateforme (style Mario)
 - **🐦 Angry Stickers** — Lance-pierre physique
 - **🏰 Tower Defense** — Protège la base

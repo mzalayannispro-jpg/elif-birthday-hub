@@ -336,8 +336,8 @@ window.initAngryBirds = function(container) {
             ctx.beginPath();
             let simX = bird.x;
             let simY = bird.y;
-            let simVX = (slingshot.x - bird.x) * 0.15;
-            let simVY = (slingshot.y - bird.y) * 0.15;
+            let simVX = (slingshot.x - bird.x) * 0.35;
+            let simVY = (slingshot.y - bird.y) * 0.35;
             ctx.moveTo(simX, simY);
             for (let i = 0; i < 20; i++) {
                 simVY += gravity;
@@ -455,8 +455,8 @@ window.initAngryBirds = function(container) {
         const dx = slingshot.x - bird.x;
         const dy = slingshot.y - bird.y;
         
-        bird.vx = dx * 0.15; // Multiplicateur de puissance
-        bird.vy = dy * 0.15;
+        bird.vx = dx * 0.35; // Multiplicateur de puissance
+        bird.vy = dy * 0.35;
     }
 
     canvas.addEventListener('mousedown', onDown);

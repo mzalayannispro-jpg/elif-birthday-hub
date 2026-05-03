@@ -5,6 +5,8 @@ Ce document retrace l'intégralité de notre travail et des mises à jour pouss�
 ---
 
 ### Mises à jour récentes (Layer 2 & Rééquilibrage)
+* **2026-05-03** - fix: Mario engine loop, Angry Birds physics tuning, TD world UI cleanup
+* **2026-05-03** - feat: Address audit recommendations (Save/Load sync, cs-clone placeholder, progress bar, Grand Gift UI)
 * **2026-05-03** - Hardcore economy rebalance (34b6705)
 * **2026-05-03** - Super Elif 6-level World Tour expansion (7cd0ab8)
 * **2026-05-03** - English localization, Game Instructions, and Layer 2 Polish (00e7228)

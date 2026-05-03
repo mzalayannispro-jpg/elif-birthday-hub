@@ -683,6 +683,7 @@ window.initMario = function(container) {
 
     loadLevel(0);
     updateUI();
+    update(); // Kicks off the game loop!
 
     // ==========================================
     // CONTROLES

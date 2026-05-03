@@ -14,7 +14,7 @@ window.initTowerDefense = function(container) {
                     WAVE: <span id="td-wave">1</span>
                 </div>
                 <div style="color:white; font-size:20px; font-weight:800; margin-left:10px;">
-                    WORLD <span id="td-world">1 - Maroc Sahara Merzouga</span>
+                    WORLD <span id="td-world">1</span>
                 </div>
             </div>
             
@@ -116,7 +116,7 @@ window.initTowerDefense = function(container) {
                 turrets = [];
                 projectiles = [];
                 
-                document.getElementById('td-msg').innerHTML = `WORLD CLEARED !<br><span style="font-size:24px; color:white;">Traveling to ${WORLDS[currentWorldIndex].name}...</span><br><span style="font-size:20px; color:#4CAF50;">Towers sold: +${refund} 💰</span>`;
+                document.getElementById('td-msg').innerHTML = `WORLD CLEARED !<br><span style="font-size:24px; color:white;">Traveling to World ${currentWorldIndex + 1}...</span><br><span style="font-size:20px; color:#4CAF50;">Towers sold: +${refund} 💰</span>`;
                 document.getElementById('td-msg').style.display = 'block';
                 updateUI();
                 
@@ -124,7 +124,7 @@ window.initTowerDefense = function(container) {
                     document.getElementById('td-msg').style.display = 'none';
                     pathNodes = JSON.parse(JSON.stringify(WORLDS[currentWorldIndex].path));
                     document.getElementById('td-game').style.background = `linear-gradient(to bottom, ${WORLDS[currentWorldIndex].bgTop}, ${WORLDS[currentWorldIndex].bgBottom})`;
-                    document.getElementById('td-world').textContent = (currentWorldIndex + 1) + " - " + WORLDS[currentWorldIndex].name;
+                    document.getElementById('td-world').textContent = (currentWorldIndex + 1);
                     
                     wave++;
                     document.getElementById('td-wave').textContent = wave;
