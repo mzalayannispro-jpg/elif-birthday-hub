@@ -71,6 +71,15 @@
             <div class="dash-header-center">
                 <p class="dash-subtitle" data-i18n="dash.welcome">✦ HOŞGELDİNİZ ✦</p>
                 <h1 class="dash-title"><span data-i18n="dash.title">ELIF'İN</span> <span>MULTIVERSE</span></h1>
+                <div class="dash-progress-container">
+                    <div class="dash-progress-bar" id="dash-progress"></div>
+                    <div class="dash-progress-markers">
+                        <span style="left: 0%">0</span>
+                        <span style="left: 25%">3k</span>
+                        <span style="left: 50%">6k</span>
+                        <span style="left: 100%">12k</span>
+                    </div>
+                </div>
             </div>
             <div style="display:flex; align-items:center; gap:15px; flex-wrap:wrap; justify-content:center;">
                 <div style="display:flex; gap:5px;">
@@ -226,22 +235,37 @@
         </div>
     </div>
 
+    <!-- ===================================
+         6. GRAND GIFT OVERLAY (12000 POINTS)
+         =================================== -->
+    <div id="grand-gift-overlay" class="bim-overlay hidden">
+        <div class="bim-content">
+            <img class="bim-sticker bim-left" src="assets/Landing page/STK-20251113-WA0023.webp" alt="Sticker">
+            <img class="bim-sticker bim-right" src="assets/Landing page/STK-20251113-WA0022.webp" alt="Sticker">
+            
+            <h1 class="bim-title" style="color: #FFD700;">🎁 12000 PTS! 🎁</h1>
+            <p class="bim-text">THE GRAND GIFT IS UNLOCKED</p>
+            <p class="bim-subtext">You successfully completed the Elif Multiverse!!</p>
+            <button class="modal-cta-btn" onclick="closeGrandGiftOverlay()">MERCI ! ✦</button>
+        </div>
+    </div>
+
     <!-- LECTEUR SPOTIFY FIXE -->
     <iframe class="spotify-player" src="https://open.spotify.com/embed/playlist/12Djx1oJKv6wfQJhY1Oi1b?utm_source=generator&theme=0" width="300" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
 
     <!-- Scripts -->
-    <script src="assets/i18n.js?v=2.1"></script>
-    <script src="assets/quotes.js?v=2.1"></script>
-    <script src="assets/assets_list.js?v=2.1"></script>
-    <script src="app.js?v=2.1"></script>
-    <script src="games/layer1/space_invaders.js?v=2.1"></script>
-    <script src="games/layer1/mahjong.js?v=2.1"></script>
-    <script src="games/layer1/sudoku.js?v=2.1"></script>
-    <script src="games/layer1/tetris.js?v=2.1"></script>
-    <script src="games/layer1/axe_throw.js?v=2.1"></script>
-    <script src="games/layer2/mario.js?v=2.1"></script>
-    <script src="games/layer2/angry_birds.js?v=2.1"></script>
-    <script src="games/layer2/tower_defense.js?v=2.1"></script>
+    <script src="assets/i18n.js?v=2.2"></script>
+    <script src="assets/quotes.js?v=2.2"></script>
+    <script src="assets/assets_list.js?v=2.2"></script>
+    <script src="app.js?v=2.2"></script>
+    <script src="games/layer1/space_invaders.js?v=2.2"></script>
+    <script src="games/layer1/mahjong.js?v=2.2"></script>
+    <script src="games/layer1/sudoku.js?v=2.2"></script>
+    <script src="games/layer1/tetris.js?v=2.2"></script>
+    <script src="games/layer1/axe_throw.js?v=2.2"></script>
+    <script src="games/layer2/mario.js?v=2.2"></script>
+    <script src="games/layer2/angry_birds.js?v=2.2"></script>
+    <script src="games/layer2/tower_defense.js?v=2.2"></script>
 </body>
 </html>

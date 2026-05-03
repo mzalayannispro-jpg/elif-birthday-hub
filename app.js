@@ -7,7 +7,7 @@ window.NIVEAU_IMAGES = window.GAME_ASSETS && window.GAME_ASSETS['mahjong'] && wi
 window.ALL_SPACE_INVADER_IMAGES = window.GAME_ASSETS && window.GAME_ASSETS['space-invaders'] && window.GAME_ASSETS['space-invaders'].length > 0 ? window.GAME_ASSETS['space-invaders'] : ['assets/player.webp'];
 window.TETRIS_IMAGES = window.GAME_ASSETS && window.GAME_ASSETS['tetris'] && window.GAME_ASSETS['tetris'].length > 0 ? window.GAME_ASSETS['tetris'] : ['assets/player.webp'];
 window.HACHE_IMAGES = window.GAME_ASSETS && window.GAME_ASSETS['lancer-hache'] && window.GAME_ASSETS['lancer-hache'].length > 0 ? window.GAME_ASSETS['lancer-hache'] : ['assets/player.webp'];
-let globalScore = parseInt(localStorage.getItem('elifScore') || '0', 10);
+window.globalScore = parseInt(localStorage.getItem('elifScore') || '0', 10);
 
 // ============ SPOTIFY IFRAME ============
 // Spotify auto-play is not allowed by browsers, but the user can click Play on the iframe in the UI.
@@ -53,9 +53,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
+        // Safe check for intro assets
+        const introAssets = window.GAME_ASSETS && Array.isArray(window.GAME_ASSETS['intro']) ? window.GAME_ASSETS['intro'] : [];
+        if (introAssets.length === 0) return;
+
         // Mélange aléatoire (Fisher-Yates) pour maximiser la variété
-        const pool = [...window.GAME_ASSETS['intro']].sort(() => Math.random() - 0.5);
-        if (pool.length === 0) return;
+        const pool = [...introAssets].sort(() => Math.random() - 0.5);
 
         const collageLayer = document.createElement('div');
         collageLayer.id = 'dashboard-collage';
@@ -145,13 +148,13 @@ window.reopenPersonalModal = function() {
 
 // ============ GLOBAL SCORE ============
 function addGlobalScore(pts) {
-    const prevScore = globalScore;
-    globalScore += pts;
-    localStorage.setItem('elifScore', globalScore);
+    const prevScore = window.globalScore;
+    window.globalScore += pts;
+    localStorage.setItem('elifScore', window.globalScore);
     updateScoreUI();
 
     // Vérifier si on vient de dépasser 3000 points pour la 1ère fois
-    if (prevScore < 3000 && globalScore >= 3000 && !localStorage.getItem('bimShown')) {
+    if (prevScore < 3000 && window.globalScore >= 3000 && !localStorage.getItem('bimShown')) {
         showBimOverlay();
     }
 }
@@ -160,8 +163,14 @@ function updateScoreUI() {
     const el = document.getElementById('global-score');
     const inlineEl = document.getElementById('score-inline');
 
-    if (el) el.textContent = globalScore;
-    if (inlineEl) inlineEl.textContent = globalScore;
+    if (el) el.textContent = window.globalScore;
+    if (inlineEl) inlineEl.textContent = window.globalScore;
+
+    const progBar = document.getElementById('dash-progress');
+    if (progBar) {
+        let pct = Math.min(100, (window.globalScore / 12000) * 100);
+        progBar.style.width = pct + '%';
+    }
 
     const magicDoor = document.getElementById('magic-door-container');
     const layer2 = document.getElementById('layer-2-container');
@@ -177,10 +186,10 @@ function updateScoreUI() {
     if (magicDoor) {
         const doorText = magicDoor.querySelector('.door-text');
         
-        if (globalScore >= 3000 && globalScore < 6000) {
+        if (window.globalScore >= 3000 && window.globalScore < 6000) {
             magicDoor.classList.remove('hidden');
             if(doorText) doorText.textContent = window.t('door.magic');
-        } else if (globalScore >= 6000) {
+        } else if (window.globalScore >= 6000) {
             if (localStorage.getItem('layer2Unlocked') === 'true') {
                 const layer2 = document.getElementById('layer-2-container');
                 if (layer2) layer2.classList.remove('hidden');
@@ -204,10 +213,10 @@ function updateScoreUI() {
                 }
 
                 // Logique pour le Layer 3
-                if (globalScore >= 9000 && globalScore < 12000) {
+                if (window.globalScore >= 9000 && window.globalScore < 12000) {
                     magicDoor.classList.remove('hidden');
                     if(doorText) doorText.textContent = window.t('door.magic3');
-                } else if (globalScore >= 12000) {
+                } else if (window.globalScore >= 12000) {
                     if (localStorage.getItem('layer3Unlocked') === 'true') {
                         magicDoor.classList.add('hidden');
                         const layer3 = document.getElementById('layer-3-container');
@@ -219,7 +228,7 @@ function updateScoreUI() {
                                 const giftBtn = document.createElement('button');
                                 giftBtn.id = 'gift-2';
                                 giftBtn.className = 'game-card-btn';
-                                giftBtn.onclick = () => alert("Second surprise coming soon!");
+                                giftBtn.onclick = () => showGrandGiftOverlay();
                                 giftBtn.innerHTML = `
                                     <span class="btn-icon">🎁</span>
                                     <span class="btn-label" data-i18n="gift2.title">${window.t('gift2.title')}</span>
@@ -292,6 +301,20 @@ window.showBimOverlay = function() {
 
 window.closeBimOverlay = function() {
     const overlay = document.getElementById('bim-overlay');
+    if (overlay) {
+        overlay.classList.add('hidden');
+    }
+};
+
+window.showGrandGiftOverlay = function() {
+    const overlay = document.getElementById('grand-gift-overlay');
+    if (overlay) {
+        overlay.classList.remove('hidden');
+    }
+};
+
+window.closeGrandGiftOverlay = function() {
+    const overlay = document.getElementById('grand-gift-overlay');
     if (overlay) {
         overlay.classList.add('hidden');
     }
@@ -434,6 +457,10 @@ function launchGameModule(gameId, slot) {
     else if (gameId === 'mario' && window.initMario) window.initMario(slot);
     else if (gameId === 'angry-birds' && window.initAngryBirds) window.initAngryBirds(slot);
     else if (gameId === 'tower-defense' && window.initTowerDefense) window.initTowerDefense(slot);
+    else if (gameId === 'cs-clone') {
+        alert("🚨 COUNTER STICKERS\n\nComing soon! Server deployment in progress...");
+        window.hideGame();
+    }
     else {
         alert(window.tReplace ? window.tReplace('alert.module_err', {game: gameId}) : "Module Error");
         window.hideGame();
