@@ -74,7 +74,7 @@ window.initMario = function(container) {
     ASSETS.turtle.src = 'assets/STK-20241108-WA0000.webp';
     ASSETS.axeThrower.src = 'assets/OwnSticker_20240322_015407147.png.jpg';
     ASSETS.baklava.src = 'assets/real_baklava.png';
-    ASSETS.princess.src = 'assets/STK-20241029-WA0001 - Copie.webp';
+    ASSETS.princess.src = 'assets/OwnSticker_20241029_163308195.png.jpg';
 
     // ==========================================
     // VARIABLES DE JEU
@@ -607,8 +607,22 @@ window.initMario = function(container) {
             // Joueur & Princesse
             let drawWidth = player.state === 'petit' ? 50 : 80;
             let drawHeight = player.state === 'petit' ? 50 : 80;
-            ctx.drawImage(ASSETS[player.state], player.x, player.y + (player.height - drawHeight), drawWidth, drawHeight);
-            ctx.drawImage(ASSETS.princess, princess.x, princess.y, princess.width, princess.height);
+            
+            let pImg = ASSETS[player.state];
+            if (pImg && pImg.complete && pImg.naturalHeight !== 0) {
+                ctx.drawImage(pImg, player.x, player.y + (player.height - drawHeight), drawWidth, drawHeight);
+            } else {
+                ctx.fillStyle = 'blue';
+                ctx.fillRect(player.x, player.y + (player.height - drawHeight), drawWidth, drawHeight);
+            }
+
+            let princessImg = ASSETS.princess;
+            if (princessImg && princessImg.complete && princessImg.naturalHeight !== 0) {
+                ctx.drawImage(princessImg, princess.x, princess.y, princess.width, princess.height);
+            } else {
+                ctx.fillStyle = 'pink';
+                ctx.fillRect(princess.x, princess.y, princess.width, princess.height);
+            }
 
             // Coeurs
             ctx.fillStyle = 'red';
