@@ -14,8 +14,11 @@ window.initMario = function(container) {
     let height = container.clientHeight;
     
     const onResize = () => {
-        width = container.clientWidth;
-        height = container.clientHeight;
+        const gameDiv = document.getElementById('mario-game');
+        if (gameDiv) {
+            width = gameDiv.clientWidth;
+            height = gameDiv.clientHeight;
+        }
         if (width === 0 || height === 0) {
             width = window.innerWidth * 0.9;
             height = window.innerHeight * 0.8;
@@ -52,12 +55,12 @@ window.initMario = function(container) {
     // === TILE ENGINE CONFIG ===
     const TILE = 50;
     const METER = TILE;
-    const GRAVITY = METER * 9.8 * 6;
+    const GRAVITY = METER * 9.8 * 4;
     const MAXDX = METER * 15;
-    const MAXDY = METER * 60;
+    const MAXDY = METER * 30; // Reduced to prevent tunneling through floor
     const ACCEL = MAXDX * 2;
     const FRICTION = MAXDX * 6;
-    const JUMP = METER * 1500;
+    const JUMP = METER * 1200;
     
     let dt = 1/60;
 
@@ -87,7 +90,7 @@ window.initMario = function(container) {
         }
 
         // Platforms & Entities
-        for(let x=5; x<lengthInTiles - 5; x++) {
+        for(let x=10; x<lengthInTiles - 5; x++) {
             if (Math.random() < 0.2) {
                 let y = rows - 4 - Math.floor(Math.random() * 3);
                 map[y][x] = 1;
