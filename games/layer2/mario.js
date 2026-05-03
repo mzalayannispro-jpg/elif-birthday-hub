@@ -2,7 +2,7 @@ window.initMario = function(container) {
     console.log("Init Super Elif Tile Engine");
 
     container.innerHTML = `
-        <div id="mario-game" style="position:relative; width:100%; height:100%; background:linear-gradient(to bottom, #87CEEB, #E0F6FF); overflow:hidden; border-radius:12px; font-family:'Outfit', sans-serif;">
+        <div id="mario-game" style="position:relative; width:100%; height:80vh; min-height:500px; background:linear-gradient(to bottom, #87CEEB, #E0F6FF); overflow:hidden; border-radius:12px; font-family:'Outfit', sans-serif;">
             <canvas id="mario-canvas" style="display:block; width:100%; height:100%;"></canvas>
         </div>
     `;

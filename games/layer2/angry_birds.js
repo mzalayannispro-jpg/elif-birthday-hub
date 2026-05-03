@@ -2,7 +2,7 @@ window.initAngryBirds = function(container) {
     console.log("Init Angry Stickers with Matter.js");
 
     container.innerHTML = `
-        <div id="ab-container" style="position:relative; width:100%; height:100%; overflow: hidden; background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 100%);">
+        <div id="ab-container" style="position:relative; width:100%; height:80vh; min-height:500px; overflow: hidden; background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 100%);">
             <canvas id="ab-canvas" style="display:block; width:100%; height:100%;"></canvas>
         </div>
     `;

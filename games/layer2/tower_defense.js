@@ -2,7 +2,7 @@ window.initTowerDefense = function(container) {
     console.log("Init Elif Tower Defense - Grid Based");
 
     container.innerHTML = `
-        <div id="td-game" style="position:relative; width:100%; height:100%; background:linear-gradient(to bottom, #4CAF50, #81C784); overflow:hidden; border-radius:12px; font-family:'Outfit', sans-serif; cursor:crosshair; user-select: none;">
+        <div id="td-game" style="position:relative; width:100%; height:80vh; min-height:500px; background:linear-gradient(to bottom, #4CAF50, #81C784); overflow:hidden; border-radius:12px; font-family:'Outfit', sans-serif; cursor:crosshair; user-select: none;">
             
             <!-- Interface -->
             <div style="position:absolute; top:15px; left:20px; z-index:10; display:flex; gap:20px; align-items:center; background:rgba(0,0,0,0.7); padding:10px 20px; border-radius:10px; border:2px solid gold;">
